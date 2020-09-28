@@ -1,5 +1,5 @@
 /*
- Copyright (c) 2010, Stig Brautaset.
+ Copyright (c) 2010-2020, Stig Brautaset.
  All rights reserved.
 
  Redistribution and use in source and binary forms, with or without
@@ -35,26 +35,127 @@
 #endif
 
 #import "SBJson5StreamWriter.h"
-#import "SBJson5StreamWriterState.h"
 
-static NSNumber *kTrue;
-static NSNumber *kFalse;
-static NSNumber *kPositiveInfinity;
-static NSNumber *kNegativeInfinity;
+@class SBJson5StreamWriterState;
 
+@interface SBJson5StreamWriter ()
+@property (nonatomic, strong) SBJson5StreamWriterState *stateObjectStart,
+  *stateObjectKey,
+  *stateObjectValue,
+  *stateArrayStart,
+  *stateArrayValue,
+  *state;
+@property (nonatomic, readonly, strong) NSMutableArray *stateStack;
+@end
+
+#pragma mark -
+
+@interface SBJson5StreamWriterState : NSObject
+- (BOOL)isInvalidState:(SBJson5StreamWriter *)writer;
+- (void)appendSeparator:(SBJson5StreamWriter *)writer;
+- (BOOL)expectingKey:(SBJson5StreamWriter *)writer;
+- (void)transitionState:(SBJson5StreamWriter *)writer;
+- (void)appendWhitespace:(SBJson5StreamWriter *)writer;
+@end
+
+@interface SBJson5StreamWriterStateObjectStart : SBJson5StreamWriterState
+@end
+
+@interface SBJson5StreamWriterStateObjectKey : SBJson5StreamWriterStateObjectStart
+@end
+
+@interface SBJson5StreamWriterStateObjectValue : SBJson5StreamWriterState
+@end
+
+@interface SBJson5StreamWriterStateArrayStart : SBJson5StreamWriterState
+@end
+
+@interface SBJson5StreamWriterStateArrayValue : SBJson5StreamWriterState
+@end
+
+@interface SBJson5StreamWriterStateStart : SBJson5StreamWriterState
+@end
+
+@interface SBJson5StreamWriterStateComplete : SBJson5StreamWriterState
+@end
+
+#pragma mark -
+
+@implementation SBJson5StreamWriterState
+- (BOOL)isInvalidState:(SBJson5StreamWriter *)writer { return NO; }
+- (void)appendSeparator:(SBJson5StreamWriter *)writer {}
+- (BOOL)expectingKey:(SBJson5StreamWriter *)writer { return NO; }
+- (void)transitionState:(SBJson5StreamWriter *)writer {}
+- (void)appendWhitespace:(SBJson5StreamWriter *)writer {
+  [writer appendBytes:"\n" length:1];
+  for (NSUInteger i = 0; i < writer.stateStack.count; i++)
+    [writer appendBytes:"  " length:2];
+}
+@end
+
+@implementation SBJson5StreamWriterStateObjectStart
+- (void)transitionState:(SBJson5StreamWriter *)writer {
+    writer.state = writer.stateObjectValue;
+}
+- (BOOL)expectingKey:(SBJson5StreamWriter *)writer {
+  writer.error = @"JSON object key must be string";
+  return YES;
+}
+@end
+
+@implementation SBJson5StreamWriterStateObjectKey
+- (void)appendSeparator:(SBJson5StreamWriter *)writer {
+  [writer appendBytes:"," length:1];
+}
+@end
+
+@implementation SBJson5StreamWriterStateObjectValue
+- (void)appendSeparator:(SBJson5StreamWriter *)writer {
+  [writer appendBytes:":" length:1];
+}
+- (void)transitionState:(SBJson5StreamWriter *)writer {
+    writer.state = writer.stateObjectKey;
+}
+- (void)appendWhitespace:(SBJson5StreamWriter *)writer {
+  [writer appendBytes:" " length:1];
+}
+@end
+
+@implementation SBJson5StreamWriterStateArrayStart
+- (void)transitionState:(SBJson5StreamWriter *)writer {
+    writer.state = writer.stateArrayValue;
+}
+@end
+
+@implementation SBJson5StreamWriterStateArrayValue
+- (void)appendSeparator:(SBJson5StreamWriter *)writer {
+  [writer appendBytes:"," length:1];
+}
+@end
+
+@implementation SBJson5StreamWriterStateStart
+- (void)transitionState:(SBJson5StreamWriter *)writer {
+  writer.state = [[SBJson5StreamWriterStateComplete alloc] init];
+}
+- (void)appendSeparator:(SBJson5StreamWriter *)writer {
+}
+@end
+
+@implementation SBJson5StreamWriterStateComplete
+- (BOOL)isInvalidState:(SBJson5StreamWriter *)writer {
+  writer.error = @"Stream is closed";
+  return YES;
+}
+@end
+
+#pragma mark -
 
 @implementation SBJson5StreamWriter {
     BOOL _sortKeys, _humanReadable;
+    NSNumber *kTrue, *kFalse, *kPositiveInfinity, *kNegativeInfinity;
     NSUInteger _maxDepth;
     __weak id<SBJson5StreamWriterDelegate> _delegate;
     NSComparator _sortKeysComparator;
-}
-
-+ (void)initialize {
-    kPositiveInfinity = [NSNumber numberWithDouble:+HUGE_VAL];
-    kNegativeInfinity = [NSNumber numberWithDouble:-HUGE_VAL];
-    kTrue = [NSNumber numberWithBool:YES];
-    kFalse = [NSNumber numberWithBool:NO];
 }
 
 #pragma mark Housekeeping
@@ -68,7 +169,7 @@ static NSNumber *kNegativeInfinity;
            humanReadable:(BOOL)humanReadable
                 sortKeys:(BOOL)sortKeys
       sortKeysComparator:(NSComparator)sortKeysComparator {
-    return [[self alloc] initWithDelegate:delegate
+  return [[self alloc] initWithDelegate:delegate
                                  maxDepth:maxDepth
                             humanReadable:humanReadable
                                  sortKeys:sortKeys
@@ -82,13 +183,24 @@ static NSNumber *kNegativeInfinity;
     sortKeysComparator:(NSComparator)sortKeysComparator {
 	self = [super init];
 	if (self) {
+        kPositiveInfinity = [NSNumber numberWithDouble:+HUGE_VAL];
+        kNegativeInfinity = [NSNumber numberWithDouble:-HUGE_VAL];
+        kTrue = [NSNumber numberWithBool:YES];
+        kFalse = [NSNumber numberWithBool:NO];
+
+        _stateObjectStart = [[SBJson5StreamWriterStateObjectStart alloc] init];
+        _stateObjectKey = [[SBJson5StreamWriterStateObjectKey alloc] init];
+        _stateObjectValue = [[SBJson5StreamWriterStateObjectValue alloc] init];
+        _stateArrayStart = [[SBJson5StreamWriterStateArrayStart alloc] init];
+        _stateArrayValue = [[SBJson5StreamWriterStateArrayValue alloc] init];
+        _state = [[SBJson5StreamWriterStateStart alloc] init];
+
         _delegate = delegate;
 		_maxDepth = maxDepth;
         _sortKeys = sortKeys;
         _humanReadable = humanReadable;
         _sortKeysComparator = sortKeysComparator;
         _stateStack = [[NSMutableArray alloc] initWithCapacity:maxDepth];
-        _state = [SBJson5StreamWriterStateStart sharedInstance];
         cache = [[NSMutableDictionary alloc] initWithCapacity:32];
     }
 	return self;
@@ -147,7 +259,7 @@ static NSNumber *kNegativeInfinity;
 	if (_humanReadable && _stateStack.count) [_state appendWhitespace:self];
 
     [_stateStack addObject:_state];
-    self.state = [SBJson5StreamWriterStateObjectStart sharedInstance];
+    self.state = self.stateObjectStart;
 
 	if (_maxDepth && _stateStack.count > _maxDepth) {
 		self.error = @"Nested too deep";
@@ -180,7 +292,7 @@ static NSNumber *kNegativeInfinity;
 	if (_humanReadable && _stateStack.count) [_state appendWhitespace:self];
 
     [_stateStack addObject:_state];
-	self.state = [SBJson5StreamWriterStateArrayStart sharedInstance];
+    self.state = self.stateArrayStart;
 
 	if (_maxDepth && _stateStack.count > _maxDepth) {
 		self.error = @"Nested too deep";
@@ -340,7 +452,7 @@ static const char *strForChar(int c) {
 }
 
 - (BOOL)writeNumber:(NSNumber*)number {
-	if (number == kTrue || number == kFalse)
+    if (number == kTrue || number == kFalse)
 		return [self writeBool:[number boolValue]];
 
 	if ([_state isInvalidState:self]) return NO;
@@ -348,7 +460,7 @@ static const char *strForChar(int c) {
 	[_state appendSeparator:self];
 	if (_humanReadable) [_state appendWhitespace:self];
 
-	if ([kPositiveInfinity isEqualToNumber:number]) {
+    if ([kPositiveInfinity isEqualToNumber:number]) {
 		self.error = @"+Infinity is not a valid number in JSON";
 		return NO;
 
@@ -363,7 +475,7 @@ static const char *strForChar(int c) {
 
 	const char *objcType = [number objCType];
 	char num[128];
-	size_t len;
+	int len;
 
 	switch (objcType[0]) {
 		case 'c': case 'i': case 's': case 'l': case 'q':
@@ -377,7 +489,11 @@ static const char *strForChar(int c) {
 			break;
         }
 	}
-	[_delegate writer:self appendBytes:num length: len];
+
+    // It is always safe to cast `len` to NSUInteger here, because
+    // snprintf above guarantees its range is in the range 0 to 128
+    // (the length of the `num` buffer).
+	[_delegate writer:self appendBytes:num length: (NSUInteger)len];
 	[_state transitionState:self];
 	return YES;
 }

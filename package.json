@@ -1,19 +1,43 @@
 {
-  "name": "@paytabscom/react-native-paytabs-library",
-  "publishConfig": { "registry": "https://npm.pkg.github.com/" },
-  "version": "1.0.8",
-  "description": "Paytabs react native library",
+  "name": "@paytabscom/react-native-paytabs-emulator",
+  "title": "React Native Paytabs Emulator",
+  "version": "1.0.0-beta",
+  "description": "Paytabs is a payment gateway",
   "main": "index.js",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "README.md",
+    "android",
+    "index.js",
+    "ios",
+    "react-native-paytabs-emulator.podspec"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paytabscom/react-native-paytabs-library.git",
+    "baseUrl": "https://github.com/paytabscom/react-native-paytabs-library"
   },
   "keywords": [
     "react-native"
   ],
-  "author": "Ramy Sabry",
-  "license": "",
+  "author": {
+    "name": "Mohamed Adly",
+    "email": "m.adly@paytabs.com"
+  },
+  "license": "MIT",
+  "licenseFilename": "LICENSE",
+  "readmeFilename": "README.md",
   "peerDependencies": {
-    "react-native": "^0.41.2",
-    "react-native-windows": "0.41.0-rc.1"
+    "react": "^16.8.1",
+    "react-native": ">=0.60.0-rc.0 <1.0.x"
+  },
+  "devDependencies": {
+    "react": "^16.9.0",
+    "react-native": "^0.61.5"
   }
 }

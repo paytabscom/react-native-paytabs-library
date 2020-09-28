@@ -4,4 +4,3 @@
 @interface RNPaytabsLibrary : RCTEventEmitter <RCTBridgeModule>
 
 @end
-  
