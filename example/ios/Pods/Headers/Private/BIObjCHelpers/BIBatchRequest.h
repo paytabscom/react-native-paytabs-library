@@ -1,1 +1,0 @@
-../../../BIObjCHelpers/BIObjCHelpers/Batch/BIBatchRequest.h

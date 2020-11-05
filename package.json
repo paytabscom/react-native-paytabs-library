@@ -1,7 +1,7 @@
 {
   "name": "@paytabscom/react-native-paytabs-emulator",
   "title": "React Native Paytabs Emulator",
-  "version": "1.0.0-beta",
+  "version": "1.1.1-beta",
   "description": "Paytabs is a payment gateway",
   "main": "index.js",
   "publishConfig": {

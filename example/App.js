@@ -40,8 +40,8 @@ export default class App extends Component<Props> {
 
   onPressPay(){
     var args = {
-      [RNPaytabsLibrary.merchant_email]: "test@example.com",
-      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSOSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
+      [RNPaytabsLibrary.merchant_email]: "test@test.com",
+      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSdSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
       [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
       [RNPaytabsLibrary.amount]: "2.0",
       [RNPaytabsLibrary.currency_code]: "USD",
@@ -63,7 +63,8 @@ export default class App extends Component<Props> {
       [RNPaytabsLibrary.color]: "#cccccc",
       [RNPaytabsLibrary.language]: 'en', // 'en', 'ar'
       [RNPaytabsLibrary.tokenization]: true,
-      [RNPaytabsLibrary.preauth]: false
+      [RNPaytabsLibrary.preauth]: false,
+      [RNPaytabsLibrary.merchant_region]: "emirates"
     };
     RNPaytabsLibrary.start(args, (response) => {
       RNPaytabsLibrary.log("on Response Payment");
@@ -83,8 +84,8 @@ export default class App extends Component<Props> {
   }
   onPressApplePay(){
     var args = {
-      [RNPaytabsLibrary.merchant_email]: "test@example.com",
-      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSsSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
+      [RNPaytabsLibrary.merchant_email]: "test@test.com",
+      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSdSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
       [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
       [RNPaytabsLibrary.amount]: "2.0",
       [RNPaytabsLibrary.currency_code]: "AED",
@@ -94,7 +95,8 @@ export default class App extends Component<Props> {
       [RNPaytabsLibrary.language]: 'en',
       [RNPaytabsLibrary.preauth]: false,
       [RNPaytabsLibrary.merchant_identifier]: 'merchant.bundleId',
-      [RNPaytabsLibrary.tokenization]: true
+      [RNPaytabsLibrary.tokenization]: true,
+      [RNPaytabsLibrary.merchant_region]: "emirates"
     };
     RNPaytabsLibrary.startApplePay(args, (response) => {
       RNPaytabsLibrary.log("on Response Payment");

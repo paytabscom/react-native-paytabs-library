@@ -80,6 +80,11 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
         
         //Pre auth
         in.putExtra(PaymentParams.IS_PREAUTH, paymentDetails.getBoolean("pt_preauth"));
+
+        //Merchant region
+        String merchant_region =  paymentDetails.getString("pt_merchant_region");
+        in.putExtra(PaymentParams.REGION_ENDPOINT, merchant_region);
+
         reactContext.startActivityForResult(in, PaymentParams.PAYMENT_REQUEST_CODE, new Bundle());
     }
 
