@@ -18,7 +18,7 @@ PODS:
   - BIObjCHelpers (0.4.3)
   - boost-for-react-native (1.63.0)
   - CardIO (5.4.1)
-  - CocoaAsyncSocket (7.6.4)
+  - CocoaAsyncSocket (7.6.5)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.63.2)
@@ -272,7 +272,7 @@ PODS:
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
-  - react-native-paytabs-emulator (1.1.0-beta):
+  - react-native-paytabs-emulator (1.1.1-beta):
     - PayTabs (= 4.2.0)
     - React
   - React-RCTActionSheet (0.63.2):
@@ -478,7 +478,7 @@ SPEC CHECKSUMS:
   BIObjCHelpers: 378672b0f9309e4d2cbd4cabfb3afbe1ce225e40
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
-  CocoaAsyncSocket: 694058e7c0ed05a9e217d1b3c7ded962f4180845
+  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
   FBLazyVector: 3ef4a7f62e7db01092f9d517d2ebc0d0677c4a37
@@ -509,7 +509,7 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
-  react-native-paytabs-emulator: 8334a0741923946fff17fbc8019749d3e53e3af8
+  react-native-paytabs-emulator: 8c534530d1e10ec583e0fe00fd15dfe14e8b3d50
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -526,4 +526,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 311cf87a4a33d759b7ec994ec3735e03d4ededbf
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0
