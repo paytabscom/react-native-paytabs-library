@@ -70,16 +70,16 @@ export default class App extends Component<Props> {
       RNPaytabsLibrary.log("on Response Payment");
       console.log(response);
       // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100')
+      if (response.pt_response_code == '100') {
         RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-      else
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      this.state = { message: 'Result:' + response.pt_result };
-      // Tokenization
+        // Tokenization
       //RNPaytabs.log(response.pt_token_customer_email);
       //RNPaytabs.log(response.pt_token_customer_password);
       //RNPaytabs.log(response.pt_token);
-      
+      } else {
+        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
+      }
+      this.state = { message: 'Result:' + response.pt_result };
     });
   }
   onPressApplePay(){
@@ -102,15 +102,17 @@ export default class App extends Component<Props> {
       RNPaytabsLibrary.log("on Response Payment");
       console.log(response);
       // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100')
+      if (response.pt_response_code == '100') {
         RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-      else
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      this.state = { message: 'Result:' + response.pt_result };
-      // Tokenization
+        // Tokenization
       //RNPaytabs.log(response.pt_token_customer_email);
       //RNPaytabs.log(response.pt_token_customer_password);
       //RNPaytabs.log(response.pt_token);
+      } else {
+        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
+      }
+      this.state = { message: 'Result:' + response.pt_result };
+      
     });
   }
   render() {
