@@ -84,7 +84,7 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
         //Merchant region
         String merchant_region =  paymentDetails.getString("pt_merchant_region");
         in.putExtra(PaymentParams.REGION_ENDPOINT, merchant_region);
-
+        in.putExtra(PaymentParams.FORCE_SHIPPING_VALIDATION, paymentDetails.getBoolean("pt_force_shipping_info"));
         reactContext.startActivityForResult(in, PaymentParams.PAYMENT_REQUEST_CODE, new Bundle());
     }
 

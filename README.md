@@ -1,6 +1,6 @@
 
 # react-native-paytabs-emulator
-![Version](https://img.shields.io/badge/Paytabs%20React%20Native%20library-v1.1.1-beta-green)
+![Version](https://img.shields.io/badge/Paytabs%20React%20Native%20library-v1.2.1-beta-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -10,7 +10,7 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabscom/react-native-paytabs-emulator@1.1.1-beta --save`
+`$ npm install @paytabscom/react-native-paytabs-emulator@1.2.1-beta --save`
 
 ## Usage
 
@@ -22,6 +22,8 @@ import RNPaytabsLibrary from '@paytabscom/react-native-paytabs-emulator';
 
 ### Pay with PayTabs
 1. Configure arguments
+
+Pass the parameter `[RNPaytabsLibrary.forceShippingInfo]` with `true` value to make the shipping info optinal.
 
 ```javascript
 var args = {
@@ -49,7 +51,8 @@ var args = {
   [RNPaytabsLibrary.language]: 'en', // 'en', 'ar'
   [RNPaytabsLibrary.tokenization]: true,
   [RNPaytabsLibrary.preauth]: false,
-  [RNPaytabsLibrary.merchant_region]: "emirates"
+  [RNPaytabsLibrary.merchant_region]: "emirates",
+  [RNPaytabsLibrary.forceShippingInfo]: true
 }
 ```
 
@@ -68,6 +71,8 @@ RNPaytabsLibrary.start(args, (response) => {
 ### Pay with Apple Pay
 1. Configure arguments
 
+Pass the parameter `[RNPaytabsLibrary.forceShippingInfo]` with `true` value to make the shipping info optinal.
+
 ```javascript
 var args = {
 [RNPaytabsLibrary.merchant_email]: "test@example.com",
@@ -82,7 +87,8 @@ var args = {
   [RNPaytabsLibrary.preauth]: false,
   [RNPaytabsLibrary.merchant_identifier]: 'merchant.bundleId',
   [RNPaytabsLibrary.tokenization]: true,
-  [RNPaytabsLibrary.merchant_region]: "emirates"
+  [RNPaytabsLibrary.merchant_region]: "emirates",
+  [RNPaytabsLibrary.forceShippingInfo]: false
 }
 ```
 
@@ -97,6 +103,16 @@ RNPaytabsLibrary.startApplePay(args, (response) => {
     RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
 });
 ```
+## Supported Merchant Region
+Pass the parameter `[RNPaytabsLibrary.merchant_region]` with one value of the below list according to supported region.
+
+* UAE = `emirates`
+* Egypt = `egypt`
+* Saudi Arabia = `saudi`
+* Oman = `oman`
+* Jordan = `jordan`
+* Global =`global`
+* Demo = `demo`
 
 ## Demo application
 

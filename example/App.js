@@ -64,7 +64,8 @@ export default class App extends Component<Props> {
       [RNPaytabsLibrary.language]: 'en', // 'en', 'ar'
       [RNPaytabsLibrary.tokenization]: true,
       [RNPaytabsLibrary.preauth]: false,
-      [RNPaytabsLibrary.merchant_region]: "emirates"
+      [RNPaytabsLibrary.merchant_region]: "emirates",
+      [RNPaytabsLibrary.forceShippingInfo]: false
     };
     RNPaytabsLibrary.start(args, (response) => {
       RNPaytabsLibrary.log("on Response Payment");

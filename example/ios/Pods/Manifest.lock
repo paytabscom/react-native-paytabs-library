@@ -93,7 +93,7 @@ PODS:
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
-  - PayTabs (4.2.0):
+  - PayTabs (4.3.0):
     - ActionSheetPicker-3.0 (~> 2.4.2)
     - AFNetworking (~> 4.0.1)
     - BIObjCHelpers (~> 0.4.3)
@@ -273,7 +273,7 @@ PODS:
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
   - react-native-paytabs-emulator (1.1.1-beta):
-    - PayTabs (= 4.2.0)
+    - PayTabs (= 4.3.0)
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -496,7 +496,7 @@ SPEC CHECKSUMS:
   Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
   MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
-  PayTabs: d7f23267142173749ad9fac102247b11de170383
+  PayTabs: 80ba20426771bad4b8f77416b843b26e1740feca
   PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
@@ -509,7 +509,7 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
-  react-native-paytabs-emulator: 8c534530d1e10ec583e0fe00fd15dfe14e8b3d50
+  react-native-paytabs-emulator: 05f4b09294696f6eddf107406811539a5909490c
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
