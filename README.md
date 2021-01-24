@@ -1,6 +1,6 @@
 
 # react-native-paytabs-emulator
-![Version](https://img.shields.io/badge/Paytabs%20React%20Native%20library-v1.2.1-beta-green)
+![Version](https://img.shields.io/badge/Paytabs%20React%20Native%20library-v1.2.2-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -10,7 +10,7 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabscom/react-native-paytabs-emulator@1.2.1-beta --save`
+`$ npm install @paytabscom/react-native-paytabs-emulator@1.2.2 --save`
 
 ## Usage
 
