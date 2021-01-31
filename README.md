@@ -116,7 +116,7 @@ Pass the parameter `[RNPaytabsLibrary.merchant_region]` with one value of the be
 
 ## Demo application
 
-Check our complete example here <https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example>.
+Check our complete example here <https://github.com/paytabscom/react-native-paytabs-library/tree/master/example>.
 
 <img src="images/demo.png" width="300">
 
@@ -131,4 +131,5 @@ See [LICENSE][license].
  [1]: https://www.paytabs.com/en/support/
  [2]: https://www.paytabs.com/en/terms-of-use/
  [3]: https://www.paytabs.com/en/privacy-policy/
- [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/LICENSE
+ [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/LICENSE
+
