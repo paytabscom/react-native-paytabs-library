@@ -1,37 +1,18 @@
-#import "RNPaytabsLibrary.h"
-#import <React/RCTLog.h>
-#import <UIKit/UIKit.h>
+#import <React/RCTBridgeModule.h>
 
-@implementation RNPaytabsLibrary
-
-RCT_EXPORT_MODULE()
+@interface RCT_EXTERN_MODULE(RNPaytabsLibrary, NSObject)
 
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
 }
 
-- (NSArray<NSString *> *)supportedEvents
++ (BOOL)requiresMainQueueSetup
 {
-    return @[@"EventPreparePaypage"];
+    return YES;
 }
 
-RCT_EXPORT_METHOD(log:(NSString *)name )
-{
-    RCTLogInfo(@"Paytabs React Native: %@", name);
-}
-
-RCT_EXPORT_METHOD(start:(NSDictionary *)paymentDetails withCallBack:(RCTResponseSenderBlock) callback)
-{
-    UIViewController *rootViewController = [[[[UIApplication sharedApplication]delegate] window] rootViewController];
-    
-}
-
-RCT_EXPORT_METHOD(startApplePay:(NSDictionary *)paymentDetails withCallBack:(RCTResponseSenderBlock) callback)
-{
-    UIViewController *rootViewController = [[[[UIApplication sharedApplication]delegate] window] rootViewController];
-    
-    
-}
-
+RCT_EXTERN_METHOD(startCardPayment:(NSDictionary *)paymentDetails
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
 @end

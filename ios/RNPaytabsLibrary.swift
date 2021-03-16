@@ -8,8 +8,15 @@
 import Foundation
 import PaymentSDK
 
-@objc class Payment: NSObject {
-    @objc func pay() {
-        
+@objc(RNPaytabsLibrary)
+class RNPaytabsLibrary: NSObject {
+
+    @objc(startCardPayment:withResolver:withRejecter:)
+    func startCardPayment(paymentDetails: NSDictionary,
+                          resolve: RCTPromiseResolveBlock,
+                          reject: RCTPromiseRejectBlock) -> Void {
+        resolve(paymentDetails)
+//        resolve(a*b)
+//        PaymentSDK.startCardPayment(on: , configuration: <#T##PaymentSDKConfiguration#>, delegate: <#T##PaymentSDKDelegate?#>)
     }
 }

@@ -13,11 +13,11 @@ import {NativeEventEmitter, Platform, StyleSheet, Text, Button, View } from 'rea
 import RNPaytabsLibrary from '@paytabscom/react-native-paytabs-emulator';
 
 // Prepare Paypage events for IOS
-const eventPreparePaypageEmitter = new NativeEventEmitter(RNPaytabsLibrary);
-const subscription = eventPreparePaypageEmitter.addListener(
-  'EventPreparePaypage',
-  (prepare) =>  RNPaytabsLibrary.log("eventPreparePaypageEmitter: " + prepare.action)
-);
+// const eventPreparePaypageEmitter = new NativeEventEmitter(RNPaytabsLibrary);
+// const subscription = eventPreparePaypageEmitter.addListener(
+//   'EventPreparePaypage',
+//   (prepare) =>  RNPaytabsLibrary.log("eventPreparePaypageEmitter: " + prepare.action)
+// );
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -26,8 +26,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
   state = {
     message: '--'
@@ -67,21 +66,26 @@ export default class App extends Component<Props> {
       [RNPaytabsLibrary.merchant_region]: "emirates",
       [RNPaytabsLibrary.forceShippingInfo]: false
     };
-    RNPaytabsLibrary.start(args, (response) => {
-      RNPaytabsLibrary.log("on Response Payment");
-      console.log(response);
-      // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100') {
-        RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-        // Tokenization
-      //RNPaytabs.log(response.pt_token_customer_email);
-      //RNPaytabs.log(response.pt_token_customer_password);
-      //RNPaytabs.log(response.pt_token);
-      } else {
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      }
-      this.state = { message: 'Result:' + response.pt_result };
-    });
+    RNPaytabsLibrary.startCardPayment(args).then( result => {
+      
+     }, function(error) {
+      
+     });
+    // RNPaytabsLibrary.start(args, (response) => {
+    //   RNPaytabsLibrary.log("on Response Payment");
+    //   console.log(response);
+    //   // Response Code: 100 successful otherwise fail
+    //   if (response.pt_response_code == '100') {
+    //     RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
+    //     // Tokenization
+    //   //RNPaytabs.log(response.pt_token_customer_email);
+    //   //RNPaytabs.log(response.pt_token_customer_password);
+    //   //RNPaytabs.log(response.pt_token);
+    //   } else {
+    //     RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
+    //   }
+    //   this.state = { message: 'Result:' + response.pt_result };
+    // });
   }
   onPressApplePay(){
     var args = {
@@ -99,22 +103,22 @@ export default class App extends Component<Props> {
       [RNPaytabsLibrary.tokenization]: true,
       [RNPaytabsLibrary.merchant_region]: "emirates"
     };
-    RNPaytabsLibrary.startApplePay(args, (response) => {
-      RNPaytabsLibrary.log("on Response Payment");
-      console.log(response);
-      // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100') {
-        RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-        // Tokenization
-      //RNPaytabs.log(response.pt_token_customer_email);
-      //RNPaytabs.log(response.pt_token_customer_password);
-      //RNPaytabs.log(response.pt_token);
-      } else {
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      }
-      this.state = { message: 'Result:' + response.pt_result };
+    // RNPaytabsLibrary.startApplePay(args, (response) => {
+    //   RNPaytabsLibrary.log("on Response Payment");
+    //   console.log(response);
+    //   // Response Code: 100 successful otherwise fail
+    //   if (response.pt_response_code == '100') {
+    //     RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
+    //     // Tokenization
+    //   //RNPaytabs.log(response.pt_token_customer_email);
+    //   //RNPaytabs.log(response.pt_token_customer_password);
+    //   //RNPaytabs.log(response.pt_token);
+    //   } else {
+    //     RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
+    //   }
+    //   this.state = { message: 'Result:' + response.pt_result };
       
-    });
+    // });
   }
   render() {
     return (
