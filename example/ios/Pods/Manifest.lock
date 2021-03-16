@@ -1,23 +1,5 @@
 PODS:
-  - ActionSheetPicker-3.0 (2.4.2)
-  - AFNetworking (4.0.1):
-    - AFNetworking/NSURLSession (= 4.0.1)
-    - AFNetworking/Reachability (= 4.0.1)
-    - AFNetworking/Security (= 4.0.1)
-    - AFNetworking/Serialization (= 4.0.1)
-    - AFNetworking/UIKit (= 4.0.1)
-  - AFNetworking/NSURLSession (4.0.1):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (4.0.1)
-  - AFNetworking/Security (4.0.1)
-  - AFNetworking/Serialization (4.0.1)
-  - AFNetworking/UIKit (4.0.1):
-    - AFNetworking/NSURLSession
-  - BIObjCHelpers (0.4.3)
   - boost-for-react-native (1.63.0)
-  - CardIO (5.4.1)
   - CocoaAsyncSocket (7.6.5)
   - CocoaLibEvent (1.0.0)
   - DoubleConversion (1.1.6)
@@ -41,8 +23,8 @@ PODS:
     - OpenSSL-Universal (= 1.0.2.20)
   - Flipper-Glog (0.3.6)
   - Flipper-PeerTalk (0.0.4)
-  - Flipper-RSocket (1.1.0):
-    - Flipper-Folly (~> 2.2)
+  - Flipper-RSocket (1.1.1):
+    - Flipper-Folly (~> 2.3)
   - FlipperKit (0.41.5):
     - FlipperKit/Core (= 0.41.5)
   - FlipperKit/Core (0.41.5):
@@ -85,33 +67,16 @@ PODS:
     - DoubleConversion
     - glog
   - glog (0.3.5)
-  - Lockbox (3.0.6)
-  - Mantle (2.1.6):
-    - Mantle/extobjc (= 2.1.6)
-  - Mantle/extobjc (2.1.6)
-  - MBProgressHUD (1.1.0)
   - OpenSSL-Universal (1.0.2.20):
     - OpenSSL-Universal/Static (= 1.0.2.20)
   - OpenSSL-Universal/Static (1.0.2.20)
-  - PayTabs (4.3.0):
-    - ActionSheetPicker-3.0 (~> 2.4.2)
-    - AFNetworking (~> 4.0.1)
-    - BIObjCHelpers (~> 0.4.3)
-    - CardIO (~> 5.4.1)
-    - Lockbox (~> 3.0.6)
-    - Mantle (~> 2.1.0)
-    - MBProgressHUD (~> 1.1.0)
-    - PINCache (~> 2.3)
-    - Reachability (~> 3.2)
-    - SBJson (~> 5.0.0)
-  - PINCache (2.3)
+  - PayTabsSDK (6.0.8-beta)
   - RCTRequired (0.63.2)
   - RCTTypeSafety (0.63.2):
     - FBLazyVector (= 0.63.2)
     - Folly (= 2020.01.13.00)
     - RCTRequired (= 0.63.2)
     - React-Core (= 0.63.2)
-  - Reachability (3.2)
   - React (0.63.2):
     - React-Core (= 0.63.2)
     - React-Core/DevSupport (= 0.63.2)
@@ -272,8 +237,8 @@ PODS:
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
   - React-jsinspector (0.63.2)
-  - react-native-paytabs-emulator (1.1.1-beta):
-    - PayTabs (= 4.3.0)
+  - react-native-paytabs-emulator (1.2.2):
+    - PayTabsSDK (= 6.0.8-beta)
     - React
   - React-RCTActionSheet (0.63.2):
     - React-Core/RCTActionSheetHeaders (= 0.63.2)
@@ -335,7 +300,6 @@ PODS:
     - React-Core (= 0.63.2)
     - React-cxxreact (= 0.63.2)
     - React-jsi (= 0.63.2)
-  - SBJson (5.0.3)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -346,7 +310,7 @@ DEPENDENCIES:
   - FBReactNativeSpec (from `../node_modules/react-native/Libraries/FBReactNativeSpec`)
   - Flipper (~> 0.41.1)
   - Flipper-DoubleConversion (= 1.1.7)
-  - Flipper-Folly (~> 2.2)
+  - Flipper-Folly (= 2.3.0)
   - Flipper-Glog (= 0.3.6)
   - Flipper-PeerTalk (~> 0.0.4)
   - Flipper-RSocket (~> 1.1)
@@ -392,11 +356,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - ActionSheetPicker-3.0
-    - AFNetworking
-    - BIObjCHelpers
     - boost-for-react-native
-    - CardIO
     - CocoaAsyncSocket
     - CocoaLibEvent
     - Flipper
@@ -406,14 +366,8 @@ SPEC REPOS:
     - Flipper-PeerTalk
     - Flipper-RSocket
     - FlipperKit
-    - Lockbox
-    - Mantle
-    - MBProgressHUD
     - OpenSSL-Universal
-    - PayTabs
-    - PINCache
-    - Reachability
-    - SBJson
+    - PayTabsSDK
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -473,11 +427,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  ActionSheetPicker-3.0: 5b62e07b00bd970509cf5ece99cb7447eae5dd0d
-  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  BIObjCHelpers: 378672b0f9309e4d2cbd4cabfb3afbe1ce225e40
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLibEvent: 2fab71b8bd46dd33ddb959f7928ec5909f838e3f
   DoubleConversion: cde416483dac037923206447da6e1454df403714
@@ -488,19 +438,14 @@ SPEC CHECKSUMS:
   Flipper-Folly: e4493b013c02d9347d5e0cb4d128680239f6c78a
   Flipper-Glog: 1dfd6abf1e922806c52ceb8701a3599a79a200a6
   Flipper-PeerTalk: 116d8f857dc6ef55c7a5a75ea3ceaafe878aadc9
-  Flipper-RSocket: 64e7431a55835eb953b0bf984ef3b90ae9fdddd7
+  Flipper-RSocket: a3acb8812d6adf127deb0a5edae2793b97e6b641
   FlipperKit: bc68102cd4952a258a23c9c1b316c7bec1fecf83
   Folly: b73c3869541e86821df3c387eb0af5f65addfab4
   glog: 40a13f7840415b9a77023fbcae0f1e6f43192af3
-  Lockbox: 4291a0b8b1aed35474881c4e592961dec3ca695e
-  Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
-  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
   OpenSSL-Universal: ff34003318d5e1163e9529b08470708e389ffcdd
-  PayTabs: 80ba20426771bad4b8f77416b843b26e1740feca
-  PINCache: ce36ed282031b92fc7733ffe831f474ff80fddc2
+  PayTabsSDK: c4e2e4ce6a250e72f9abf4820e0044cc5eaec3b9
   RCTRequired: f13f25e7b12f925f1f6a6a8c69d929a03c0129fe
   RCTTypeSafety: 44982c5c8e43ff4141eb519a8ddc88059acd1f3a
-  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
   React: e1c65dd41cb9db13b99f24608e47dd595f28ca9a
   React-callinvoker: 552a6a6bc8b3bb794cf108ad59e5a9e2e3b4fc98
   React-Core: 9d341e725dc9cd2f49e4c49ad1fc4e8776aa2639
@@ -509,7 +454,7 @@ SPEC CHECKSUMS:
   React-jsi: 54245e1d5f4b690dec614a73a3795964eeef13a8
   React-jsiexecutor: 8ca588cc921e70590820ce72b8789b02c67cce38
   React-jsinspector: b14e62ebe7a66e9231e9581279909f2fc3db6606
-  react-native-paytabs-emulator: 05f4b09294696f6eddf107406811539a5909490c
+  react-native-paytabs-emulator: d821edc3a319b4d225da0bee20af3c4ad889dce1
   React-RCTActionSheet: 910163b6b09685a35c4ebbc52b66d1bfbbe39fc5
   React-RCTAnimation: 9a883bbe1e9d2e158d4fb53765ed64c8dc2200c6
   React-RCTBlob: 39cf0ece1927996c4466510e25d2105f67010e13
@@ -520,10 +465,9 @@ SPEC CHECKSUMS:
   React-RCTText: 1b6773e776e4b33f90468c20fe3b16ca3e224bb8
   React-RCTVibration: 4d2e726957f4087449739b595f107c0d4b6c2d2d
   ReactCommon: a0a1edbebcac5e91338371b72ffc66aa822792ce
-  SBJson: 31813d1508edec904663cd59e71e0225d9dd8e07
   Yoga: 7740b94929bbacbddda59bf115b5317e9a161598
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 311cf87a4a33d759b7ec994ec3735e03d4ededbf
+PODFILE CHECKSUM: 066df36ef657f15273fce3d24ef2128f1e9fe5c6
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
