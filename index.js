@@ -1,4 +1,5 @@
 import { NativeModules } from 'react-native';
+// import PaymentSDKConfiguration from './PaymentSDKConfiguration.js';
 
 const { RNPaytabsLibrary } = NativeModules;
 
@@ -32,4 +33,20 @@ RNPaytabsLibrary.merchant_identifier = 'pt_merchant_identifier';
 RNPaytabsLibrary.country_code = 'pt_country_code';
 RNPaytabsLibrary.merchant_region = 'pt_merchant_region';
 RNPaytabsLibrary.forceShippingInfo = 'pt_force_shipping_info';
-export default RNPaytabsLibrary;
+
+// export class PaymentSDKConfiguration {
+//     constructor(profileID) {self.profileID = profileID}
+// };
+const TokeniseType = Object.freeze({"none":0, "merchantMandatory":1,"userMandatory":2,"userOptinoal":3});
+const TokeniseFromat = Object.freeze({"none":"1", "hex32": "2", "alphaNum20": "3", "digit22": "3", "digit16": "5", "alphaNum32": "6"});
+const TransactionType = Object.freeze({"sale":"sale"});
+const TransactionClass = Object.freeze({"ecom":"ecom", "recur":"recurring"});
+
+export {
+    RNPaytabsLibrary,
+};
+
+export { default as PaymentSDKConfiguration} from './PaymentSDKConfiguration';
+export { default as PaymentSDKBillingDetails} from './PaymentSDKBillingDetails';
+export { default as PaymentSDKShippingDetails} from './PaymentSDKShippingDetails';
+export { default as PaymentSDKTheme} from './PaymentSDKTheme';

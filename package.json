@@ -11,6 +11,7 @@
     "README.md",
     "android",
     "index.js",
+    "PaymentSDKConfiguration.js",
     "ios",
     "react-native-paytabs-emulator.podspec"
   ],
