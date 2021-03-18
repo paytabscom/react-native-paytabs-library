@@ -69,9 +69,36 @@ class RNPaytabsLibrary: NSObject {
         configuration.merchantCountryCode = dictionary["merchantCountryCode"] as? String ?? ""
         configuration.merchantIdentifier = dictionary["merchantIdentifier"] as? String
         configuration.simplifyApplePayValidation = dictionary["simplifyApplePayValidation"] as? Bool ?? false
-        configuration.theme = .default
+        configuration.languageCode = dictionary["languageCode"] as? String
+        configuration.forceShippingInfo = dictionary["forceShippingInfo"] as? Bool ?? false
+        configuration.showBillingInfo = dictionary["showBillingInfo"] as? Bool ?? false
+        configuration.showShippingInfo = dictionary["showShippingInfo"] as? Bool ?? false
+        configuration.token = dictionary["token"] as? String
+        configuration.transactionReference = dictionary["transactionReference"] as? String
+        configuration.hideCardScanner = dictionary["hideCardScanner"] as? Bool ?? false
+        configuration.serverIP = dictionary["serverIP"] as? String
+        if let tokeniseType = dictionary["tokeniseType"] as? Int,
+           let type = TokeniseType.getType(type: tokeniseType) {
+            configuration.tokeniseType = type
+        }
+        if let tokenFormat = dictionary["tokenFormat"] as? String,
+           let type = TokenFormat.getType(type: tokenFormat) {
+            configuration.tokenFormat = type
+        }
+        
+//        public var paymentNetworks: [PKPaymentNetwork]?
+
+        if let themeDictionary = dictionary["theme"] as? [String: Any],
+           let theme = generateTheme(dictionary: themeDictionary) {
+            configuration.theme = theme
+        } else {
+            configuration.theme = .default
+        }
         if let billingDictionary = dictionary["billingDetails"] as?  [String: Any] {
             configuration.billingDetails = generateBillingDetails(dictionary: billingDictionary)
+        }
+        if let shippingDictionary = dictionary["shippingDetails"] as?  [String: Any] {
+            configuration.shippingDetails = generateShippingDetails(dictionary: shippingDictionary)
         }
         return configuration
     }
@@ -89,6 +116,74 @@ class RNPaytabsLibrary: NSObject {
         billingDetails.zip = dictionary["zip"] as? String ?? ""
         return billingDetails
     }
+    private func generateShippingDetails(dictionary: [String: Any]) -> PaymentSDKShippingDetails? {
+        let shippingDetails = PaymentSDKShippingDetails()
+        shippingDetails.name = dictionary["name"] as? String ?? ""
+        shippingDetails.phone = dictionary["phone"] as? String ?? ""
+        shippingDetails.email = dictionary["email"] as? String ?? ""
+        shippingDetails.addressLine = dictionary["addressLine"] as? String ?? ""
+        shippingDetails.countryCode = dictionary["countryCode"] as? String ?? ""
+        shippingDetails.city = dictionary["city"] as? String ?? ""
+        shippingDetails.state = dictionary["state"] as? String ?? ""
+        shippingDetails.zip = dictionary["zip"] as? String ?? ""
+        return shippingDetails
+    }
+    
+    private func generateTheme(dictionary: [String: Any]) -> PaymentSDKTheme? {
+        let theme = PaymentSDKTheme.default
+        if let imageName = dictionary["logoImage"] as? String {
+            theme.logoImage = UIImage(named: imageName)
+        }
+        if let colorHex = dictionary["primaryColor"] as? String {
+            theme.primaryColor = UIColor(hex: colorHex)
+        }
+        if let colorHex = dictionary["primaryFontColor"] as? String {
+            theme.primaryFontColor = UIColor(hex: colorHex)
+        }
+        if let fontName = dictionary["primaryFont"] as? String {
+            theme.primaryFont = UIFont.init(name: fontName, size: 16)
+        }
+        if let colorHex = dictionary["secondaryColor"] as? String {
+            theme.secondaryColor = UIColor(hex: colorHex)
+        }
+        if let colorHex = dictionary["secondaryFontColor"] as? String {
+            theme.secondaryFontColor = UIColor(hex: colorHex)
+        }
+        if let fontName = dictionary["secondaryFont"] as? String {
+            theme.secondaryFont = UIFont.init(name: fontName, size: 16)
+        }
+        if let colorHex = dictionary["strokeColor"] as? String {
+            theme.strokeColor = UIColor(hex: colorHex)
+        }
+        if let value = dictionary["strokeThinckness"] as? CGFloat {
+            theme.strokeThinckness = value
+        }
+        if let value = dictionary["inputsCornerRadius"] as? CGFloat {
+            theme.inputsCornerRadius = value
+        }
+        if let colorHex = dictionary["buttonColor"] as? String {
+            theme.buttonColor = UIColor(hex: colorHex)
+        }
+        if let colorHex = dictionary["buttonFontColor"] as? String {
+            theme.buttonFontColor = UIColor(hex: colorHex)
+        }
+        if let fontName = dictionary["buttonFont"] as? String {
+            theme.buttonFont = UIFont.init(name: fontName, size: 16)
+        }
+        if let colorHex = dictionary["titleFontColor"] as? String {
+            theme.titleFontColor = UIColor(hex: colorHex)
+        }
+        if let fontName = dictionary["titleFont"] as? String {
+            theme.titleFont = UIFont.init(name: fontName, size: 16)
+        }
+        if let colorHex = dictionary["backgroundColor"] as? String {
+            theme.backgroundColor = UIColor(hex: colorHex)
+        }
+        if let colorHex = dictionary["placeholderColor"] as? String {
+            theme.placeholderColor = UIColor(hex: colorHex)
+        }
+        return theme
+    }
     
 }
 
@@ -97,9 +192,17 @@ extension RNPaytabsLibrary: PaymentSDKDelegate {
         if let error = error, let reject = reject {
             return reject("", error.localizedDescription, error)
         }
-        
         if let resolve = resolve {
-            resolve(transactionDetails)
+            do {
+                let encoder = JSONEncoder()
+                let data = try encoder.encode(transactionDetails)
+                let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
+                resolve(dictionary)
+            } catch  {
+                if let reject = reject {
+                    reject("", error.localizedDescription, error)
+                }
+            }
         }
     }
 }

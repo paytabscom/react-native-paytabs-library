@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import {NativeEventEmitter, Platform, StyleSheet, Text, Button, View } from 'react-native';
-import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails} from '@paytabscom/react-native-paytabs-emulator';
+import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs-emulator';
 
 // Prepare Paypage events for IOS
 // const eventPreparePaypageEmitter = new NativeEventEmitter(RNPaytabsLibrary);
@@ -47,7 +47,7 @@ export default class App extends Component {
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"
     configuration.merchantCountryCode = "ae"
-    configuration.merchantName = "Sand Box"
+    configuration.merchantName = "Flowers Store"
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
 
@@ -60,27 +60,16 @@ export default class App extends Component {
                                   countryCode= "AE",
                                   zip= "")
     configuration.billingDetails = billingDetails
-    console.log(configuration)
+    let theme = new PaymentSDKTheme()
+    // theme.backgroundColor = "a83297"
+    configuration.theme = theme
+
     RNPaytabsLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
-      //console.log(result)
+      console.log(result)
      }, function(error) {
-      //console.log(error)
+      console.log(error)
      });
-    // RNPaytabsLibrary.start(args, (response) => {
-    //   RNPaytabsLibrary.log("on Response Payment");
-    //   console.log(response);
-    //   // Response Code: 100 successful otherwise fail
-    //   if (response.pt_response_code == '100') {
-    //     RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-    //     // Tokenization
-    //   //RNPaytabs.log(response.pt_token_customer_email);
-    //   //RNPaytabs.log(response.pt_token_customer_password);
-    //   //RNPaytabs.log(response.pt_token);
-    //   } else {
-    //     RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-    //   }
-    //   this.state = { message: 'Result:' + response.pt_result };
-    // });
+    
   }
   onPressApplePay(){
     let configuration = new PaymentSDKConfiguration();
@@ -96,9 +85,9 @@ export default class App extends Component {
     configuration.merchantIdentifier = "merchant.com.paytabs.applepay"
 
     RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
-      //console.log(result)
+      console.log(result)
      }, function(error) {
-      //console.log(error)
+      console.log(error)
      });
   }
   render() {

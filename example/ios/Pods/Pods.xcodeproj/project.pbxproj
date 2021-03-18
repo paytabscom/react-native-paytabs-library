@@ -1527,6 +1527,7 @@
 		DAC0A84DEF0C6AD11170C39D9D1D9320 /* GlobalExecutor.h in Headers */ = {isa = PBXBuildFile; fileRef = BC084752D868F1E0487D0376832C68F9 /* GlobalExecutor.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DB559712C4B8DBF9255080D22A4B4863 /* UIView+React.h in Headers */ = {isa = PBXBuildFile; fileRef = AED7FB4FD5E8B950AF8C547D8B6A68E3 /* UIView+React.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DB74C0C36A6BCBBF578B06377A6CB635 /* Foreach-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = C2452CCE5D9C3E7687B8B9DA940A2CA0 /* Foreach-inl.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		DB74C8F32603244C00A28AD2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB74C8F22603244C00A28AD2 /* UIColor.swift */; };
 		DB823648EE658ED290FB58BD89EDFC40 /* RCTInvalidating.h in Headers */ = {isa = PBXBuildFile; fileRef = 652BD1C3D105223B0188B681EBBEEA7D /* RCTInvalidating.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DB88BC8F773D480D32C3E9853C075410 /* RCTSegmentedControlManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 932FA8073D69B00ADB551D0FED50C3D7 /* RCTSegmentedControlManager.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		DBC9CDDE89BB05890D9D39EA591CCBB6 /* dynamic-inl.h in Headers */ = {isa = PBXBuildFile; fileRef = 64A8DEE6E01BB6CA4264AEBB27A4B0D8 /* dynamic-inl.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -4829,6 +4830,7 @@
 		DB110F3EE631B0E76523ADF3F119EE77 /* RCTProfile.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTProfile.m; sourceTree = "<group>"; };
 		DB2D4435D62B5EB1FCB23A784071452D /* RCTImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = RCTImageCache.m; sourceTree = "<group>"; };
 		DB3C831FFE862EB11379B035A7F89B8A /* InlineExecutor.cpp */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.cpp.cpp; name = InlineExecutor.cpp; path = folly/executors/InlineExecutor.cpp; sourceTree = "<group>"; };
+		DB74C8F22603244C00A28AD2 /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColor.swift; path = ios/UIColor.swift; sourceTree = "<group>"; };
 		DB887850CC91F4EF65555E66C83984F2 /* evrpc.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = evrpc.h; path = src/evrpc.h; sourceTree = "<group>"; };
 		DBDA49C1B89A0A238BCAD99F2C5336A3 /* EventUtil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EventUtil.h; path = folly/io/async/EventUtil.h; sourceTree = "<group>"; };
 		DBE9AD747F18506842B933ED77245E82 /* YGEnums.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = YGEnums.h; path = yoga/YGEnums.h; sourceTree = "<group>"; };
@@ -6110,6 +6112,7 @@
 				8DBBC2F9712C5B9EFEA4B9A133605AE0 /* react-native-paytabs-emulator-Bridging-Header.h */,
 				63F07EDA0F5EB8C635976C6BE53FCBCB /* RNPaytabsLibrary.m */,
 				A6FDB80E87812AA3EDEFECE4408BE3C7 /* RNPaytabsLibrary.swift */,
+				DB74C8F22603244C00A28AD2 /* UIColor.swift */,
 				CE767DA5128E08D5A3CCB693A63B9538 /* Pod */,
 				DC5793313CD23329598AE52A31F4A41A /* Support Files */,
 			);
@@ -11540,6 +11543,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				625F82ED09FA0E5E541E7E1AFFD86735 /* react-native-paytabs-emulator-dummy.m in Sources */,
+				DB74C8F32603244C00A28AD2 /* UIColor.swift in Sources */,
 				9AE05B833ACE25B7F16A20834D11437D /* RNPaytabsLibrary.m in Sources */,
 				DC2F6FDAF49B72D50962568266224FBB /* RNPaytabsLibrary.swift in Sources */,
 			);
