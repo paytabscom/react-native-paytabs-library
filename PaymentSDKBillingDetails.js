@@ -1,4 +1,4 @@
-export default class PaymentSDKBillingInfo {
+export default class PaymentSDKBillingDetails {
     constructor(name, email, phone, addressLine, city, state, countryCode, zip) {
         this.name = name
         this.email = email

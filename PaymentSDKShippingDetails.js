@@ -1,4 +1,4 @@
-export default class PaymentSDKShippingInfo {
+export default class PaymentSDKShippingDetails {
     constructor(name, email, phone, addressLine, city, state, countryCode, zip) {
         this.name = name
         this.email = email
