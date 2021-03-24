@@ -24,7 +24,7 @@ class RNPaytabsLibrary: NSObject {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
             let configuration = generateConfiguration(dictionary: dictionary)
             if let rootViewController = getRootController() {
-                PaymentSDK.startCardPayment(on: rootViewController, configuration: configuration, delegate: self)
+                PaymentManager.startCardPayment(on: rootViewController, configuration: configuration, delegate: self)
             }
         } catch let error {
             reject("", error.localizedDescription, error)
@@ -42,7 +42,7 @@ class RNPaytabsLibrary: NSObject {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
             let configuration = generateConfiguration(dictionary: dictionary)
             if let rootViewController = getRootController() {
-                PaymentSDK.startApplePayPayment(on: rootViewController, configuration: configuration, delegate: self)
+                PaymentManager.startApplePayPayment(on: rootViewController, configuration: configuration, delegate: self)
             }
         } catch let error {
             reject("", error.localizedDescription, error)
@@ -187,8 +187,8 @@ class RNPaytabsLibrary: NSObject {
     
 }
 
-extension RNPaytabsLibrary: PaymentSDKDelegate {
-    func paymentSDK(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
+extension RNPaytabsLibrary: PaymentManagerDelegate {
+    func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
             return reject("", error.localizedDescription, error)
         }
