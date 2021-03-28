@@ -12,7 +12,7 @@
 
 def DEFAULT_COMPILE_SDK_VERSION = 28
 def DEFAULT_BUILD_TOOLS_VERSION = '28.0.3'
-def DEFAULT_MIN_SDK_VERSION = 16
+def DEFAULT_MIN_SDK_VERSION = 21
 def DEFAULT_TARGET_SDK_VERSION = 28
 
 def safeExtGet(prop, fallback) {
@@ -57,6 +57,9 @@ android {
         resolutionStrategy {
             exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
         }
+    }
+    packagingOptions {
+        pickFirst '**/*.so'
     }
 }
 

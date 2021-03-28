@@ -26,6 +26,7 @@ export default class PaymentSDKConfiguration {
         paymentNetworks,
         token,
         transactionReference,
+        samsungToken,
         theme
         ) {
             this.profileID = profileID;
@@ -56,5 +57,6 @@ export default class PaymentSDKConfiguration {
             this.token = token
             this.transactionReference = transactionReference
             this.theme = theme
+            this.samsungToken = samsungToken
         }
 };

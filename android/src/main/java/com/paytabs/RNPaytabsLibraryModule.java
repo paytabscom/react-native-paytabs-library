@@ -1,14 +1,17 @@
 package com.paytabs;
 import android.util.Log;
 
+import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
+import static com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCodeKt.createPaymentSdkLanguageCode;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormatKt.createPaymentSdkTokenFormat;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokeniseKt.createPaymentSdkTokenise;
 
+import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
 import com.payment.paymentsdk.PaymentSdkActivity;
 import com.payment.paymentsdk.PaymentSdkConfigBuilder;
@@ -56,59 +59,63 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
         this.promise = promise;
         try {
             JSONObject paymentDetails = new JSONObject(arguments);
-            String profileId = paymentDetails.getString("profileID");
-            String serverKey = paymentDetails.getString("serverKey");
-            String clientKey = paymentDetails.getString("clientKey");
-            PaymentSdkLanguageCode locale = PaymentSdkLanguageCode.EN;
-            String screenTitle = paymentDetails.getString("screenTitle");
-            String orderId = paymentDetails.getString("cartID");
-            String cartDesc = paymentDetails.getString("cartDescription");
-            String currency = paymentDetails.getString("currency");
-            String token = paymentDetails.getString("token");
-            String transRef = paymentDetails.getString("transactionReference");
-            double amount = paymentDetails.getDouble("amount");
+            String profileId = paymentDetails.optString("profileID");
+            String serverKey = paymentDetails.optString("serverKey");
+            String clientKey = paymentDetails.optString("clientKey");
+            PaymentSdkLanguageCode locale = createPaymentSdkLanguageCode(paymentDetails.optString("languageCode"));
+            String screenTitle = paymentDetails.optString("screenTitle");
+            String orderId = paymentDetails.optString("cartID");
+            String cartDesc = paymentDetails.optString("cartDescription");
+            String currency = paymentDetails.optString("currency");
+            String token = paymentDetails.optString("token");
+            String transRef = paymentDetails.optString("transactionReference");
+            double amount = paymentDetails.optDouble("amount");
 
-            PaymentSdkTokenise tokeniseType = createPaymentSdkTokenise("tokeniseType");
-            PaymentSdkTokenFormat tokenFormat = createPaymentSdkTokenFormat("tokenFormat");
+            PaymentSdkTokenise tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"));
+            PaymentSdkTokenFormat tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"));
 
-            JSONObject billingDetails = paymentDetails.getJSONObject("billingDetails");
-
-            PaymentSdkBillingDetails billingData = new PaymentSdkBillingDetails(
-                    billingDetails.getString("city"),
-                    billingDetails.getString("countryCode"),
-                    billingDetails.getString("email"),
-                    billingDetails.getString("name"),
-                    billingDetails.getString("phone"), billingDetails.getString("state"),
-                    billingDetails.getString("addressLine"), billingDetails.getString("zip")
-            );
-
-            JSONObject shippingDetails = paymentDetails.getJSONObject("shippingDetails");
-            PaymentSdkShippingDetails shippingData = new PaymentSdkShippingDetails(
-                    billingDetails.getString("city"),
-                    billingDetails.getString("countryCode"),
-                    billingDetails.getString("email"),
-                    billingDetails.getString("name"),
-                    billingDetails.getString("phone"), billingDetails.getString("state"),
-                    billingDetails.getString("addressLine"), billingDetails.getString("zip")
-            );
+            JSONObject billingDetails = paymentDetails.optJSONObject("billingDetails");
+            PaymentSdkBillingDetails billingData = null;
+            if(billingDetails != null) {
+                billingData = new PaymentSdkBillingDetails(
+                        billingDetails.optString("city"),
+                        billingDetails.optString("countryCode"),
+                        billingDetails.optString("email"),
+                        billingDetails.optString("name"),
+                        billingDetails.optString("phone"), billingDetails.optString("state"),
+                        billingDetails.optString("addressLine"), billingDetails.optString("zip")
+                );
+            }
+            JSONObject shippingDetails = paymentDetails.optJSONObject("shippingDetails");
+            PaymentSdkShippingDetails shippingData = null;
+            if(shippingDetails != null ) {
+                shippingData = new PaymentSdkShippingDetails(
+                        shippingDetails.optString("city"),
+                        shippingDetails.optString("countryCode"),
+                        shippingDetails.optString("email"),
+                        shippingDetails.optString("name"),
+                        shippingDetails.optString("phone"), shippingDetails.optString("state"),
+                        shippingDetails.optString("addressLine"), shippingDetails.optString("zip")
+                );
+            }
             PaymentSdkConfigurationDetails configData = new PaymentSdkConfigBuilder(
                     profileId, serverKey, clientKey, amount, currency)
                     .setCartDescription(cartDesc)
                     .setLanguageCode(locale)
                     .setBillingData(billingData)
-                    .setMerchantCountryCode(paymentDetails.getString("merchantCountryCode"))
+                    .setMerchantCountryCode(paymentDetails.optString("merchantCountryCode"))
                     .setShippingData(shippingData)
                     .setCartId(orderId)
                     .setTokenise(tokeniseType, tokenFormat)
                     .setTokenisationData(token, transRef)
-                    .showBillingInfo(paymentDetails.getBoolean("showBillingInfo"))
-                    .showShippingInfo(paymentDetails.getBoolean("showShippingInfo"))
-                    .forceShippingInfo(paymentDetails.getBoolean("forceShippingInfo"))
+                    .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
+                    .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
+                    .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
                     .setScreenTitle(screenTitle)
                     .build();
-            String pt_samsung_token = paymentDetails.getString("pt_samsung_token");
-            if (pt_samsung_token != null && pt_samsung_token.length() > 0)
-                PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configData, pt_samsung_token, this);
+            String samsungToken = paymentDetails.optString("samsungToken");
+            if (samsungToken != null && samsungToken.length() > 0)
+                PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configData, samsungToken, this);
             else
                 PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configData, this);
         } catch (Exception e) {
@@ -124,8 +131,9 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
     @Override
     public void onPaymentFinish(@NotNull PaymentSdkTransactionDetails paymentSdkTransactionDetails) {
         if (promise != null) {
-            Map<String, Object> map = new HashMap<>();
-            map.put("PaymentDetails", new Gson().toJson(paymentSdkTransactionDetails));
+            WritableMap map = Arguments.createMap();
+            String details = new Gson().toJson(paymentSdkTransactionDetails);
+            map.putString("PaymentDetails", details);
             promise.resolve(map);
         }
     }
@@ -133,8 +141,8 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
     @Override
     public void onPaymentCancel() {
         if (promise != null) {
-            Map<String, String> map = new HashMap<>();
-            map.put("Event", "CancelPayment");
+            WritableMap map = Arguments.createMap();
+            map.putString("Event", "CancelPayment");
             promise.resolve(map);
         }
     }

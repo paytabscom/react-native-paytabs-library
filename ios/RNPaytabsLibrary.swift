@@ -79,8 +79,8 @@ class RNPaytabsLibrary: NSObject {
         configuration.transactionReference = dictionary["transactionReference"] as? String
         configuration.hideCardScanner = dictionary["hideCardScanner"] as? Bool ?? false
         configuration.serverIP = dictionary["serverIP"] as? String
-        if let tokeniseType = dictionary["tokeniseType"] as? Int,
-           let type = TokeniseType.getType(type: tokeniseType) {
+        if let tokeniseType = dictionary["tokeniseType"] as? String,
+           let type = mapTokeiseType(tokeniseType: tokeniseType) {
             configuration.tokeniseType = type
         }
         if let tokenFormat = dictionary["tokenFormat"] as? String,
@@ -187,6 +187,21 @@ class RNPaytabsLibrary: NSObject {
         return theme
     }
     
+    // to be fixed in next versions
+    private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
+        var type = 0
+        switch tokeniseType {
+        case "userOptional":
+            type = 3
+        case "userMandatory":
+            type = 2
+        case "merchantMandatory":
+            type = 1
+        default:
+            break
+        }
+        return TokeniseType.getType(type: type)
+    }
 }
 
 extension RNPaytabsLibrary: PaymentManagerDelegate {
@@ -199,7 +214,7 @@ extension RNPaytabsLibrary: PaymentManagerDelegate {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(transactionDetails)
                 let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-                resolve(["PaymentResult": dictionary])
+                resolve(["PaymentDetails": dictionary])
             } catch  {
                 if let reject = reject {
                     reject("Error", error.localizedDescription, error)

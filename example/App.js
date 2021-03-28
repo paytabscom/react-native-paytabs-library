@@ -51,7 +51,7 @@ export default class App extends Component {
                                   city= "Dubai",
                                   state= "Dubai",
                                   countryCode= "AE",
-                                  zip= "")
+                                  zip= "1234")
     configuration.billingDetails = billingDetails
     let theme = new PaymentSDKTheme()
     // theme.backgroundColor = "a83297"
