@@ -1,6 +1,6 @@
 //
 //  RNPaytabsLibrary.swift
-//  react-native-paytabs-emulator
+//  react-native-paytabs
 //
 //  Created by Mohamed Adly on 16/03/2021.
 //
@@ -19,6 +19,7 @@ class RNPaytabsLibrary: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -27,7 +28,7 @@ class RNPaytabsLibrary: NSObject {
                 PaymentManager.startCardPayment(on: rootViewController, configuration: configuration, delegate: self)
             }
         } catch let error {
-            reject("", error.localizedDescription, error)
+            reject("Error", error.localizedDescription, error)
         }
     }
     
@@ -37,6 +38,7 @@ class RNPaytabsLibrary: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -45,7 +47,7 @@ class RNPaytabsLibrary: NSObject {
                 PaymentManager.startApplePayPayment(on: rootViewController, configuration: configuration, delegate: self)
             }
         } catch let error {
-            reject("", error.localizedDescription, error)
+            reject("Error", error.localizedDescription, error)
         }
     }
     
@@ -190,19 +192,25 @@ class RNPaytabsLibrary: NSObject {
 extension RNPaytabsLibrary: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
-            return reject("", error.localizedDescription, error)
+            return reject("Error", error.localizedDescription, error)
         }
         if let resolve = resolve {
             do {
                 let encoder = JSONEncoder()
                 let data = try encoder.encode(transactionDetails)
                 let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
-                resolve(dictionary)
+                resolve(["PaymentResult": dictionary])
             } catch  {
                 if let reject = reject {
-                    reject("", error.localizedDescription, error)
+                    reject("Error", error.localizedDescription, error)
                 }
             }
+        }
+    }
+    
+    func paymentManager(didCancelPayment error: Error?) {
+        if let resolve = resolve {
+            resolve(["Event": "CancelPayment"])
         }
     }
 }

@@ -25,12 +25,16 @@ import com.payment.paymentsdk.sharedclasses.interfaces.CallbackPaymentInterface;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
+import com.facebook.react.bridge.Promise;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
 
     private final ReactApplicationContext reactContext;
-    private static int PAYMENT_REQUEST_CODE = 4040;
     private static String PAYTABS_MODULE = "RNPaytabsLibrary";
-    private Callback mCallback;
+    private Promise promise;
 
     public RNPaytabsLibraryModule(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -43,13 +47,13 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
     }
 
     @ReactMethod
-    public void log(String message) {
+        public void log(String message) {
         Log.d(PAYTABS_MODULE, message);
     }
 
     @ReactMethod
-    public void startCardPayment(String arguments, final Callback callback) {
-        this.mCallback = callback;
+    public void startCardPayment(final String arguments,final Promise promise) {
+        this.promise = promise;
         try {
             JSONObject paymentDetails = new JSONObject(arguments);
             String profileId = paymentDetails.getString("profileID");
@@ -108,23 +112,30 @@ public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implement
             else
                 PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configData, this);
         } catch (Exception e) {
-            mCallback.invoke("0", e.getMessage(), "{}");
+            promise.reject("Error",e.getMessage(), new Throwable(e.getMessage()));
         }
     }
 
     @Override
     public void onError(@NotNull PaymentSdkError err) {
-        mCallback.invoke(err.getCode() + "", err.getMsg(), new Gson().toJson(err));
+        promise.reject("Error",err.getMsg(), new Throwable(new Gson().toJson(err)));
     }
 
     @Override
     public void onPaymentFinish(@NotNull PaymentSdkTransactionDetails paymentSdkTransactionDetails) {
-        if (mCallback != null)
-            mCallback.invoke(new Gson().toJson(paymentSdkTransactionDetails));
+        if (promise != null) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("PaymentDetails", new Gson().toJson(paymentSdkTransactionDetails));
+            promise.resolve(map);
+        }
     }
 
     @Override
     public void onPaymentCancel() {
-        mCallback.invoke("0", "Cancelled", "{}");
+        if (promise != null) {
+            Map<String, String> map = new HashMap<>();
+            map.put("Event", "CancelPayment");
+            promise.resolve(map);
+        }
     }
 }

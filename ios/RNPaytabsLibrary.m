@@ -13,8 +13,7 @@
 }
 
 RCT_EXTERN_METHOD(startCardPayment:(NSString *)paymentDetails
-                  withResolver:(RCTPromiseResolveBlock)resolve
-                  withRejecter:(RCTPromiseRejectBlock)reject)
+                  withResolver:(RCTPromiseResolveBlock)resolve                  withRejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(startApplePayPayment:(NSString *)paymentDetails
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

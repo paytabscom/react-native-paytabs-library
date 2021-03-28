@@ -1,7 +1,7 @@
 {
-  "name": "@paytabscom/react-native-paytabs-emulator",
-  "title": "React Native Paytabs Emulator",
-  "version": "1.2.2",
+  "name": "@paytabscom/react-native-paytabs",
+  "title": "React Native Paytabs",
+  "version": "2.0.0",
   "description": "Paytabs is a payment gateway",
   "main": "index.js",
   "publishConfig": {
@@ -12,8 +12,11 @@
     "android",
     "index.js",
     "PaymentSDKConfiguration.js",
+    "PaymentSDKBillingDetails.js",
+    "PaymentSDKShippingDetails.js",
+    "PaymentSDKTheme.js",
     "ios",
-    "react-native-paytabs-emulator.podspec"
+    "react-native-paytabs.podspec"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

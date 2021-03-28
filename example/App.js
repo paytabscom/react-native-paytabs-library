@@ -9,15 +9,8 @@
  */
 
 import React, { Component } from 'react';
-import {NativeEventEmitter, Platform, StyleSheet, Text, Button, View } from 'react-native';
-import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs-emulator';
-
-// Prepare Paypage events for IOS
-// const eventPreparePaypageEmitter = new NativeEventEmitter(RNPaytabsLibrary);
-// const subscription = eventPreparePaypageEmitter.addListener(
-//   'EventPreparePaypage',
-//   (prepare) =>  RNPaytabsLibrary.log("eventPreparePaypageEmitter: " + prepare.action)
-// );
+import {Platform, StyleSheet, Text, Button, View } from 'react-native';
+import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -65,7 +58,12 @@ export default class App extends Component {
     configuration.theme = theme
 
     RNPaytabsLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
-      console.log(result)
+      if(result["PaymentDetails"] != null) {
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") {
+        console.log("Cancel Payment Event")
+      } 
      }, function(error) {
       console.log(error)
      });
@@ -85,7 +83,12 @@ export default class App extends Component {
     configuration.merchantIdentifier = "merchant.com.paytabs.applepay"
 
     RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
-      console.log(result)
+        if(result["PaymentDetails"] != null) {
+          let paymentDetails = result["PaymentDetails"]
+          console.log(paymentDetails)
+        } else if(result["Event"] == "CancelPayment") {
+          console.log("Cancel Payment Event")
+        } 
      }, function(error) {
       console.log(error)
      });

@@ -53,6 +53,11 @@ android {
     lintOptions {
         abortOnError false
     }
+    configurations.all {
+        resolutionStrategy {
+            exclude group: "org.jetbrains.kotlinx", module: "kotlinx-coroutines-debug"
+        }
+    }
 }
 
 repositories {
@@ -148,23 +153,18 @@ afterEvaluate { project ->
     }
 }
 
-
-
-
 repositories {
-    mavenCentral()
     google()
+    jcenter()
     maven { url 'https://jitpack.io' }
+    maven {
+        url  "https://dl.bintray.com/paytabsandroidsdk/paytabs-sdk"
+    }
+    maven { url "http://pay.cards/maven" }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.android.support:design:28.0.0'
-    implementation 'com.android.support:appcompat-v7:28.0.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.google.code.gson:gson:2.8.5'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.github.dbachelder:CreditCardEntry:1.4.9'
-    implementation 'com.paytabs:payment-sdk:6.0.1-beta09'
+    implementation 'com.paytabs:payment-sdk:6.0.2-rc05'
 }
   
