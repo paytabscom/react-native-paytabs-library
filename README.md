@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/Paytabs%20React%20Native%20library-v1.2.2-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.0_beta-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -10,115 +10,174 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabscom/react-native-paytabs@1.2.2 --save`
+`$ npm install @paytabscom/react-native-paytabs@2.0.0-beta --save`
 
 ## Usage
 
 Import `react-native-paytabs`
 
 ```javascript
-import RNPaytabsLibrary from '@paytabscom/react-native-paytabs';
+import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
 ```
 
-### Pay with PayTabs
-1. Configure arguments
+### Pay with Card
 
-Pass the parameter `[RNPaytabsLibrary.forceShippingInfo]` with `true` value to make the shipping info optinal.
+1. Configure the billing & shipping info, the shipping info is optional
 
 ```javascript
-var args = {
-  [RNPaytabsLibrary.merchant_email]: "test@example.com",
-  [RNPaytabsLibrary.secret_key]: "merchant_secret_ket",
-  [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
-  [RNPaytabsLibrary.amount]: "2.0",
-  [RNPaytabsLibrary.currency_code]: "USD",
-  [RNPaytabsLibrary.customer_email]: "test@example.com",
-  [RNPaytabsLibrary.customer_phone_number]: "+973000000",
-  [RNPaytabsLibrary.order_id]: "1234567",
-  [RNPaytabsLibrary.product_name]: "Tomato",
-  [RNPaytabsLibrary.timeout_in_seconds]: "300", //Optional
-  [RNPaytabsLibrary.address_billing]: "test test",
-  [RNPaytabsLibrary.city_billing]: "Juffair",
-  [RNPaytabsLibrary.state_billing]: "Manama",
-  [RNPaytabsLibrary.country_billing]: "BHR",
-  [RNPaytabsLibrary.postal_code_billing]: "00973", //Put Country Phone code if Postal code not available '00973'//
-  [RNPaytabsLibrary.address_shipping]: "test test",
-  [RNPaytabsLibrary.city_shipping]: "Juffair",
-  [RNPaytabsLibrary.state_shipping]: "Manama",
-  [RNPaytabsLibrary.country_shipping]: "BHR",
-  [RNPaytabsLibrary.postal_code_shipping]: "00973", //Put Country Phone code if Postal
-  [RNPaytabsLibrary.color]: "#cccccc",
-  [RNPaytabsLibrary.language]: 'en', // 'en', 'ar'
-  [RNPaytabsLibrary.tokenization]: true,
-  [RNPaytabsLibrary.preauth]: false,
-  [RNPaytabsLibrary.merchant_region]: "emirates",
-  [RNPaytabsLibrary.forceShippingInfo]: true
-}
+let billingDetails = new PaymentSDKBillingDetails(name= "John Smith",
+                                  email= "email@test.com",
+                                  phone= "+ 2011111111",
+                                  addressLine= "address line",
+                                  city= "Dubai",
+                                  state= "Dubai",
+                                  countryCode= "ae", // ISO alpha 2
+                                  zip= "1234")
+
+let shippingDetails = new PaymentSDKShippingDetails(name= "John Smith",
+                                  email= "email@test.com",
+                                  phone= "+ 2011111111",
+                                  addressLine= "address line",
+                                  city= "Dubai",
+                                  state= "Dubai",
+                                  countryCode= "ae", // ISO alpha 2
+                                  zip= "1234")
+                                              
 ```
 
-2. Start payment by calling `start` method and handle the transaction details
+2. Create object of `PaymentSDKConfiguration` and fill it with your credentials and payment details.
 
 ```javascript
-RNPaytabsLibrary.start(args, (response) => {
-  // Response Code: 100 successful otherwise fail
-  if (response.pt_response_code == '100')
-    RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-  else
-    RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-});
+
+let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = "*your profile id*"
+    configuration.serverKey= "*server key*"
+    configuration.clientKey = "*client key*"
+    configuration.cartID = "545454"
+    configuration.currency = "AED"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "ae"
+    configuration.merchantName = "Flowers Store"
+    configuration.amount = 20
+    configuration.screenTitle = "Pay with Card"
+    configuration.billingDetails = billingDetails
+
+```
+
+3. Start payment by calling `startCardPayment` method and handle the transaction details 
+
+```javascript
+
+RNPaytabsLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
+      if(result["PaymentDetails"] != null) { // Handle transaction details
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") { // Handle events
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) { // Handle error
+      console.log(error)
+     });
+     
 ```
 
 ### Pay with Apple Pay
-1. Configure arguments
 
-Pass the parameter `[RNPaytabsLibrary.forceShippingInfo]` with `true` value to make the shipping info optinal.
+1. Follow the guide [Steps to configure Apple Pay][applepayguide] to learn how to configure ApplePay with PayTabs.
+
+2. Do the steps 1 and 2 from **Pay with Card** although you can ignore Billing & Shipping details and Apple Pay will handle it, also you must pass the **merchant name** and **merchant identifier**.
 
 ```javascript
-var args = {
-[RNPaytabsLibrary.merchant_email]: "test@example.com",
-  [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSOSeiiSSeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
-  [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
-  [RNPaytabsLibrary.amount]: "2.0",
-  [RNPaytabsLibrary.currency_code]: "AED",
-  [RNPaytabsLibrary.customer_email]: "test@example.com",
-  [RNPaytabsLibrary.order_id]: "1234567",
-  [RNPaytabsLibrary.country_code]: "AE",
-  [RNPaytabsLibrary.language]: 'en',
-  [RNPaytabsLibrary.preauth]: false,
-  [RNPaytabsLibrary.merchant_identifier]: 'merchant.bundleId',
-  [RNPaytabsLibrary.tokenization]: true,
-  [RNPaytabsLibrary.merchant_region]: "emirates",
-  [RNPaytabsLibrary.forceShippingInfo]: false
-}
+
+let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = "*your profile id*"
+    configuration.serverKey= "*server key*"
+    configuration.clientKey = "*client key*"
+    configuration.cartID = "545454"
+    configuration.currency = "AED"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "ae"
+    configuration.merchantName = "Flowers Store"
+    configuration.amount = 20
+    configuration.screenTitle = "Pay with Card"
+    configuration.merchantIdentifier = "merchant.com.bundleID"
+
 ```
 
-2. Start payment by calling `startApplePay` method and handle the transaction details
+3. To simplify ApplePay validation on all user's billing info, pass **simplifyApplePayValidation** parameter in the configuration with **true**.
 
 ```javascript
-RNPaytabsLibrary.startApplePay(args, (response) => {
-  // Response Code: 100 successful otherwise fail
-  if (response.pt_response_code == '100')
-    RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-  else
-    RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
+
+configuration.simplifyApplePayValidation = true
+
+```
+
+4. Call `startApplePayPayment` to start payment
+
+```javascript
+RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
+        if(result["PaymentDetails"] != null) { // Handle transaction details
+          let paymentDetails = result["PaymentDetails"]
+          console.log(paymentDetails)
+        } else if(result["Event"] == "CancelPayment") { // Handle events
+          console.log("Cancel Payment Event")
+        } 
+     }, function(error) { // handle errors
+      console.log(error)
+     });
+```
+
+### Pay with Samsung Pay
+
+Pass Samsung Pay token to the configuration and call `startCardPayment`
+
+```javascript
+configuration.samsungToken = "token"
+```
+
+## Enums
+
+Those enums will help you in customizing your configuration.
+
+* Tokenise types
+
+ The default type is none
+
+```javascript
+const TokeniseType = Object.freeze({
+"none":"none", // tokenise is off
+"merchantMandatory":"merchantMandatory", // tokenise is forced
+"userMandatory":"userMandatory", // tokenise is forced as per user approval
+"userOptinoal":"userOptional" // tokenise if optional as per user approval
 });
 ```
-## Supported Merchant Region
-Pass the parameter `[RNPaytabsLibrary.merchant_region]` with one value of the below list according to supported region.
 
-* UAE = `emirates`
-* Egypt = `egypt`
-* Saudi Arabia = `saudi`
-* Oman = `oman`
-* Jordan = `jordan`
-* Global =`global`
-* Demo = `demo`
+```javascript
+configuration.tokeniseType = TokeniseType. userOptinoal
+```
 
+* Token formats
+
+The default format is hex32
+
+```javascript
+const TokeniseFromat = Object.freeze({"none":"1", 
+"hex32": "2", 
+"alphaNum20": "3", 
+"digit22": "3", 
+"digit16": "5", 
+"alphaNum32": "6"
+});
+```
+
+```javascript
+configuration.tokeniseFormat = TokeniseFromat.hex32
+```
 ## Demo application
 
-Check our complete example here <https://github.com/paytabscom/react-native-paytabs-library/tree/master/example>.
+Check our complete example here <https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example>.
 
-<img src="images/demo.png" width="300">
+<img src="https://user-images.githubusercontent.com/13621658/109432386-905e5280-7a13-11eb-847c-63f2c554e2d1.png" width="370">
 
 ## License
 
@@ -131,5 +190,6 @@ See [LICENSE][license].
  [1]: https://www.paytabs.com/en/support/
  [2]: https://www.paytabs.com/en/terms-of-use/
  [3]: https://www.paytabs.com/en/privacy-policy/
- [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/LICENSE
+ [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/LICENSE
+ [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/ApplePayConfiguration.md
 
