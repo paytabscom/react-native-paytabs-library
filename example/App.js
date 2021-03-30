@@ -33,9 +33,9 @@ export default class App extends Component {
   onPressPay(){
   
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = "49611"
-    configuration.serverKey= "SMJNLTR2G6-JBGNGKBBM9-2MB6HGBG6M"
-    configuration.clientKey = "CKKMDG-KDD262-TQTK22-GQGMHN"
+    configuration.profileID = "profile id"
+    configuration.serverKey= "server key"
+    configuration.clientKey = "client key"
     configuration.cartID = "545454"
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"
@@ -71,16 +71,16 @@ export default class App extends Component {
   }
   onPressApplePay(){
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = "49611"
-    configuration.serverKey= "SMJNLTR2G6-JBGNGKBBM9-2MB6HGBG6M"
-    configuration.clientKey = "CKKMDG-KDD262-TQTK22-GQGMHN"
+    configuration.profileID = "profile id"
+    configuration.serverKey= "server key"
+    configuration.clientKey = "client key"
     configuration.cartID = "545454"
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"
     configuration.merchantCountryCode = "ae"
     configuration.merchantName = "Sand Box"
     configuration.amount = 20
-    configuration.merchantIdentifier = "merchant.com.paytabs.applepay"
+    configuration.merchantIdentifier = "merchant.com.bundleid"
 
     RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
         if(result["PaymentDetails"] != null) {
