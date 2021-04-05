@@ -1,7 +1,7 @@
 {
   "name": "@paytabscom/react-native-paytabs",
   "title": "React Native Paytabs",
-  "version": "2.0.1-beta",
+  "version": "2.0.2-beta",
   "description": "Paytabs is a payment gateway",
   "main": "index.js",
   "files": [
