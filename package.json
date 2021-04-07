@@ -1,5 +1,5 @@
 {
-  "name": "@paytabscom/react-native-paytabs",
+  "name": "@paytabs/react-native-paytabs",
   "title": "React Native Paytabs",
   "version": "2.0.3",
   "description": "Paytabs is a payment gateway",
@@ -20,8 +20,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/paytabscom/react-native-paymentsdk-library.git",
-    "baseUrl": "https://github.com/paytabscom/react-native-paymentsdk-library"
+    "url": "git+https://github.com/paytabscom/react-native-paytabs-library.git",
+    "baseUrl": "https://github.com/paytabscom/react-native-paytabs-library"
   },
   "keywords": [
     "react-native"

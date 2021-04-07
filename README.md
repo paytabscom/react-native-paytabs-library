@@ -11,14 +11,14 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabscom/react-native-paytabs@2.0.3 --save`
+`$ npm install @paytabs/react-native-paytabs@2.0.3 --save`
 
 ## Usage
 
 Import `react-native-paytabs`
 
 ```javascript
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
 ```
 
 ### Pay with Card
