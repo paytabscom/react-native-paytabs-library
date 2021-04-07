@@ -1,4 +1,4 @@
-package com.paytabs;
+package com.paymentsdk;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -33,25 +33,25 @@ import com.facebook.react.bridge.Promise;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RNPaytabsLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
+public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
 
     private final ReactApplicationContext reactContext;
-    private static String PAYTABS_MODULE = "RNPaytabsLibrary";
+    private static String PaymentSDK_MODULE = "RNPaymentSDKLibrary";
     private Promise promise;
 
-    public RNPaytabsLibraryModule(ReactApplicationContext reactContext) {
+    public RNPaymentSDKLibraryModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }
 
     @Override
     public String getName() {
-        return PAYTABS_MODULE;
+        return PaymentSDK_MODULE;
     }
 
     @ReactMethod
         public void log(String message) {
-        Log.d(PAYTABS_MODULE, message);
+        Log.d(PaymentSDK_MODULE, message);
     }
 
     @ReactMethod

@@ -1,23 +1,24 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.2_beta-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.3-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
 Library Support:
+
 * [x] iOS
 * [x] Android
 
 # Installation
 
-`$ npm install @paytabscom/react-native-paytabs@2.0.2-beta --save`
+`$ npm install @paytabscom/react-native-paytabs@2.0.3 --save`
 
 ## Usage
 
 Import `react-native-paytabs`
 
 ```javascript
-import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
 ```
 
 ### Pay with Card
@@ -77,7 +78,7 @@ Options to show billing and shipping ifno
 
 ```javascript
 
-RNPaytabsLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
+RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
       if(result["PaymentDetails"] != null) { // Handle transaction details
         let paymentDetails = result["PaymentDetails"]
         console.log(paymentDetails)
@@ -124,7 +125,7 @@ configuration.simplifyApplePayValidation = true
 4. Call `startApplePayPayment` to start payment
 
 ```javascript
-RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
+RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
         if(result["PaymentDetails"] != null) { // Handle transaction details
           let paymentDetails = result["PaymentDetails"]
           console.log(paymentDetails)
@@ -184,7 +185,7 @@ configuration.tokeniseFormat = TokeniseFromat.hex32
 ```
 ## Demo application
 
-Check our complete example here <https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example>.
+Check our complete example [here][example].
 
 <img src="https://user-images.githubusercontent.com/13621658/109432386-905e5280-7a13-11eb-847c-63f2c554e2d1.png" width="370">
 
@@ -201,4 +202,5 @@ See [LICENSE][license].
  [3]: https://www.paytabs.com/en/privacy-policy/
  [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/LICENSE
  [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/ApplePayConfiguration.md
+ [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example
 

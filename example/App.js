@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import {Platform, StyleSheet, Text, Button, View } from 'react-native';
-import {RNPaytabsLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabscom/react-native-paytabs';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -57,7 +57,7 @@ export default class App extends Component {
     // theme.backgroundColor = "a83297"
     configuration.theme = theme
 
-    RNPaytabsLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
+    RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
       if(result["PaymentDetails"] != null) {
         let paymentDetails = result["PaymentDetails"]
         console.log(paymentDetails)
@@ -82,7 +82,7 @@ export default class App extends Component {
     configuration.amount = 20
     configuration.merchantIdentifier = "merchant.com.bundleid"
 
-    RNPaytabsLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
+    RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
         if(result["PaymentDetails"] != null) {
           let paymentDetails = result["PaymentDetails"]
           console.log(paymentDetails)
@@ -102,7 +102,7 @@ export default class App extends Component {
         <Text style={styles.instructions}>{this.state.message}</Text>
         <Button
             onPress={this.onPressPay}
-            title="Pay with PayTabs"
+            title="Pay with Card"
             color="#c00"
           />
         <View style = {{height: 20}}></View>

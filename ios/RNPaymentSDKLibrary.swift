@@ -1,6 +1,6 @@
 //
-//  RNPaytabsLibrary.swift
-//  react-native-paytabs
+//  RNPaymentSDKLibrary.swift
+//  react-native-paymentsdk
 //
 //  Created by Mohamed Adly on 16/03/2021.
 //
@@ -8,8 +8,8 @@
 import Foundation
 import PaymentSDK
 
-@objc(RNPaytabsLibrary)
-class RNPaytabsLibrary: NSObject {
+@objc(RNPaymentSDKLibrary)
+class RNPaymentSDKLibrary: NSObject {
     var resolve: RCTPromiseResolveBlock?
     var reject: RCTPromiseRejectBlock?
     
@@ -204,7 +204,7 @@ class RNPaytabsLibrary: NSObject {
     }
 }
 
-extension RNPaytabsLibrary: PaymentManagerDelegate {
+extension RNPaymentSDKLibrary: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
             return reject("Error", error.localizedDescription, error)

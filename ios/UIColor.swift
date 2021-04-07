@@ -1,6 +1,6 @@
 //
 //  UIColor.swift
-//  react-native-paytabs
+//  react-native-paymentsdk
 //
 //  Created by Mohamed Adly on 18/03/2021.
 //
