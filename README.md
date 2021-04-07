@@ -1,8 +1,8 @@
 
-# react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.3-green)
+# react-native-clickpay
+![Version](https://img.shields.io/badge/React%20Native%20ClickPay-v2.0.3-green)
 
-React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
+React native ClickPay library is a wrapper for the native ClickPay Android and iOS SDKs, It helps you integrate with ClickPay payment gateway.
 
 Library Support:
 
@@ -11,14 +11,14 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-paytabs@2.0.3 --save`
+`$ npm install @paytabs/react-native-clickpay@2.0.4 --save`
 
 ## Usage
 
-Import `react-native-paytabs`
+Import `react-native-clickpay`
 
 ```javascript
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-clickpay';
 ```
 
 ### Pay with Card
@@ -93,7 +93,7 @@ RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result
 
 ### Pay with Apple Pay
 
-1. Follow the guide [Steps to configure Apple Pay][applepayguide] to learn how to configure ApplePay with PayTabs.
+1. Follow the guide [Steps to configure Apple Pay][applepayguide] to learn how to configure ApplePay with ClickPay.
 
 2. Do the steps 1 and 2 from **Pay with Card** although you can ignore Billing & Shipping details and Apple Pay will handle it, also you must pass the **merchant name** and **merchant identifier**.
 
@@ -193,14 +193,14 @@ Check our complete example [here][example].
 
 See [LICENSE][license].
 
-## Paytabs
+## ClickPay
 
 [Support][1] | [Terms of Use][2] | [Privacy Policy][3]
 
- [1]: https://www.paytabs.com/en/support/
- [2]: https://www.paytabs.com/en/terms-of-use/
- [3]: https://www.paytabs.com/en/privacy-policy/
- [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/LICENSE
- [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/ApplePayConfiguration.md
- [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example
+ [1]: https://merchant.clickpay.com.sa/
+ [2]: https://merchant.clickpay.com.sa
+ [3]: https://merchant.clickpay.com.sa
+ [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/clickpay/LICENSE
+ [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/clickpay/ApplePayConfiguration.md
+ [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/clickpay/example
 

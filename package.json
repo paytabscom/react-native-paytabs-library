@@ -1,8 +1,8 @@
 {
-  "name": "@paytabs/react-native-paytabs",
-  "title": "React Native Paytabs",
-  "version": "2.0.3",
-  "description": "Paytabs is a payment gateway",
+  "name": "@paytabs/react-native-clickpay",
+  "title": "React Native ClickPay",
+  "version": "2.0.4",
+  "description": "React Native ClickPay",
   "main": "index.js",
   "files": [
     "README.md",

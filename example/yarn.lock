@@ -5607,7 +5607,7 @@
 
 "react-native-paymentsdk@file:../":
   "resolved" "file:.."
-  "version" "2.0.3"
+  "version" "2.0.4"
 
 "react-native@^0.64.0", "react-native@>=0.64.0-rc.0 || 0.0.0-*":
   "integrity" "sha512-8dhSHBthgGwAjU+OjqUEA49229ThPMQH7URH0u8L0xoQFCnZO2sZ9Wc6KcbxI0x9KSmjCMFFZqRe3w3QsRv64g=="

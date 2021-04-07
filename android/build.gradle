@@ -161,13 +161,13 @@ repositories {
     jcenter()
     maven { url 'https://jitpack.io' }
     maven {
-        url  "https://dl.bintray.com/paytabsandroidsdk/paytabs-sdk"
+        url  "https://dl.bintray.com/alinma/alinma-repo"
     }
     maven { url "http://pay.cards/maven" }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.paytabs:payment-sdk:6.0.2-rc08'
+    implementation 'com.alinma:clickpaysdk:6.0.2-rc08'
 }
   

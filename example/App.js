@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import {Platform, StyleSheet, Text, Button, View } from 'react-native';
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-clickpay';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -37,9 +37,9 @@ export default class App extends Component {
     configuration.serverKey= "server key"
     configuration.clientKey = "client key"
     configuration.cartID = "545454"
-    configuration.currency = "AED"
+    configuration.currency = "SAR"
     configuration.cartDescription = "Flowers"
-    configuration.merchantCountryCode = "ae"
+    configuration.merchantCountryCode = "sa"
     configuration.merchantName = "Flowers Store"
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
@@ -96,7 +96,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to Paytabs Native!</Text>
+        <Text style={styles.welcome}>Welcome to ClickPay React Native!</Text>
         <Text style={styles.instructions}>To get started, edit App.js</Text>
         <Text style={styles.instructions}>{instructions}</Text>
         <Text style={styles.instructions}>{this.state.message}</Text>
