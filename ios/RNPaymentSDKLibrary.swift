@@ -207,7 +207,9 @@ class RNPaymentSDKLibrary: NSObject {
 extension RNPaymentSDKLibrary: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
-            return reject("Error", error.localizedDescription, error)
+            reject("Error", error.localizedDescription, error)
+            self.reject = nil
+            return
         }
         if let resolve = resolve {
             do {
@@ -215,9 +217,11 @@ extension RNPaymentSDKLibrary: PaymentManagerDelegate {
                 let data = try encoder.encode(transactionDetails)
                 let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
                 resolve(["PaymentDetails": dictionary])
+                self.resolve = nil
             } catch  {
                 if let reject = reject {
                     reject("Error", error.localizedDescription, error)
+                    self.reject = nil
                 }
             }
         }
@@ -226,6 +230,7 @@ extension RNPaymentSDKLibrary: PaymentManagerDelegate {
     func paymentManager(didCancelPayment error: Error?) {
         if let resolve = resolve {
             resolve(["Event": "CancelPayment"])
+            self.resolve = nil
         }
     }
 }

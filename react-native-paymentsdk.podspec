@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.dependency "React"
-  s.dependency "PayTabsSDK", '6.0.11'
+  s.dependency "PayTabsSDK", '6.0.17'
 end
 

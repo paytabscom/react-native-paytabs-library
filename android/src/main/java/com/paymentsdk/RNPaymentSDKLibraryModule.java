@@ -11,6 +11,9 @@ import static com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCodeKt.
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormatKt.createPaymentSdkTokenFormat;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokeniseKt.createPaymentSdkTokenise;
 
+import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
 import com.payment.paymentsdk.PaymentSdkActivity;
@@ -26,11 +29,15 @@ import com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionDetails;
 import com.payment.paymentsdk.sharedclasses.interfaces.CallbackPaymentInterface;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.react.bridge.Promise;
 
+import java.lang.reflect.Array;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
@@ -132,8 +139,14 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
     public void onPaymentFinish(@NotNull PaymentSdkTransactionDetails paymentSdkTransactionDetails) {
         if (promise != null) {
             WritableMap map = Arguments.createMap();
-            String details = new Gson().toJson(paymentSdkTransactionDetails);
-            map.putString("PaymentDetails", details);
+            String paymentDetails = new Gson().toJson(paymentSdkTransactionDetails);
+            try {
+                JSONObject jsonObject = new JSONObject(paymentDetails);
+                WritableMap detailsMap = jsonToReact(jsonObject);
+                map.putMap("PaymentDetails", detailsMap);
+            } catch (JSONException e) {
+                map.putNull("PaymentDetails");
+            }
             promise.resolve(map);
         }
     }
@@ -145,5 +158,28 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
             map.putString("Event", "CancelPayment");
             promise.resolve(map);
         }
+    }
+
+    public static WritableMap jsonToReact(JSONObject jsonObject) throws JSONException {
+        WritableMap writableMap = Arguments.createMap();
+        Iterator iterator = jsonObject.keys();
+        while(iterator.hasNext()) {
+            String key = (String) iterator.next();
+            Object value = jsonObject.get(key);
+            if (value instanceof Float || value instanceof Double) {
+                writableMap.putDouble(key, jsonObject.getDouble(key));
+            } else if (value instanceof Number) {
+                writableMap.putInt(key, jsonObject.getInt(key));
+            } else if (value instanceof String) {
+                writableMap.putString(key, jsonObject.getString(key));
+            } else if (value instanceof JSONObject) {
+                writableMap.putMap(key,jsonToReact(jsonObject.getJSONObject(key)));
+            } else if (value instanceof JSONArray){
+                writableMap.putArray(key, (ReadableArray) jsonToReact(jsonObject.getJSONObject(key)));
+            } else if (value == JSONObject.NULL){
+                writableMap.putNull(key);
+            }
+        }
+        return writableMap;
     }
 }
