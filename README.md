@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.7-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.8-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -11,11 +11,43 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-paytabs@2.0.7 --save`
+`$ npm install @paytabs/react-native-paytabs@2.0.8 --save`
+
+### Follow the below steps to complete the installation
+
+* Android
+	* Add dependencies to project `build.gradle` file
+	
+	```
+	allprojects {
+	repositories {
+	    maven { url "http://pay.cards/maven" }
+	    maven { url 'https://jitpack.io' }
+		}
+	}
+	```
+	
+	* Add `packagingOptions` to module `build.gradle` file
+	
+	```
+	android {
+		packagingOptions {
+        	pickFirst '**/*.so'
+    	}
+	}
+	```
+* iOS
+
+	* Add `libswiftWebKit.tbd` to your **Link Binary With Libraries**
+	* Navigate to the iOS folder and run the following command: 
+	
+	```
+	pod install
+	```
 
 ## Usage
 
-Import `react-native-paytabs`
+Import `@paytabs/react-native-paytabs`
 
 ```javascript
 import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
