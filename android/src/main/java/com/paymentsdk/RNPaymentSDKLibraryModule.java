@@ -115,6 +115,7 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
                     .setCartId(orderId)
                     .setTokenise(tokeniseType, tokenFormat)
                     .setTokenisationData(token, transRef)
+                    .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
                     .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
                     .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
                     .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
