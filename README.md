@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.9-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.10-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -11,7 +11,7 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-paytabs@2.0.9 --save`
+`$ npm install @paytabs/react-native-paytabs@2.0.10 --save`
 
 ### Follow the below steps to complete the installation
 
@@ -215,14 +215,21 @@ const TokeniseFromat = Object.freeze({"none":"1",
 ```javascript
 configuration.tokeniseFormat = TokeniseFromat.hex32
 ```
+
+## Show/Hide Card Scanner
+
+```javascript
+configuration.hideCardScanner = true
+```
+
 ## Theme Android
 Use the following guide to customize the colors, font, and logo by configuring the theme and pass it to the payment configuration.
 
-![UI guide](https://github.com/paytabscom/paytabs-android-library-sample/tree/PT2/res/UIguide.jpg)
+![UI guide](https://user-images.githubusercontent.com/13621658/109432213-d7981380-7a12-11eb-9224-c8fc12b0024d.jpg)
 
 -- Override strings
 To override string you can find the keys with the default values here
-![english]( https://github.com/paytabscom/paytabs-android-library-sample/blob/PT2/res/strings.xml)
+![english](https://github.com/paytabscom/paytabs-android-library-sample/blob/PT2/res/strings.xml)
 ![arabic](https://github.com/paytabscom/paytabs-android-library-sample/blob/PT2/res/strings-ar.xml)
 
 ````xml
