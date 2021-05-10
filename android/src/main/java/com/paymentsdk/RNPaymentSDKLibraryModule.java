@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactMethod;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCodeKt.createPaymentSdkLanguageCode;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormatKt.createPaymentSdkTokenFormat;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokeniseKt.createPaymentSdkTokenise;
+import static com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionTypeKt.createPaymentSdkTransactionType;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
@@ -26,6 +27,7 @@ import com.payment.paymentsdk.integrationmodels.PaymentSdkShippingDetails;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormat;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkTokenise;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionDetails;
+import com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionType;
 import com.payment.paymentsdk.sharedclasses.interfaces.CallbackPaymentInterface;
 
 import org.jetbrains.annotations.NotNull;
@@ -77,9 +79,9 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
             String token = paymentDetails.optString("token");
             String transRef = paymentDetails.optString("transactionReference");
             double amount = paymentDetails.optDouble("amount");
-
             PaymentSdkTokenise tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"));
             PaymentSdkTokenFormat tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"));
+            PaymentSdkTransactionType transactionType = createPaymentSdkTransactionType(paymentDetails.optString("transactionType"));
 
             JSONObject billingDetails = paymentDetails.optJSONObject("billingDetails");
             PaymentSdkBillingDetails billingData = null;
@@ -120,6 +122,7 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
                     .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
                     .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
                     .setScreenTitle(screenTitle)
+                    .setTransactionType(transactionType)
                     .build();
             String samsungToken = paymentDetails.optString("samsungToken");
             if (samsungToken != null && samsungToken.length() > 0)

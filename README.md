@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.0.10-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.1.0-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -212,8 +212,17 @@ const TokeniseFromat = Object.freeze({"none":"1",
 });
 ```
 
+* Transaction types
+
+The default type is sale
+
 ```javascript
-configuration.tokeniseFormat = TokeniseFromat.hex32
+const TransactionType = Object.freeze({"sale":"sale", 
+"authorize": "auth"});
+```
+
+```javascript
+configuration.transactionType = TransactionType.sale
 ```
 
 ## Show/Hide Card Scanner
@@ -229,8 +238,8 @@ Use the following guide to customize the colors, font, and logo by configuring t
 
 -- Override strings
 To override string you can find the keys with the default values here
-![english](https://github.com/paytabscom/paytabs-android-library-sample/blob/PT2/res/strings.xml)
-![arabic](https://github.com/paytabscom/paytabs-android-library-sample/blob/PT2/res/strings-ar.xml)
+![english](https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings.xml)
+![arabic](https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings-ar.xml)
 
 ````xml
 <resourse>
@@ -275,7 +284,7 @@ See [LICENSE][license].
  [1]: https://www.paytabs.com/en/support/
  [2]: https://www.paytabs.com/en/terms-of-use/
  [3]: https://www.paytabs.com/en/privacy-policy/
- [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/LICENSE
- [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/PT2/ApplePayConfiguration.md
- [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/PT2/example
+ [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/LICENSE
+ [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/ApplePayConfiguration.md
+ [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/example
 

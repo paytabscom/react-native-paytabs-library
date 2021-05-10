@@ -14992,6 +14992,31 @@
 			};
 			name = Debug;
 		};
+		1E893544A3467497B13C6516657C9D3D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EF174F5A0C715B46EF2552979FEF913E /* react-native-paymentsdk.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-paymentsdk/react-native-paymentsdk-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MODULEMAP_FILE = "Headers/Public/react_native_paymentsdk/react-native-paymentsdk.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_paymentsdk;
+				PRODUCT_NAME = "react-native-paymentsdk";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 		1EFF22AE21A4C9BED89C5FCA96C3CC06 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 01945DF0767DA6C2A155D1F7034C3536 /* Flipper-RSocket.debug.xcconfig */;
@@ -15286,30 +15311,6 @@
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
-		};
-		5691C73CF45D8A65ACB71757045B7A50 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = EF174F5A0C715B46EF2552979FEF913E /* react-native-paymentsdk.debug.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-paymentsdk/react-native-paymentsdk-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MODULEMAP_FILE = "Headers/Public/react_native_paymentsdk/react-native-paymentsdk.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_paymentsdk;
-				PRODUCT_NAME = "react-native-paymentsdk";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
 		};
 		56D952410E4FEB7137B0A848AE8669F1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -16170,6 +16171,32 @@
 			};
 			name = Release;
 		};
+		BF116F694BEBCB742F25B88AB769697A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = EDEFE836A1F5751F6E6C6D45858CA20B /* react-native-paymentsdk.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				GCC_PREFIX_HEADER = "Target Support Files/react-native-paymentsdk/react-native-paymentsdk-prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				MODULEMAP_FILE = "Headers/Public/react_native_paymentsdk/react-native-paymentsdk.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PRIVATE_HEADERS_FOLDER_PATH = "";
+				PRODUCT_MODULE_NAME = react_native_paymentsdk;
+				PRODUCT_NAME = "react-native-paymentsdk";
+				PUBLIC_HEADERS_FOLDER_PATH = "";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		C20E70F853FCFD28C3159FDA848AA512 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 22EE5C6920E9162DC1C197FE93BD6082 /* React-RCTBlob.release.xcconfig */;
@@ -16726,31 +16753,6 @@
 			};
 			name = Debug;
 		};
-		F8A372C68074FD428C9B3EC08D747F5D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = EDEFE836A1F5751F6E6C6D45858CA20B /* react-native-paymentsdk.release.xcconfig */;
-			buildSettings = {
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				GCC_PREFIX_HEADER = "Target Support Files/react-native-paymentsdk/react-native-paymentsdk-prefix.pch";
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
-				MODULEMAP_FILE = "Headers/Public/react_native_paymentsdk/react-native-paymentsdk.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PRIVATE_HEADERS_FOLDER_PATH = "";
-				PRODUCT_MODULE_NAME = react_native_paymentsdk;
-				PRODUCT_NAME = "react-native-paymentsdk";
-				PUBLIC_HEADERS_FOLDER_PATH = "";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 		FA14EFC37F4A176BFE0224763AEE39F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1688B4884AA74838E2170173CE2C42B6 /* FlipperKit.release.xcconfig */;
@@ -17030,8 +17032,8 @@
 		84B89A38939B6C1D74ED613D65FA7747 /* Build configuration list for PBXNativeTarget "react-native-paymentsdk" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				5691C73CF45D8A65ACB71757045B7A50 /* Debug */,
-				F8A372C68074FD428C9B3EC08D747F5D /* Release */,
+				1E893544A3467497B13C6516657C9D3D /* Debug */,
+				BF116F694BEBCB742F25B88AB769697A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
