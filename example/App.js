@@ -9,15 +9,8 @@
  */
 
 import React, { Component } from 'react';
-import {NativeEventEmitter, Platform, StyleSheet, Text, Button, View } from 'react-native';
-import RNPaytabsLibrary from '@paytabscom/react-native-paytabs-emulator';
-
-// Prepare Paypage events for IOS
-const eventPreparePaypageEmitter = new NativeEventEmitter(RNPaytabsLibrary);
-const subscription = eventPreparePaypageEmitter.addListener(
-  'EventPreparePaypage',
-  (prepare) =>  RNPaytabsLibrary.log("eventPreparePaypageEmitter: " + prepare.action)
-);
+import {Platform, StyleSheet, Text, Button, View } from 'react-native';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -26,8 +19,7 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
-type Props = {};
-export default class App extends Component<Props> {
+export default class App extends Component {
 
   state = {
     message: '--'
@@ -39,82 +31,67 @@ export default class App extends Component<Props> {
   }
 
   onPressPay(){
-    var args = {
-      [RNPaytabsLibrary.merchant_email]: "test@test.com",
-      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSdSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
-      [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
-      [RNPaytabsLibrary.amount]: "2.0",
-      [RNPaytabsLibrary.currency_code]: "USD",
-      [RNPaytabsLibrary.customer_email]: "test@example.com",
-      [RNPaytabsLibrary.customer_phone_number]: "00973000000",
-      [RNPaytabsLibrary.order_id]: "1234567",
-      [RNPaytabsLibrary.product_name]: "Tomato",
-      [RNPaytabsLibrary.timeout_in_seconds]: "300", //Optional
-      [RNPaytabsLibrary.address_billing]: "test test",
-      [RNPaytabsLibrary.city_billing]: "Juffair",
-      [RNPaytabsLibrary.state_billing]: "Manama",
-      [RNPaytabsLibrary.country_billing]: "BHR",
-      [RNPaytabsLibrary.postal_code_billing]: "00973", //Put Country Phone code if Postal code not available '00973'//
-      [RNPaytabsLibrary.address_shipping]: "test test",
-      [RNPaytabsLibrary.city_shipping]: "Juffair",
-      [RNPaytabsLibrary.state_shipping]: "Manama",
-      [RNPaytabsLibrary.country_shipping]: "BHR",
-      [RNPaytabsLibrary.postal_code_shipping]: "00973", //Put Country Phone code if Postal
-      [RNPaytabsLibrary.color]: "#cccccc",
-      [RNPaytabsLibrary.language]: 'en', // 'en', 'ar'
-      [RNPaytabsLibrary.tokenization]: true,
-      [RNPaytabsLibrary.preauth]: false,
-      [RNPaytabsLibrary.merchant_region]: "emirates",
-      [RNPaytabsLibrary.forceShippingInfo]: false
-    };
-    RNPaytabsLibrary.start(args, (response) => {
-      RNPaytabsLibrary.log("on Response Payment");
-      console.log(response);
-      // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100') {
-        RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-        // Tokenization
-      //RNPaytabs.log(response.pt_token_customer_email);
-      //RNPaytabs.log(response.pt_token_customer_password);
-      //RNPaytabs.log(response.pt_token);
-      } else {
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      }
-      this.state = { message: 'Result:' + response.pt_result };
-    });
+  
+    let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = "profile id"
+    configuration.serverKey= "server key"
+    configuration.clientKey = "client key"
+    configuration.cartID = "545454"
+    configuration.currency = "AED"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "ae"
+    configuration.merchantName = "Flowers Store"
+    configuration.amount = 20
+    configuration.screenTitle = "Pay with Card"
+
+    let billingDetails = new PaymentSDKBillingDetails(name= "Mohamed Adly",
+                                  email= "m.adly@paytabs.com",
+                                  phone= "+201113655936",
+                                  addressLine= "Flat 1,Building 123, Road 2345",
+                                  city= "Dubai",
+                                  state= "Dubai",
+                                  countryCode= "AE",
+                                  zip= "1234")
+    configuration.billingDetails = billingDetails
+    let theme = new PaymentSDKTheme()
+    // theme.backgroundColor = "a83297"
+    configuration.theme = theme
+
+    RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
+      if(result["PaymentDetails"] != null) {
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") {
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) {
+      console.log(error)
+     });
+    
   }
   onPressApplePay(){
-    var args = {
-      [RNPaytabsLibrary.merchant_email]: "test@test.com",
-      [RNPaytabsLibrary.secret_key]: "kuTEjyEMhpVSWTwXBSdSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",// Add your Secret Key Here
-      [RNPaytabsLibrary.transaction_title]: "Mr. John Doe",
-      [RNPaytabsLibrary.amount]: "2.0",
-      [RNPaytabsLibrary.currency_code]: "AED",
-      [RNPaytabsLibrary.customer_email]: "test@example.com",
-      [RNPaytabsLibrary.order_id]: "1234567",
-      [RNPaytabsLibrary.country_code]: "AE",
-      [RNPaytabsLibrary.language]: 'en',
-      [RNPaytabsLibrary.preauth]: false,
-      [RNPaytabsLibrary.merchant_identifier]: 'merchant.bundleId',
-      [RNPaytabsLibrary.tokenization]: true,
-      [RNPaytabsLibrary.merchant_region]: "emirates"
-    };
-    RNPaytabsLibrary.startApplePay(args, (response) => {
-      RNPaytabsLibrary.log("on Response Payment");
-      console.log(response);
-      // Response Code: 100 successful otherwise fail
-      if (response.pt_response_code == '100') {
-        RNPaytabsLibrary.log("Transaction Id: " + response.pt_transaction_id);
-        // Tokenization
-      //RNPaytabs.log(response.pt_token_customer_email);
-      //RNPaytabs.log(response.pt_token_customer_password);
-      //RNPaytabs.log(response.pt_token);
-      } else {
-        RNPaytabsLibrary.log("Otherwise Response: " + response.pt_response_code);
-      }
-      this.state = { message: 'Result:' + response.pt_result };
-      
-    });
+    let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = "profile id"
+    configuration.serverKey= "server key"
+    configuration.clientKey = "client key"
+    configuration.cartID = "545454"
+    configuration.currency = "AED"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "ae"
+    configuration.merchantName = "Sand Box"
+    configuration.amount = 20
+    configuration.merchantIdentifier = "merchant.com.bundleid"
+
+    RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configuration)).then( result => {
+        if(result["PaymentDetails"] != null) {
+          let paymentDetails = result["PaymentDetails"]
+          console.log(paymentDetails)
+        } else if(result["Event"] == "CancelPayment") {
+          console.log("Cancel Payment Event")
+        } 
+     }, function(error) {
+      console.log(error)
+     });
   }
   render() {
     return (
@@ -125,7 +102,7 @@ export default class App extends Component<Props> {
         <Text style={styles.instructions}>{this.state.message}</Text>
         <Button
             onPress={this.onPressPay}
-            title="Pay with PayTabs"
+            title="Pay with Card"
             color="#c00"
           />
         <View style = {{height: 20}}></View>
