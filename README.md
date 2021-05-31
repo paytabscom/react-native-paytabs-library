@@ -50,7 +50,7 @@ Library Support:
 Import `@paytabs/react-native-paytabs`
 
 ```javascript
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme, PaymentSDKConstants} from '@paytabs/react-native-paytabs';
 ```
 
 ### Pay with Card
