@@ -51,6 +51,25 @@ class RNPaymentSDKLibrary: NSObject {
         }
     }
     
+    @objc(startAlternativePaymentMethod:withResolver:withRejecter:)
+    func startAlternativePaymentMethod(paymentDetails: NSString,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+        
+        let data = Data((paymentDetails as String).utf8)
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let configuration = generateConfiguration(dictionary: dictionary)
+            if let rootViewController = getRootController() {
+                PaymentManager.startAlternativePaymentMethod(on: rootViewController, configuration: configuration, delegate: self)
+            }
+        } catch let error {
+            reject("Error", error.localizedDescription, error)
+        }
+    }
+    
     func getRootController() -> UIViewController? {
         let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
             let topController = keyWindow?.rootViewController
@@ -103,6 +122,9 @@ class RNPaymentSDKLibrary: NSObject {
         }
         if let shippingDictionary = dictionary["shippingDetails"] as?  [String: Any] {
             configuration.shippingDetails = generateShippingDetails(dictionary: shippingDictionary)
+        }
+        if let alternativePaymentMethods = dictionary["alternativePaymentMethods"] as? [String] {
+            configuration.alternativePaymentMethods = generateAlternativePaymentMethods(apmsArray: alternativePaymentMethods)
         }
         return configuration
     }
@@ -188,6 +210,16 @@ class RNPaymentSDKLibrary: NSObject {
         }
         return theme
     }
+    
+    private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
+            var apms = [AlternativePaymentMethod]()
+            for apmValue in apmsArray {
+                if let apm = AlternativePaymentMethod.init(rawValue: apmValue) {
+                    apms.append(apm)
+                }
+            }
+            return apms
+        }
     
     // to be fixed in next versions
     private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {

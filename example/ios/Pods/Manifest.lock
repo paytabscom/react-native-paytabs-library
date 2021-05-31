@@ -59,7 +59,7 @@ PODS:
   - glog (0.3.5)
   - libevent (2.1.12)
   - OpenSSL-Universal (1.1.180)
-  - PayTabsSDK (6.0.21)
+  - PayTabsSDK (6.1.0)
   - RCT-Folly (2020.01.13.00):
     - boost-for-react-native
     - DoubleConversion
@@ -253,8 +253,8 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-paymentsdk (2.0.10):
-    - PayTabsSDK (= 6.0.21)
+  - react-native-paymentsdk (2.2.0):
+    - PayTabsSDK (= 6.1.0)
     - React
   - React-perflogger (0.64.0)
   - React-RCTActionSheet (0.64.0):
@@ -468,7 +468,7 @@ SPEC CHECKSUMS:
   glog: 73c2498ac6884b13ede40eda8228cb1eee9d9d62
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   OpenSSL-Universal: 1aa4f6a6ee7256b83db99ec1ccdaa80d10f9af9b
-  PayTabsSDK: 8803db25af282707ebf4307458ad9adf93b46b30
+  PayTabsSDK: 709ac5055df6f9a966ede707fc6cf22c9f11a717
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
   RCTRequired: 2f8cb5b7533219bf4218a045f92768129cf7050a
   RCTTypeSafety: 512728b73549e72ad7330b92f3d42936f2a4de5b
@@ -480,7 +480,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-paymentsdk: b798d0e1852391403621b9d0f4f1f7f40cf0bbfd
+  react-native-paymentsdk: d859418f6b81106b725a6e6a409a6690c845f298
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f

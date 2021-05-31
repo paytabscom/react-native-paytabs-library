@@ -2,7 +2,6 @@ package com.paymentsdk;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Callback;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
@@ -11,14 +10,14 @@ import static com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCodeKt.
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormatKt.createPaymentSdkTokenFormat;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokeniseKt.createPaymentSdkTokenise;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionTypeKt.createPaymentSdkTransactionType;
+import static com.payment.paymentsdk.integrationmodels.PaymentSdkApmsKt.createPaymentSdkApms;
 
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.bridge.ReadableNativeMap;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
 import com.payment.paymentsdk.PaymentSdkActivity;
 import com.payment.paymentsdk.PaymentSdkConfigBuilder;
+import com.payment.paymentsdk.integrationmodels.PaymentSdkApms;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkBillingDetails;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkConfigurationDetails;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkError;
@@ -36,11 +35,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.react.bridge.Promise;
-
-import java.lang.reflect.Array;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
 
 public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
 
@@ -68,62 +64,7 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
         this.promise = promise;
         try {
             JSONObject paymentDetails = new JSONObject(arguments);
-            String profileId = paymentDetails.optString("profileID");
-            String serverKey = paymentDetails.optString("serverKey");
-            String clientKey = paymentDetails.optString("clientKey");
-            PaymentSdkLanguageCode locale = createPaymentSdkLanguageCode(paymentDetails.optString("languageCode"));
-            String screenTitle = paymentDetails.optString("screenTitle");
-            String orderId = paymentDetails.optString("cartID");
-            String cartDesc = paymentDetails.optString("cartDescription");
-            String currency = paymentDetails.optString("currency");
-            String token = paymentDetails.optString("token");
-            String transRef = paymentDetails.optString("transactionReference");
-            double amount = paymentDetails.optDouble("amount");
-            PaymentSdkTokenise tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"));
-            PaymentSdkTokenFormat tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"));
-            PaymentSdkTransactionType transactionType = createPaymentSdkTransactionType(paymentDetails.optString("transactionType"));
-
-            JSONObject billingDetails = paymentDetails.optJSONObject("billingDetails");
-            PaymentSdkBillingDetails billingData = null;
-            if(billingDetails != null) {
-                billingData = new PaymentSdkBillingDetails(
-                        billingDetails.optString("city"),
-                        billingDetails.optString("countryCode"),
-                        billingDetails.optString("email"),
-                        billingDetails.optString("name"),
-                        billingDetails.optString("phone"), billingDetails.optString("state"),
-                        billingDetails.optString("addressLine"), billingDetails.optString("zip")
-                );
-            }
-            JSONObject shippingDetails = paymentDetails.optJSONObject("shippingDetails");
-            PaymentSdkShippingDetails shippingData = null;
-            if(shippingDetails != null ) {
-                shippingData = new PaymentSdkShippingDetails(
-                        shippingDetails.optString("city"),
-                        shippingDetails.optString("countryCode"),
-                        shippingDetails.optString("email"),
-                        shippingDetails.optString("name"),
-                        shippingDetails.optString("phone"), shippingDetails.optString("state"),
-                        shippingDetails.optString("addressLine"), shippingDetails.optString("zip")
-                );
-            }
-            PaymentSdkConfigurationDetails configData = new PaymentSdkConfigBuilder(
-                    profileId, serverKey, clientKey, amount, currency)
-                    .setCartDescription(cartDesc)
-                    .setLanguageCode(locale)
-                    .setBillingData(billingData)
-                    .setMerchantCountryCode(paymentDetails.optString("merchantCountryCode"))
-                    .setShippingData(shippingData)
-                    .setCartId(orderId)
-                    .setTokenise(tokeniseType, tokenFormat)
-                    .setTokenisationData(token, transRef)
-                    .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
-                    .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
-                    .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
-                    .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
-                    .setScreenTitle(screenTitle)
-                    .setTransactionType(transactionType)
-                    .build();
+            PaymentSdkConfigurationDetails configData = createConfiguration(paymentDetails);
             String samsungToken = paymentDetails.optString("samsungToken");
             if (samsungToken != null && samsungToken.length() > 0)
                 PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configData, samsungToken, this);
@@ -134,9 +75,98 @@ public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implem
         }
     }
 
+    @ReactMethod
+    public void startAlternativePaymentMethod(final String arguments,final Promise promise) {
+        this.promise = promise;
+        try {
+            JSONObject paymentDetails = new JSONObject(arguments);
+            PaymentSdkConfigurationDetails configData = createConfiguration(paymentDetails);
+            PaymentSdkActivity.startAlternativePaymentMethods(reactContext.getCurrentActivity(), configData, this);
+        } catch (Exception e) {
+            promise.reject("Error",e.getMessage(), new Throwable(e.getMessage()));
+        }
+    }
+
+    private PaymentSdkConfigurationDetails createConfiguration(JSONObject paymentDetails) {
+        String profileId = paymentDetails.optString("profileID");
+        String serverKey = paymentDetails.optString("serverKey");
+        String clientKey = paymentDetails.optString("clientKey");
+        PaymentSdkLanguageCode locale = createPaymentSdkLanguageCode(paymentDetails.optString("languageCode"));
+        String screenTitle = paymentDetails.optString("screenTitle");
+        String orderId = paymentDetails.optString("cartID");
+        String cartDesc = paymentDetails.optString("cartDescription");
+        String currency = paymentDetails.optString("currency");
+        String token = paymentDetails.optString("token");
+        String transRef = paymentDetails.optString("transactionReference");
+        double amount = paymentDetails.optDouble("amount");
+        PaymentSdkTokenise tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"));
+        PaymentSdkTokenFormat tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"));
+        PaymentSdkTransactionType transactionType = createPaymentSdkTransactionType(paymentDetails.optString("transactionType"));
+
+        JSONObject billingDetails = paymentDetails.optJSONObject("billingDetails");
+        PaymentSdkBillingDetails billingData = null;
+        if(billingDetails != null) {
+            billingData = new PaymentSdkBillingDetails(
+                    billingDetails.optString("city"),
+                    billingDetails.optString("countryCode"),
+                    billingDetails.optString("email"),
+                    billingDetails.optString("name"),
+                    billingDetails.optString("phone"), billingDetails.optString("state"),
+                    billingDetails.optString("addressLine"), billingDetails.optString("zip")
+            );
+        }
+        JSONObject shippingDetails = paymentDetails.optJSONObject("shippingDetails");
+        PaymentSdkShippingDetails shippingData = null;
+        if(shippingDetails != null ) {
+            shippingData = new PaymentSdkShippingDetails(
+                    shippingDetails.optString("city"),
+                    shippingDetails.optString("countryCode"),
+                    shippingDetails.optString("email"),
+                    shippingDetails.optString("name"),
+                    shippingDetails.optString("phone"), shippingDetails.optString("state"),
+                    shippingDetails.optString("addressLine"), shippingDetails.optString("zip")
+            );
+        }
+        JSONArray apmsJSONArray = paymentDetails.optJSONArray("alternativePaymentMethods");
+        ArrayList<PaymentSdkApms> apmsList = new ArrayList<PaymentSdkApms>();
+        if (apmsJSONArray != null) {
+            apmsList =  createAPMs(apmsJSONArray);
+        }
+        PaymentSdkConfigurationDetails configData = new PaymentSdkConfigBuilder(
+                profileId, serverKey, clientKey, amount, currency)
+                .setCartDescription(cartDesc)
+                .setLanguageCode(locale)
+                .setBillingData(billingData)
+                .setMerchantCountryCode(paymentDetails.optString("merchantCountryCode"))
+                .setShippingData(shippingData)
+                .setCartId(orderId)
+                .setTokenise(tokeniseType, tokenFormat)
+                .setTokenisationData(token, transRef)
+                .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
+                .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
+                .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
+                .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
+                .setScreenTitle(screenTitle)
+                .setAlternativePaymentMethods(apmsList)
+                .setTransactionType(transactionType)
+                .build();
+
+        return configData;
+    }
+
     @Override
     public void onError(@NotNull PaymentSdkError err) {
         promise.reject("Error",err.getMsg(), new Throwable(new Gson().toJson(err)));
+    }
+
+    private ArrayList<PaymentSdkApms> createAPMs(JSONArray apmsJSONArray) {
+        ArrayList<PaymentSdkApms> apmsList = new ArrayList<PaymentSdkApms>();
+        for (int i = 0; i < apmsJSONArray.length(); i++) {
+            String apmString = apmsJSONArray.optString(i);
+            PaymentSdkApms apm = createPaymentSdkApms(apmString);
+            apmsList.add(apm);
+        }
+        return apmsList;
     }
 
     @Override

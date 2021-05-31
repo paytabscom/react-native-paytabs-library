@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.1.0-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.2.0-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
 
@@ -11,7 +11,7 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-paytabs@2.1.0 --save`
+`$ npm install @paytabs/react-native-paytabs@2.2.0 --save`
 
 ### Follow the below steps to complete the installation
 
@@ -177,6 +177,35 @@ Pass Samsung Pay token to the configuration and call `startCardPayment`
 configuration.samsungToken = "token"
 ```
 
+### Pay with Alternative Payment Methods
+
+It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet, Valu, Fawry, UnionPay, and Meeza, to serve a large sector of customers.
+
+1. Do the steps 1 and 2 from **Pay with Card**.
+
+2. Choose one or more of the payment methods you want to support.
+
+```javascript
+configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay]
+```
+
+3. Start payment by calling `startAlternativePaymentMethod` method and handle the transaction details 
+
+```javascript
+
+RNPaymentSDKLibrary.startAlternativePaymentMethod(JSON.stringify(configuration)).then( result => {
+      if(result["PaymentDetails"] != null) { // Handle transaction details
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") { // Handle events
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) { // Handle error
+      console.log(error)
+     });
+     
+```
+
 ## Enums
 
 Those enums will help you in customizing your configuration.
@@ -186,16 +215,16 @@ Those enums will help you in customizing your configuration.
  The default type is none
 
 ```javascript
-const TokeniseType = Object.freeze({
+TokeniseType = {
 "none":"none", // tokenise is off
 "merchantMandatory":"merchantMandatory", // tokenise is forced
 "userMandatory":"userMandatory", // tokenise is forced as per user approval
 "userOptinoal":"userOptional" // tokenise if optional as per user approval
-});
+};
 ```
 
 ```javascript
-configuration.tokeniseType = TokeniseType. userOptinoal
+configuration.tokeniseType = PaymentSDKConstants.TokeniseType.userOptinoal
 ```
 
 * Token formats
@@ -203,13 +232,16 @@ configuration.tokeniseType = TokeniseType. userOptinoal
 The default format is hex32
 
 ```javascript
-const TokeniseFromat = Object.freeze({"none":"1", 
+TokeniseFromat = {"none":"1", 
 "hex32": "2", 
 "alphaNum20": "3", 
 "digit22": "3", 
 "digit16": "5", 
 "alphaNum32": "6"
-});
+};
+```
+```javascript
+configuration.tokenFormat = PaymentSDKConstants.TokeniseFromat.hex32
 ```
 
 * Transaction types
@@ -217,12 +249,22 @@ const TokeniseFromat = Object.freeze({"none":"1",
 The default type is sale
 
 ```javascript
-const TransactionType = Object.freeze({"sale":"sale", 
-"authorize": "auth"});
+TransactionType = {"sale":"sale", 
+"authorize": "auth"};
 ```
 
 ```javascript
-configuration.transactionType = TransactionType.sale
+configuration.transactionType = PaymentSDKConstants.TransactionType.sale
+```
+
+* Alternative payment methods
+
+```javascript
+AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry"};
+```
+
+```javascript
+configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay, ...]
 ```
 
 ## Show/Hide Card Scanner

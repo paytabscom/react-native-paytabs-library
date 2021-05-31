@@ -10,7 +10,7 @@
 
 import React, { Component } from 'react';
 import {Platform, StyleSheet, Text, Button, View } from 'react-native';
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-paytabs';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme, PaymentSDKConstants} from '@paytabs/react-native-paytabs';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -33,9 +33,9 @@ export default class App extends Component {
   onPressPay(){
   
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = "profile id"
-    configuration.serverKey= "server key"
-    configuration.clientKey = "client key"
+    configuration.profileID = "*profile id*"
+    configuration.serverKey= "*server key*"
+    configuration.clientKey = "*client key*"
     configuration.cartID = "545454"
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"
@@ -44,9 +44,9 @@ export default class App extends Component {
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
 
-    let billingDetails = new PaymentSDKBillingDetails(name= "Mohamed Adly",
-                                  email= "m.adly@paytabs.com",
-                                  phone= "+201113655936",
+    let billingDetails = new PaymentSDKBillingDetails(name= "Jone Smith",
+                                  email= "email@domain.com",
+                                  phone= "97311111111",
                                   addressLine= "Flat 1,Building 123, Road 2345",
                                   city= "Dubai",
                                   state= "Dubai",
@@ -69,11 +69,12 @@ export default class App extends Component {
      });
     
   }
+  
   onPressApplePay(){
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = "profile id"
-    configuration.serverKey= "server key"
-    configuration.clientKey = "client key"
+    configuration.profileID = "*profile id*"
+    configuration.serverKey= "*server key*"
+    configuration.clientKey = "*client key*"
     configuration.cartID = "545454"
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"
@@ -93,6 +94,43 @@ export default class App extends Component {
       console.log(error)
      });
   }
+
+  onPressSTCPay(){
+  
+    let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = "*profile id*"
+    configuration.serverKey= "*server key*"
+    configuration.clientKey = "*client key*"
+    configuration.cartID = "545454"
+    configuration.currency = "SAR"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "SA"
+    configuration.amount = 20
+    configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay];
+
+    let billingDetails = new PaymentSDKBillingDetails(name= "Jone Smith",
+                                  email= "email@domain.com",
+                                  phone= "966111111111",
+                                  addressLine= "Flat 1,Building 123, Road 2345",
+                                  city= "Riyadh",
+                                  state= "Riyadh",
+                                  countryCode= "SA",
+                                  zip= "1234")
+    configuration.billingDetails = billingDetails
+
+    RNPaymentSDKLibrary.startAlternativePaymentMethod(JSON.stringify(configuration)).then( result => {
+      if(result["PaymentDetails"] != null) {
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") {
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) {
+      console.log(error)
+     });
+    
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -111,6 +149,12 @@ export default class App extends Component {
             title="Pay with Apple Pay"
             color="#c00"
             disabled = { Platform.OS != 'ios'}
+          />
+          <View style = {{height: 20}}></View>
+          <Button
+            onPress={this.onPressSTCPay}
+            title="Pay with STC Pay"
+            color="#c00"
           />
       </View>
     );
