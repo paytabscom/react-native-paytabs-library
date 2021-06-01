@@ -212,14 +212,14 @@ class RNPaymentSDKLibrary: NSObject {
     }
     
     private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
-            var apms = [AlternativePaymentMethod]()
-            for apmValue in apmsArray {
-                if let apm = AlternativePaymentMethod.init(rawValue: apmValue) {
-                    apms.append(apm)
-                }
+        var apms = [AlternativePaymentMethod]()
+        for apmValue in apmsArray {
+            if let apm = AlternativePaymentMethod.init(rawValue: apmValue) {
+                apms.append(apm)
             }
-            return apms
         }
+        return apms
+    }
     
     // to be fixed in next versions
     private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
