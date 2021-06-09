@@ -51,6 +51,25 @@ class RNPaymentSDKLibrary: NSObject {
         }
     }
     
+    @objc(startAlternativePaymentMethod:withResolver:withRejecter:)
+    func startAlternativePaymentMethod(paymentDetails: NSString,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+        
+        let data = Data((paymentDetails as String).utf8)
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let configuration = generateConfiguration(dictionary: dictionary)
+            if let rootViewController = getRootController() {
+                PaymentManager.startAlternativePaymentMethod(on: rootViewController, configuration: configuration, delegate: self)
+            }
+        } catch let error {
+            reject("Error", error.localizedDescription, error)
+        }
+    }
+    
     func getRootController() -> UIViewController? {
         let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
             let topController = keyWindow?.rootViewController
@@ -88,8 +107,10 @@ class RNPaymentSDKLibrary: NSObject {
             configuration.tokenFormat = type
         }
         
-//        public var paymentNetworks: [PKPaymentNetwork]?
-
+        if let transactionType = dictionary["transactionType"] as? String {
+            configuration.transactionType = TransactionType.init(rawValue: transactionType) ?? .sale
+        }
+        
         if let themeDictionary = dictionary["theme"] as? [String: Any],
            let theme = generateTheme(dictionary: themeDictionary) {
             configuration.theme = theme
@@ -101,6 +122,9 @@ class RNPaymentSDKLibrary: NSObject {
         }
         if let shippingDictionary = dictionary["shippingDetails"] as?  [String: Any] {
             configuration.shippingDetails = generateShippingDetails(dictionary: shippingDictionary)
+        }
+        if let alternativePaymentMethods = dictionary["alternativePaymentMethods"] as? [String] {
+            configuration.alternativePaymentMethods = generateAlternativePaymentMethods(apmsArray: alternativePaymentMethods)
         }
         return configuration
     }
@@ -187,6 +211,16 @@ class RNPaymentSDKLibrary: NSObject {
         return theme
     }
     
+    private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
+            var apms = [AlternativePaymentMethod]()
+            for apmValue in apmsArray {
+                if let apm = AlternativePaymentMethod.init(rawValue: apmValue) {
+                    apms.append(apm)
+                }
+            }
+            return apms
+        }
+    
     // to be fixed in next versions
     private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
         var type = 0
@@ -207,7 +241,9 @@ class RNPaymentSDKLibrary: NSObject {
 extension RNPaymentSDKLibrary: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
-            return reject("Error", error.localizedDescription, error)
+            reject("Error", error.localizedDescription, error)
+            self.reject = nil
+            return
         }
         if let resolve = resolve {
             do {
@@ -215,9 +251,11 @@ extension RNPaymentSDKLibrary: PaymentManagerDelegate {
                 let data = try encoder.encode(transactionDetails)
                 let dictionary = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: Any]
                 resolve(["PaymentDetails": dictionary])
+                self.resolve = nil
             } catch  {
                 if let reject = reject {
                     reject("Error", error.localizedDescription, error)
+                    self.reject = nil
                 }
             }
         }
@@ -226,6 +264,7 @@ extension RNPaymentSDKLibrary: PaymentManagerDelegate {
     func paymentManager(didCancelPayment error: Error?) {
         if let resolve = resolve {
             resolve(["Event": "CancelPayment"])
+            self.resolve = nil
         }
     }
 }

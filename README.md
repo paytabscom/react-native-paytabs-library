@@ -1,6 +1,6 @@
 
 # react-native-clickpay
-![Version](https://img.shields.io/badge/React%20Native%20ClickPay-v2.0.3-green)
+![Version](https://img.shields.io/badge/React%20Native%20ClickPay-v2.2.1-green)
 
 React native ClickPay library is a wrapper for the native ClickPay Android and iOS SDKs, It helps you integrate with ClickPay payment gateway.
 
@@ -11,14 +11,14 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-clickpay@2.0.4 --save`
+`$ npm install @paytabs/react-native-clickpay@2.2.1 --save`
 
 ## Usage
 
 Import `react-native-clickpay`
 
 ```javascript
-import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme} from '@paytabs/react-native-clickpay';
+import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKTheme, PaymentSDKConstants} from '@paytabs/react-native-clickpay';
 ```
 
 ### Pay with Card
@@ -28,20 +28,20 @@ import {RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, 
 ```javascript
 let billingDetails = new PaymentSDKBillingDetails(name= "John Smith",
                                   email= "email@test.com",
-                                  phone= "+ 2011111111",
+                                  phone= "+96611111111",
                                   addressLine= "address line",
-                                  city= "Dubai",
-                                  state= "Dubai",
-                                  countryCode= "ae", // ISO alpha 2
+                                  city= "Riyadh",
+                                  state= "Riyadh",
+                                  countryCode= "sa", // ISO alpha 2
                                   zip= "1234")
 
 let shippingDetails = new PaymentSDKShippingDetails(name= "John Smith",
                                   email= "email@test.com",
-                                  phone= "+ 2011111111",
+                                  phone= "+96611111111",
                                   addressLine= "address line",
-                                  city= "Dubai",
-                                  state= "Dubai",
-                                  countryCode= "ae", // ISO alpha 2
+                                  city= "Riyadh",
+                                  state= "Riyadh",
+                                  countryCode= "sa", // ISO alpha 2
                                   zip= "1234")
                                               
 ```
@@ -55,9 +55,9 @@ let configuration = new PaymentSDKConfiguration();
     configuration.serverKey= "*server key*"
     configuration.clientKey = "*client key*"
     configuration.cartID = "545454"
-    configuration.currency = "AED"
+    configuration.currency = "SAR"
     configuration.cartDescription = "Flowers"
-    configuration.merchantCountryCode = "ae"
+    configuration.merchantCountryCode = "sa"
     configuration.merchantName = "Flowers Store"
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
@@ -104,9 +104,9 @@ let configuration = new PaymentSDKConfiguration();
     configuration.serverKey= "*server key*"
     configuration.clientKey = "*client key*"
     configuration.cartID = "545454"
-    configuration.currency = "AED"
+    configuration.currency = "SAR"
     configuration.cartDescription = "Flowers"
-    configuration.merchantCountryCode = "ae"
+    configuration.merchantCountryCode = "sa"
     configuration.merchantName = "Flowers Store"
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
@@ -145,6 +145,35 @@ Pass Samsung Pay token to the configuration and call `startCardPayment`
 configuration.samsungToken = "token"
 ```
 
+### Pay with Alternative Payment Methods
+
+It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet, Valu, Fawry, UnionPay, and Meeza, to serve a large sector of customers.
+
+1. Do the steps 1 and 2 from **Pay with Card**.
+
+2. Choose one or more of the payment methods you want to support.
+
+```javascript
+configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay]
+```
+
+3. Start payment by calling `startAlternativePaymentMethod` method and handle the transaction details 
+
+```javascript
+
+RNPaymentSDKLibrary.startAlternativePaymentMethod(JSON.stringify(configuration)).then( result => {
+      if(result["PaymentDetails"] != null) { // Handle transaction details
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") { // Handle events
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) { // Handle error
+      console.log(error)
+     });
+     
+```
+
 ## Enums
 
 Those enums will help you in customizing your configuration.
@@ -154,16 +183,16 @@ Those enums will help you in customizing your configuration.
  The default type is none
 
 ```javascript
-const TokeniseType = Object.freeze({
+TokeniseType = {
 "none":"none", // tokenise is off
 "merchantMandatory":"merchantMandatory", // tokenise is forced
 "userMandatory":"userMandatory", // tokenise is forced as per user approval
 "userOptinoal":"userOptional" // tokenise if optional as per user approval
-});
+};
 ```
 
 ```javascript
-configuration.tokeniseType = TokeniseType. userOptinoal
+configuration.tokeniseType = PaymentSDKConstants.TokeniseType.userOptinoal
 ```
 
 * Token formats
@@ -171,18 +200,36 @@ configuration.tokeniseType = TokeniseType. userOptinoal
 The default format is hex32
 
 ```javascript
-const TokeniseFromat = Object.freeze({"none":"1", 
+TokeniseFromat = {"none":"1", 
 "hex32": "2", 
 "alphaNum20": "3", 
 "digit22": "3", 
 "digit16": "5", 
 "alphaNum32": "6"
-});
+};
 ```
 
 ```javascript
-configuration.tokeniseFormat = TokeniseFromat.hex32
+configuration.tokeniseFormat = PaymentSDKConstants.TokeniseFromat.hex32
 ```
+
+* Alternative payment methods
+
+```javascript
+AlternativePaymentMethod = {"unionPay":"unionpay", 
+"stcPay":"stcpay", 
+"valu": "valu", 
+"meezaQR": "meezaqr", 
+"omannet": "omannet", 
+"knetCredit": "knetcredit", 
+"knetDebit": "knetdebit", 
+"fawry": "fawry"};
+ ```
+ 
+ ```javascript
+configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay, ...]
+ ```
+
 ## Demo application
 
 Check our complete example [here][example].

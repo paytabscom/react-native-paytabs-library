@@ -1,7 +1,7 @@
 {
   "name": "@paytabs/react-native-clickpay",
   "title": "React Native ClickPay",
-  "version": "2.0.4",
+  "version": "2.2.1",
   "description": "React Native ClickPay",
   "main": "index.js",
   "files": [
@@ -12,6 +12,7 @@
     "PaymentSDKBillingDetails.js",
     "PaymentSDKShippingDetails.js",
     "PaymentSDKTheme.js",
+    "PaymentSDKConstants.js",
     "ios",
     "react-native-paymentsdk.podspec"
   ],

@@ -1,6 +1,6 @@
 PODS:
   - boost-for-react-native (1.63.0)
-  - ClickPay (6.0.12)
+  - ClickPay (6.1.1)
   - CocoaAsyncSocket (7.6.5)
   - DoubleConversion (1.1.6)
   - FBLazyVector (0.64.0)
@@ -253,8 +253,8 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-paymentsdk (2.0.4):
-    - ClickPay (= 6.0.12)
+  - react-native-paymentsdk (2.2.1):
+    - ClickPay (= 6.1.1)
     - React
   - React-perflogger (0.64.0)
   - React-RCTActionSheet (0.64.0):
@@ -454,7 +454,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
-  ClickPay: ae82a3cd6956274dd5aebc5dca7537cfd418ab4e
+  ClickPay: 61afbd7e0e6f04208a017232448f1c00fd6f158d
   CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   DoubleConversion: cf9b38bf0b2d048436d9a82ad2abe1404f11e7de
   FBLazyVector: 49cbe4b43e445b06bf29199b6ad2057649e4c8f5
@@ -480,7 +480,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-paymentsdk: ca2f1091419a8f619f67cf4ba248c2eef90cb005
+  react-native-paymentsdk: fda90dfa4962c97cd78cd2e78429cd4f44268acd
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
