@@ -159,15 +159,11 @@ afterEvaluate { project ->
 repositories {
     google()
     jcenter()
-    maven { url 'https://jitpack.io' }
-    maven {
-        url  "https://dl.bintray.com/paytabsandroidsdk/paytabs-sdk"
-    }
     maven { url "http://pay.cards/maven" }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.paytabs:payment-sdk:6.1.0'
+    implementation 'com.paytabs:payment-sdk:6.1.2'
 }
   

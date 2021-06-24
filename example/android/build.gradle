@@ -32,8 +32,5 @@ allprojects {
         google()
         jcenter()
         maven { url "http://pay.cards/maven" }
-        maven { url "https://dl.bintray.com/paytabsandroidsdk/paytabs-sdk" }
-
-        maven { url 'https://www.jitpack.io' }
     }
 }

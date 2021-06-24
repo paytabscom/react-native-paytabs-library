@@ -1,8 +1,8 @@
 {
   "name": "@paytabs/react-native-paytabs",
   "title": "React Native Paytabs",
-  "version": "2.2.0",
-  "description": "Paytabs is a payment gateway",
+  "version": "2.2.1",
+  "description": "Paytabs React-Native Library",
   "main": "index.js",
   "files": [
     "README.md",
@@ -12,6 +12,7 @@
     "PaymentSDKBillingDetails.js",
     "PaymentSDKShippingDetails.js",
     "PaymentSDKTheme.js",
+    "PaymentSDKConstants.js",
     "ios",
     "react-native-paymentsdk.podspec"
   ],

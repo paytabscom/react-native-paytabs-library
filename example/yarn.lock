@@ -14,7 +14,7 @@
   "resolved" "https://registry.npmjs.org/@babel/compat-data/-/compat-data-7.13.12.tgz"
   "version" "7.13.12"
 
-"@babel/core@*", "@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.1.0", "@babel/core@^7.1.6", "@babel/core@^7.11.6", "@babel/core@^7.13.0", "@babel/core@^7.4.0-0", "@babel/core@^7.7.5":
+"@babel/core@^7.0.0", "@babel/core@^7.0.0-0", "@babel/core@^7.1.0", "@babel/core@^7.1.6", "@babel/core@^7.11.6", "@babel/core@^7.13.0", "@babel/core@^7.4.0-0", "@babel/core@^7.7.5":
   "integrity" "sha512-wZso/vyF4ki0l0znlgM4inxbdrUvCb+cVz8grxDq+6C9k6qbqoIJteQOKicaKjCipU3ISV+XedCqpL2RJJVehA=="
   "resolved" "https://registry.npmjs.org/@babel/core/-/core-7.13.14.tgz"
   "version" "7.13.14"
@@ -1226,6 +1226,10 @@
     "@types/node" "*"
     "@types/yargs" "^15.0.0"
     "chalk" "^4.0.0"
+
+"@paytabs/react-native-paytabs@file:../":
+  "resolved" "file:.."
+  "version" "2.2.1"
 
 "@react-native-community/cli-debugger-ui@^5.0.1-alpha.1":
   "integrity" "sha512-o6msDywXU7q0dPKhCTo8IrpmJ+7o+kVghyHlrAndnb30p6vnm4pID5Yi7lHXGfs6bQXorKUWX8oD5xYwWkN8qw=="
@@ -5604,10 +5608,6 @@
     "flow-parser" "^0.121.0"
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
-
-"react-native-paymentsdk@file:../":
-  "resolved" "file:.."
-  "version" "2.0.3"
 
 "react-native@^0.64.0", "react-native@>=0.64.0-rc.0 || 0.0.0-*":
   "integrity" "sha512-8dhSHBthgGwAjU+OjqUEA49229ThPMQH7URH0u8L0xoQFCnZO2sZ9Wc6KcbxI0x9KSmjCMFFZqRe3w3QsRv64g=="
