@@ -1,7 +1,7 @@
 {
   "name": "@paytabs/react-native-paytabs",
   "title": "React Native Paytabs",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Paytabs React-Native Library",
   "main": "index.js",
   "files": [
