@@ -1,12 +1,6 @@
-import { NativeModules } from 'react-native';
-const { RNPaymentSDKLibrary } = NativeModules;
-
-export {
-    RNPaymentSDKLibrary,
-};
-
-export { default as PaymentSDKConfiguration} from './PaymentSDKConfiguration';
-export { default as PaymentSDKBillingDetails} from './PaymentSDKBillingDetails';
-export { default as PaymentSDKShippingDetails} from './PaymentSDKShippingDetails';
-export { default as PaymentSDKTheme} from './PaymentSDKTheme';
-export { default as PaymentSDKConstants} from './PaymentSDKConstants';
+export { default as RNPaymentSDKLibrary} from './src/RNPaymentSDKLibrary';
+export { default as PaymentSDKConfiguration} from './src/PaymentSDKConfiguration';
+export { default as PaymentSDKBillingDetails} from './src/PaymentSDKBillingDetails';
+export { default as PaymentSDKShippingDetails} from './src/PaymentSDKShippingDetails';
+export { default as PaymentSDKTheme} from './src/PaymentSDKTheme';
+export { default as PaymentSDKConstants} from './src/PaymentSDKConstants';

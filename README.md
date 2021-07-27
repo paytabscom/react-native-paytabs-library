@@ -1,8 +1,8 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.2.2-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.3.0-green)
 
-React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs payment gateway.
+React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs seamlessly.
 
 Library Support:
 
@@ -11,7 +11,15 @@ Library Support:
 
 # Installation
 
-`$ npm install @paytabs/react-native-paytabs@2.2.2 --save --force`
+```sh
+$ npm install @paytabs/react-native-paytabs@2.3.0 --save --force
+```
+
+### Expo
+
+```sh
+expo install @paytabs/react-native-paytabs
+```
 
 ### Follow the below steps to complete the installation
 
@@ -207,6 +215,27 @@ RNPaymentSDKLibrary.startAlternativePaymentMethod(JSON.stringify(configuration))
      
 ```
 
+## Tokenisation
+
+Follow the below instructions to enable tokenisation feature.
+
+1. Request token
+
+```javascript
+configuration.tokeniseType = PaymentSDKConstants.TokeniseType.userOptinoal // read more about the tokeniseType in the enums section 
+configuration.tokenFormat = PaymentSDKConstants.TokeniseFormat.hex32 // read more about the tokenFormat in the enums section  
+
+```
+After passing those parameters, you will receive a token and transaction reference in the result callback, save them for future usage.
+
+2. Pass the token & transaction reference
+
+```javascript
+configuration.token = token
+configuration.transactionReference = transactionreference
+```
+
+
 ## Enums
 
 Those enums will help you in customizing your configuration.
@@ -233,7 +262,7 @@ configuration.tokeniseType = PaymentSDKConstants.TokeniseType.userOptinoal
 The default format is hex32
 
 ```javascript
-TokeniseFromat = {"none":"1", 
+TokeniseFormat = {"none":"1", 
 "hex32": "2", 
 "alphaNum20": "3", 
 "digit22": "3", 
@@ -274,18 +303,25 @@ configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymen
 configuration.hideCardScanner = true
 ```
 
-## Theme Android
-Use the following guide to customize the colors, font, and logo by configuring the theme and pass it to the payment configuration.
+## Theme Customization
 
 ![UI guide](https://user-images.githubusercontent.com/13621658/109432213-d7981380-7a12-11eb-9224-c8fc12b0024d.jpg)
 
--- Override strings
-To override string you can find the keys with the default values here
-![english](https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings.xml)
-![arabic](https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings-ar.xml)
+### iOS
+Create an instance from the class `PaymentTheme` and configure its fonts and colors.
+
+```javascript
+let theme = new PaymentSDKTheme()
+theme.backgroundColor = "a83297"
+theme.primaryColor = "956596"
+configuration.theme = theme
+```
+### Android
+
+- Edit your `styles.xml` to customize the colors, fonts, and logo.
 
 ````xml
-<resourse>
+<resources>
   // to override colors
      <color name="payment_sdk_primary_color">#5C13DF</color>
      <color name="payment_sdk_secondary_color">#FFC107</color>
@@ -307,12 +343,16 @@ To override string you can find the keys with the default values here
      <dimen name="payment_sdk_input_corner_radius">8dp</dimen>
      <dimen name="payment_sdk_button_corner_radius">8dp</dimen>
      
-</resourse>
+</resources>
 ````
+
+- Override strings:
+To override string you can find the keys with the default values here
+[English][english], [Arabic][arabic].
 
 ## Demo application
 
-Check our complete example [here][example].
+Check our complete examples ([React-Native][example], [Expo][expoexample]).
 
 <img src="https://user-images.githubusercontent.com/13621658/109432386-905e5280-7a13-11eb-847c-63f2c554e2d1.png" width="370">
 
@@ -330,4 +370,6 @@ See [LICENSE][license].
  [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/LICENSE
  [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/ApplePayConfiguration.md
  [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/example
-
+ [expoexample]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/expo-example
+[english]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings.xml
+ [arabic]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings-ar.xml

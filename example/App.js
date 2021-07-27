@@ -56,7 +56,7 @@ export default class App extends Component {
     let theme = new PaymentSDKTheme()
     // theme.backgroundColor = "a83297"
     configuration.theme = theme
-
+    
     RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
       if(result["PaymentDetails"] != null) {
         let paymentDetails = result["PaymentDetails"]

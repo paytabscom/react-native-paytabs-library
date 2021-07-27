@@ -38,13 +38,13 @@ import com.facebook.react.bridge.Promise;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class RNPaymentSDKLibraryModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
+public class RNPaymentManagerModule extends ReactContextBaseJavaModule implements CallbackPaymentInterface {
 
     private final ReactApplicationContext reactContext;
-    private static String PaymentSDK_MODULE = "RNPaymentSDKLibrary";
+    private static String PaymentSDK_MODULE = "RNPaymentManager";
     private Promise promise;
 
-    public RNPaymentSDKLibraryModule(ReactApplicationContext reactContext) {
+    public RNPaymentManagerModule(ReactApplicationContext reactContext) {
         super(reactContext);
         this.reactContext = reactContext;
     }

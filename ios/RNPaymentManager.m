@@ -1,6 +1,6 @@
 #import <React/RCTBridgeModule.h>
 
-@interface RCT_EXTERN_MODULE(RNPaymentSDKLibrary, NSObject)
+@interface RCT_EXTERN_MODULE(RNPaymentManager, NSObject)
 
 - (dispatch_queue_t)methodQueue
 {

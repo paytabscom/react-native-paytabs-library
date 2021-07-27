@@ -1,5 +1,5 @@
 //
-//  RNPaymentSDKLibrary.swift
+//  RNPaymentManager.swift
 //  react-native-paymentsdk
 //
 //  Created by Mohamed Adly on 16/03/2021.
@@ -8,8 +8,8 @@
 import Foundation
 import PaymentSDK
 
-@objc(RNPaymentSDKLibrary)
-class RNPaymentSDKLibrary: NSObject {
+@objc(RNPaymentManager)
+class RNPaymentManager: NSObject {
     var resolve: RCTPromiseResolveBlock?
     var reject: RCTPromiseRejectBlock?
     
@@ -238,7 +238,7 @@ class RNPaymentSDKLibrary: NSObject {
     }
 }
 
-extension RNPaymentSDKLibrary: PaymentManagerDelegate {
+extension RNPaymentManager: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
         if let error = error, let reject = reject {
             reject("Error", error.localizedDescription, error)

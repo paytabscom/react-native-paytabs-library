@@ -1,18 +1,16 @@
 {
   "name": "@paytabs/react-native-paytabs",
   "title": "React Native Paytabs",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "description": "Paytabs React-Native Library",
   "main": "index.js",
+  "typings": "./index.d.ts",
   "files": [
     "README.md",
+    "src",
     "android",
     "index.js",
-    "PaymentSDKConfiguration.js",
-    "PaymentSDKBillingDetails.js",
-    "PaymentSDKShippingDetails.js",
-    "PaymentSDKTheme.js",
-    "PaymentSDKConstants.js",
+    "index.d.ts",
     "ios",
     "react-native-paymentsdk.podspec"
   ],
