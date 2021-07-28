@@ -308,7 +308,8 @@ configuration.hideCardScanner = true
 ![UI guide](https://user-images.githubusercontent.com/13621658/109432213-d7981380-7a12-11eb-9224-c8fc12b0024d.jpg)
 
 ### iOS
-Create an instance from the class `PaymentTheme` and configure its fonts and colors.
+
+- **Theme**: <br />Create an instance from the class `PaymentTheme` and customize the theme.
 
 ```javascript
 let theme = new PaymentSDKTheme()
@@ -316,9 +317,13 @@ theme.backgroundColor = "a83297"
 theme.primaryColor = "956596"
 configuration.theme = theme
 ```
+
+- **Localization**:
+<br />Use the keys from our localization string files ([English][iosenglish], [Arabic][iosarabic]), then add the same key to your app localizable string file and add your custom string.
+
 ### Android
 
-- Edit your `styles.xml` to customize the colors, fonts, and logo.
+- **Theme**: <br />Edit your `styles.xml` to customize the theme.
 
 ````xml
 <resources>
@@ -346,8 +351,8 @@ configuration.theme = theme
 </resources>
 ````
 
-- Override strings:
-To override string you can find the keys with the default values here
+- **Localization**:
+To override your strings you can find the keys with the default values here
 [English][english], [Arabic][arabic].
 
 ## Demo application
@@ -373,3 +378,6 @@ See [LICENSE][license].
  [expoexample]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/expo-example
 [english]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings.xml
  [arabic]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings-ar.xml
+ [iosenglish]: https://github.com/paytabscom/paytabs-ios-library-sample/blob/master/en.strings
+ [iosarabic]: https://github.com/paytabscom/paytabs-ios-library-sample/blob/master/ar.strings
+ 
