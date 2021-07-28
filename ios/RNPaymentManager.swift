@@ -158,7 +158,7 @@ class RNPaymentManager: NSObject {
     private func generateTheme(dictionary: [String: Any]) -> PaymentSDKTheme? {
         let theme = PaymentSDKTheme.default
         if let imageName = dictionary["logoImage"] as? String {
-            theme.logoImage = UIImage(named: imageName)
+            theme.logoImage = RCTConvert.uiImage(imageName)
         }
         if let colorHex = dictionary["primaryColor"] as? String {
             theme.primaryColor = UIColor(hex: colorHex)

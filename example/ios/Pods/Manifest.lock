@@ -253,7 +253,7 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-paymentsdk (2.2.1):
+  - react-native-paymentsdk (2.3.0):
     - PayTabsSDK (= 6.1.0)
     - React
   - React-perflogger (0.64.0)
@@ -361,7 +361,7 @@ DEPENDENCIES:
   - React-jsi (from `../node_modules/react-native/ReactCommon/jsi`)
   - React-jsiexecutor (from `../node_modules/react-native/ReactCommon/jsiexecutor`)
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
-  - react-native-paymentsdk (from `../..`)
+  - "react-native-paymentsdk (from `../node_modules/@paytabs/react-native-paytabs`)"
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -424,7 +424,7 @@ EXTERNAL SOURCES:
   React-jsinspector:
     :path: "../node_modules/react-native/ReactCommon/jsinspector"
   react-native-paymentsdk:
-    :path: "../.."
+    :path: "../node_modules/@paytabs/react-native-paytabs"
   React-perflogger:
     :path: "../node_modules/react-native/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -480,7 +480,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-paymentsdk: 40dedd476475af96531dd80b1958ab96722d0aae
+  react-native-paymentsdk: af8094ae66a9dd7e3bf4629b4e6e6251026dd7de
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f
