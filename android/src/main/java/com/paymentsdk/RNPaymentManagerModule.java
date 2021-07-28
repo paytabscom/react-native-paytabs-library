@@ -1,4 +1,6 @@
 package com.paymentsdk;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 
 import com.facebook.react.bridge.Arguments;
@@ -35,6 +37,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.facebook.react.bridge.Promise;
+
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -149,9 +154,21 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
                 .setScreenTitle(screenTitle)
                 .setAlternativePaymentMethods(apmsList)
                 .setTransactionType(transactionType)
+                .setMerchantIcon(getDrawableFromUri(paymentDetails.optJSONObject("theme").optString("logoImage")))
                 .build();
 
         return configData;
+    }
+
+    private Drawable getDrawableFromUri(String path) {
+        Drawable yourDrawable = null;
+        try {
+           Uri uri= Uri.parse(path);
+            InputStream inputStream = getCurrentActivity().getContentResolver().openInputStream(uri);
+            yourDrawable = Drawable.createFromStream(inputStream, uri.toString() );
+        } catch (Exception e) {
+        }
+        return yourDrawable;
     }
 
     @Override

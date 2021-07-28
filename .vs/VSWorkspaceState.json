@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\android",
+    "\\example",
+    "\\example\\android",
+    "\\example\\android\\gradle",
+    "\\example\\android\\gradle\\wrapper"
+  ],
+  "SelectedNode": "\\example\\android\\gradle\\wrapper\\gradle-wrapper.properties",
+  "PreviewInSolutionExplorer": false
+}
