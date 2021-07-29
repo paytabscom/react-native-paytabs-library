@@ -315,6 +315,12 @@ configuration.hideCardScanner = true
 let theme = new PaymentSDKTheme()
 theme.backgroundColor = "a83297"
 theme.primaryColor = "956596"
+// Set the merchant logo
+const merchantLogo = require('./Logo.png');
+const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+const resolvedMerchantLogo = resolveAssetSource(merchantLogo);
+theme.merchantLogo = resolvedMerchantLogo
+
 configuration.theme = theme
 ```
 
@@ -350,6 +356,19 @@ configuration.theme = theme
      
 </resources>
 ````
+- **Merchant Logo**:
+
+```javascript
+let theme = new PaymentSDKTheme()
+
+// Set the merchant logo
+const merchantLogo = require('./Logo.png');
+const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+const resolvedMerchantLogo = resolveAssetSource(merchantLogo);
+theme.merchantLogo = resolvedMerchantLogo
+
+configuration.theme = theme
+```
 
 - **Localization**:
 To override your strings you can find the keys with the default values here
