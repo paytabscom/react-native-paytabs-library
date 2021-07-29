@@ -54,9 +54,18 @@ export default class App extends Component {
                                   zip= "1234")
     configuration.billingDetails = billingDetails
     let theme = new PaymentSDKTheme()
+    //Prepare the resolved Image
+    // -
+    // const merchantLogo = require('./Logo.png');
+    // const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+    // const resolvedMerchantLogo = resolveAssetSource(merchantLogo);
+    // theme.merchantLogo = resolvedMerchantLogo
+    //-
     // theme.backgroundColor = "a83297"
     configuration.theme = theme
     
+    
+
     RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result => {
       if(result["PaymentDetails"] != null) {
         let paymentDetails = result["PaymentDetails"]

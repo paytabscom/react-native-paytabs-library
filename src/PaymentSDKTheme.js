@@ -1,5 +1,5 @@
 export default class PaymentSDKTheme {
-    constructor(logoImage, 
+    constructor(merchantLogo, 
         primaryColor, 
         primaryFontColor,
         primaryFont, 
@@ -16,7 +16,7 @@ export default class PaymentSDKTheme {
         titleFont,
         backgroundColor, 
         placeholderColor) {
-            this.logoImage = logoImage
+            this.merchantLogo = merchantLogo
             this.primaryColor = primaryColor
             this.primaryFontColor = primaryFontColor
             this.primaryFont = primaryFont
