@@ -10,9 +10,9 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@paytabs/react-native-paytabs": "file:..",
     "react": "16.13.1",
-    "react-native": "^0.64.0",
-    "@paytabs/react-native-paytabs": "2.3.0"
+    "react-native": "^0.64.0"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",

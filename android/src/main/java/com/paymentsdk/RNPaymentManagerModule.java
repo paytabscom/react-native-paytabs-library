@@ -1,19 +1,25 @@
 package com.paymentsdk;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
-
+import static com.payment.paymentsdk.integrationmodels.PaymentSdkApmsKt.createPaymentSdkApms;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCodeKt.createPaymentSdkLanguageCode;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokenFormatKt.createPaymentSdkTokenFormat;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTokeniseKt.createPaymentSdkTokenise;
 import static com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionTypeKt.createPaymentSdkTransactionType;
-import static com.payment.paymentsdk.integrationmodels.PaymentSdkApmsKt.createPaymentSdkApms;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.util.Log;
+
+import com.facebook.react.bridge.Arguments;
+import com.facebook.react.bridge.Promise;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.bridge.ReactContextBaseJavaModule;
+import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.google.gson.Gson;
@@ -21,7 +27,6 @@ import com.payment.paymentsdk.PaymentSdkActivity;
 import com.payment.paymentsdk.PaymentSdkConfigBuilder;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkApms;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkBillingDetails;
-import com.payment.paymentsdk.integrationmodels.PaymentSdkConfigurationDetails;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkError;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkLanguageCode;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkShippingDetails;
@@ -36,10 +41,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.facebook.react.bridge.Promise;
-
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -68,31 +73,48 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
     public void startCardPayment(final String arguments,final Promise promise) {
         this.promise = promise;
         try {
-            JSONObject paymentDetails = new JSONObject(arguments);
-            PaymentSdkConfigurationDetails configData = createConfiguration(paymentDetails);
-            String samsungToken = paymentDetails.optString("samsungToken");
-            if (samsungToken != null && samsungToken.length() > 0)
-                PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configData, samsungToken, this);
+            final JSONObject paymentDetails = new JSONObject(arguments);
+            String logoUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
+            final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
+            if (logoUri != null)
+                getDrawableFromUri(logoUri, new RetrieveDrawableListener() {
+                    @Override
+                    public void getDrawable(BitmapDrawable d) {
+                        if (d != null)
+                            configBuilder.setMerchantIcon(d);
+                        startPayment(paymentDetails, configBuilder);
+                    }
+                });
             else
-                PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configData, this);
+                startPayment(paymentDetails, configBuilder);
+
+
         } catch (Exception e) {
-            promise.reject("Error",e.getMessage(), new Throwable(e.getMessage()));
+            promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
         }
+    }
+
+    private void startPayment(JSONObject paymentDetails, PaymentSdkConfigBuilder configBuilder) {
+        String samsungToken = paymentDetails.optString("samsungToken");
+        if (samsungToken != null && samsungToken.length() > 0)
+            PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configBuilder.build(), samsungToken, this);
+        else
+            PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configBuilder.build(), this);
     }
 
     @ReactMethod
-    public void startAlternativePaymentMethod(final String arguments,final Promise promise) {
+    public void startAlternativePaymentMethod(final String arguments, final Promise promise) {
         this.promise = promise;
         try {
             JSONObject paymentDetails = new JSONObject(arguments);
-            PaymentSdkConfigurationDetails configData = createConfiguration(paymentDetails);
-            PaymentSdkActivity.startAlternativePaymentMethods(reactContext.getCurrentActivity(), configData, this);
+            PaymentSdkConfigBuilder configData = createConfiguration(paymentDetails);
+            PaymentSdkActivity.startAlternativePaymentMethods(reactContext.getCurrentActivity(), configData.build(), this);
         } catch (Exception e) {
-            promise.reject("Error",e.getMessage(), new Throwable(e.getMessage()));
+            promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
         }
     }
 
-    private PaymentSdkConfigurationDetails createConfiguration(JSONObject paymentDetails) {
+    private PaymentSdkConfigBuilder createConfiguration(JSONObject paymentDetails) {
         String profileId = paymentDetails.optString("profileID");
         String serverKey = paymentDetails.optString("serverKey");
         String clientKey = paymentDetails.optString("clientKey");
@@ -137,8 +159,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
         if (apmsJSONArray != null) {
             apmsList =  createAPMs(apmsJSONArray);
         }
-        String logoUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
-        PaymentSdkConfigurationDetails configData = new PaymentSdkConfigBuilder(
+        PaymentSdkConfigBuilder configData = new PaymentSdkConfigBuilder(
                 profileId, serverKey, clientKey, amount, currency)
                 .setCartDescription(cartDesc)
                 .setLanguageCode(locale)
@@ -154,23 +175,44 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
                 .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo"))
                 .setScreenTitle(screenTitle)
                 .setAlternativePaymentMethods(apmsList)
-                .setTransactionType(transactionType)
-                .setMerchantIcon(getDrawableFromUri(logoUri))
-                .build();
+                .setTransactionType(transactionType);
 
         return configData;
     }
 
-    private Drawable getDrawableFromUri(String path) {
-        Drawable yourDrawable = null;
+    private void getDrawableFromUri(final String path, final RetrieveDrawableListener listener) {
         try {
-           Uri uri= Uri.parse(path);
-            InputStream inputStream = getCurrentActivity().getContentResolver().openInputStream(uri);
-            yourDrawable = Drawable.createFromStream(inputStream, uri.toString() );
+            new AsyncTask<String, Integer, BitmapDrawable>() {
+
+                @Override
+                protected BitmapDrawable doInBackground(String... strings) {
+                    Bitmap bmp = null;
+                    try {
+                        HttpURLConnection connection = (HttpURLConnection) new URL(path).openConnection();
+                        connection.connect();
+                        InputStream input = connection.getInputStream();
+                        bmp = BitmapFactory.decodeStream(input);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    Resources resources = reactContext.getResources();
+                    return new BitmapDrawable(resources, bmp);
+                }
+
+                protected void onPostExecute(BitmapDrawable result) {
+
+                    //Add image to ImageView
+                    listener.getDrawable(result);
+
+                }
+
+
+            }.execute();
         } catch (Exception e) {
+            log(e.getLocalizedMessage());
         }
-        return yourDrawable;
     }
+
 
     @Override
     public void onError(@NotNull PaymentSdkError err) {
