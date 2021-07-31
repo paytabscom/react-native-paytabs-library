@@ -10,8 +10,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -76,18 +74,8 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
             final JSONObject paymentDetails = new JSONObject(arguments);
             String logoUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
             final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
-            if (logoUri != null)
-                getDrawableFromUri(logoUri, new RetrieveDrawableListener() {
-                    @Override
-                    public void getDrawable(BitmapDrawable d) {
-                        if (d != null)
-                            configBuilder.setMerchantIcon(d);
-                        startPayment(paymentDetails, configBuilder);
-                    }
-                });
-            else
-                startPayment(paymentDetails, configBuilder);
-
+            configBuilder.setMerchantIcon(logoUri);
+            startPayment(paymentDetails, configBuilder);
 
         } catch (Exception e) {
             promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));

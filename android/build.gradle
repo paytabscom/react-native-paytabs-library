@@ -160,13 +160,10 @@ repositories {
     google()
     jcenter()
     mavenCentral()
-    maven { url "http://pay.cards/maven" }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.paytabs:payment-sdk:6.1.2'
-    implementation 'com.github.bumptech.glide:glide:4.12.0'
-    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.paytabs:payment-sdk:6.1.6-beta01'
 }
   
