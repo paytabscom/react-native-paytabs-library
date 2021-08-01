@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.3.0-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.3.1-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs seamlessly.
 
@@ -12,7 +12,7 @@ Library Support:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.3.0 --save --force
+$ npm install @paytabs/react-native-paytabs@2.3.1 --save --force
 ```
 
 ### Expo

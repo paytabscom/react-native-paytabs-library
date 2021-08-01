@@ -7,7 +7,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
-    "@paytabs/react-native-paytabs": "2.3.0",
+    "@paytabs/react-native-paytabs": "2.3.1",
     "expo": "~41.0.1",
     "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
