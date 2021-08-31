@@ -934,7 +934,7 @@
 
 "@paytabs/react-native-paytabs@file:../":
   "resolved" "file:.."
-  "version" "2.3.4"
+  "version" "2.3.5"
 
 "@react-native-community/cli-debugger-ui@^5.0.1-alpha.1":
   "integrity" "sha512-o6msDywXU7q0dPKhCTo8IrpmJ+7o+kVghyHlrAndnb30p6vnm4pID5Yi7lHXGfs6bQXorKUWX8oD5xYwWkN8qw=="

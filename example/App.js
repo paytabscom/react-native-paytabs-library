@@ -57,6 +57,7 @@ export default class App extends Component {
                                   countryCode= "AE",
                                   zip= "1234")
     configuration.billingDetails = billingDetails
+    configuration.languageCode = "ar"
     let theme = new PaymentSDKTheme()
     //Prepare the resolved Image
     // -
