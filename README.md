@@ -12,7 +12,7 @@ Library Support:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.3.7 --save --force
+$ npm install @paytabs/react-native-paytabs@2.3.8 --save --force
 ```
 
 ### Expo

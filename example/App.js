@@ -37,9 +37,9 @@ export default class App extends Component {
 
   onPressPay() {
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = "*profile id*"
-    configuration.serverKey= "*server key*"
-    configuration.clientKey = "*client key*"
+    configuration.profileID = "77322"
+    configuration.serverKey= "SDJNW9NKHT-J2DZLDJ6DW-6TMNMKTKWM"
+    configuration.clientKey = "CVKMGT-2GH76M-D9BD6G-VPVTVP"
     configuration.cartID = "545454"
     configuration.currency = "AED"
     configuration.cartDescription = "Flowers"

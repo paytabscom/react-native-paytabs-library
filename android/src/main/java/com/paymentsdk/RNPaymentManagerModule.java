@@ -75,6 +75,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
             String logoUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
             final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
             configBuilder.setMerchantIcon(logoUri);
+            Log.d("LogoURL", logoUri);
             startPayment(paymentDetails, configBuilder);
 
         } catch (Exception e) {

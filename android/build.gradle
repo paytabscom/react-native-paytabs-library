@@ -164,6 +164,6 @@ repositories {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.paytabs:payment-sdk:6.2.0-beta01'
+    implementation 'com.paytabs:payment-sdk:6.2.1'
 }
   
