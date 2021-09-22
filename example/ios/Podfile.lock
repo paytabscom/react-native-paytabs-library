@@ -264,7 +264,7 @@ PODS:
     - React-jsi (= 0.64.0)
     - React-perflogger (= 0.64.0)
   - React-jsinspector (0.64.0)
-  - react-native-paymentsdk (2.3.8):
+  - react-native-paymentsdk (2.3.9):
     - PayTabsSDK (= 6.1.6)
     - React
   - React-perflogger (0.64.0)
@@ -491,7 +491,7 @@ SPEC CHECKSUMS:
   React-jsi: 74341196d9547cbcbcfa4b3bbbf03af56431d5a1
   React-jsiexecutor: 06a9c77b56902ae7ffcdd7a4905f664adc5d237b
   React-jsinspector: 0ae35a37b20d5e031eb020a69cc5afdbd6406301
-  react-native-paymentsdk: ba9b1b0f12a242778f8cee50955dab20d13fd110
+  react-native-paymentsdk: a03743a43ef691a1c2e3851860c31784c41af92c
   React-perflogger: 9c547d8f06b9bf00cb447f2b75e8d7f19b7e02af
   React-RCTActionSheet: 3080b6e12e0e1a5b313c8c0050699b5c794a1b11
   React-RCTAnimation: 3f96f21a497ae7dabf4d2f150ee43f906aaf516f

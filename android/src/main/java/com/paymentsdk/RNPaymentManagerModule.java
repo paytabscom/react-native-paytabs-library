@@ -72,16 +72,28 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
         this.promise = promise;
         try {
             final JSONObject paymentDetails = new JSONObject(arguments);
-            String logoUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
             final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
-            configBuilder.setMerchantIcon(logoUri);
-            Log.d("LogoURL", logoUri);
+            if  (!paymentDetails.isNull("theme")) {
+                if  (!paymentDetails.optJSONObject("theme").isNull("merchantLogo")) { 
+                    String iconUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
+                    Log.d("LogoURL", iconUri);
+                    configBuilder.setMerchantIcon(iconUri);
+                }
+            }
+            
             startPayment(paymentDetails, configBuilder);
 
         } catch (Exception e) {
             promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
         }
     }
+   
+    public static String optString(JSONObject json, String key) {
+        if (json.isNull(key))
+         return "";
+        else
+         return json.optString(key, null);
+     }
 
     private void startPayment(JSONObject paymentDetails, PaymentSdkConfigBuilder configBuilder) {
         String samsungToken = paymentDetails.optString("samsungToken");
