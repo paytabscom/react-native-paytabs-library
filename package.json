@@ -1,7 +1,7 @@
 {
   "name": "@paytabs/react-native-paytabs",
   "title": "React Native Paytabs",
-  "version": "2.3.9",
+  "version": "2.3.10",
   "description": "Paytabs React-Native Library",
   "main": "index.js",
   "typings": "./index.d.ts",
@@ -33,11 +33,14 @@
   "licenseFilename": "LICENSE",
   "readmeFilename": "README.md",
   "peerDependencies": {
-    "react": "^16.8.1",
+    "react": "^17.0.2",
     "react-native": ">=0.60.0-rc.0 <1.0.x"
   },
   "devDependencies": {
-    "react": "^16.9.0",
-    "react-native": "^0.61.5"
+    "react": "^17.0.2",
+    "react-native": "^0.66.4"
+  },
+  "dependencies": {
+    "react-dom": "^17.0.2"
   }
 }
