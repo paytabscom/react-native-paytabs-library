@@ -31,6 +31,5 @@ allprojects {
         }
         google()
         jcenter()
-        maven { url "http://pay.cards/maven" }
     }
 }
