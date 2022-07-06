@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.3.10-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.3.11-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs seamlessly.
 
@@ -12,7 +12,7 @@ Library Support:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.3.10 --save --force
+$ npm install @paytabs/react-native-paytabs@2.3.11 --save --force
 ```
 
 ### Expo
@@ -279,7 +279,7 @@ configuration.transactionType = PaymentSDKConstants.TransactionType.sale
 * Alternative payment methods
 
 ```javascript
-AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry"};
+AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry", "aman": "aman", "urpay": "urpay"};
 ```
 
 ```javascript

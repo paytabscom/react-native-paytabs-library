@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@paytabs/react-native-paytabs": "^2.3.10",
+    "@paytabs/react-native-paytabs": "^2.3.11",
     "react": "16.13.1",
     "react-native": "^0.64.0"
   },
