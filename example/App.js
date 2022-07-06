@@ -122,7 +122,7 @@ export default class App extends Component {
     configuration.merchantCountryCode = 'SA'
     configuration.amount = 20;
     configuration.alternativePaymentMethods = [
-      PaymentSDKConstants.AlternativePaymentMethod.stcPay,
+      PaymentSDKConstants.AlternativePaymentMethod.ama,
     ];
 
     let billingDetails = new PaymentSDKBillingDetails(
