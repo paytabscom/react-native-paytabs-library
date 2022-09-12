@@ -87,6 +87,33 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
             promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
         }
     }
+
+    
+
+    @ReactMethod
+    public void startTokenizedCardPayment(
+        final String arguments,
+        final String token,
+        final String transactionRef,
+        final Promise promise) {
+        this.promise = promise;
+        try {
+            final JSONObject paymentDetails = new JSONObject(arguments);
+            final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
+            if  (!paymentDetails.isNull("theme")) {
+                if  (!paymentDetails.optJSONObject("theme").isNull("merchantLogo")) { 
+                    String iconUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
+                    Log.d("LogoURL", iconUri);
+                    configBuilder.setMerchantIcon(iconUri);
+                }
+            }
+            
+            startTokenizedPayment(paymentDetails, token, transactionRef, configBuilder);
+
+        } catch (Exception e) {
+            promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
+        }
+    }
    
     public static String optString(JSONObject json, String key) {
         if (json.isNull(key))
@@ -95,12 +122,28 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
          return json.optString(key, null);
      }
 
-    private void startPayment(JSONObject paymentDetails, PaymentSdkConfigBuilder configBuilder) {
+     private void startPayment(JSONObject paymentDetails, PaymentSdkConfigBuilder configBuilder) {
+         String samsungToken = paymentDetails.optString("samsungToken");
+         if (samsungToken != null && samsungToken.length() > 0)
+             PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configBuilder.build(), samsungToken, this);
+         else
+             PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configBuilder.build(), this);
+     }
+
+     
+
+    private void startTokenizedPayment(
+        JSONObject paymentDetails, 
+        final String token,
+        final String transactionRef,
+        PaymentSdkConfigBuilder configBuilder) {
         String samsungToken = paymentDetails.optString("samsungToken");
-        if (samsungToken != null && samsungToken.length() > 0)
-            PaymentSdkActivity.startSamsungPayment(reactContext.getCurrentActivity(), configBuilder.build(), samsungToken, this);
-        else
-            PaymentSdkActivity.startCardPayment(reactContext.getCurrentActivity(), configBuilder.build(), this);
+        PaymentSdkActivity.startTokenizedCardPayment(
+            reactContext.getCurrentActivity(), 
+            configBuilder.build(),
+            token,
+            transactionRef,
+             this);
     }
 
     @ReactMethod
