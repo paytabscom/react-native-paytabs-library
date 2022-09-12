@@ -27,7 +27,7 @@ export default class RNPaymentSDKLibrary {
     static start3DSecureTokenizedCardPayment(config) {
         return new Promise((resolver, reject) => {
             const RNPaymentManager = NativeModules.RNPaymentManager;
-            RNPaymentManager.startCardPayment(config).then( result => {
+            RNPaymentManager.start3DSecureTokenizedCardPayment(config).then( result => {
                 resolver(result); 
                }, function(error) {
                 reject(error);
@@ -36,10 +36,10 @@ export default class RNPaymentSDKLibrary {
     };
 
     
-    static startPaymentWithSavedCards(config) {
+    static startPaymentWithSavedCards(config, support3DS) {
         return new Promise((resolver, reject) => {
             const RNPaymentManager = NativeModules.RNPaymentManager;
-            RNPaymentManager.startCardPayment(config).then( result => {
+            RNPaymentManager.startPaymentWithSavedCards(config, support3DS).then( result => {
                 resolver(result); 
                }, function(error) {
                 reject(error);

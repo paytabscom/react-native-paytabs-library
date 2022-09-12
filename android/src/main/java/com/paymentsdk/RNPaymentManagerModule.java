@@ -33,6 +33,7 @@ import com.payment.paymentsdk.integrationmodels.PaymentSdkTokenise;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionDetails;
 import com.payment.paymentsdk.integrationmodels.PaymentSdkTransactionType;
 import com.payment.paymentsdk.sharedclasses.interfaces.CallbackPaymentInterface;
+import com.payment.paymentsdk.save_cards.entities.PaymentSDKSavedCardInfo;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -115,6 +116,57 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
         }
     }
    
+    
+    @ReactMethod
+    public void start3DSecureTokenizedCardPayment(
+        final String arguments,
+        final PaymentSDKSavedCardInfo savedCardInfo,
+        final String token,
+        final Promise promise) {
+        this.promise = promise;
+        try {
+            final JSONObject paymentDetails = new JSONObject(arguments);
+            final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
+            if  (!paymentDetails.isNull("theme")) {
+                if  (!paymentDetails.optJSONObject("theme").isNull("merchantLogo")) { 
+                    String iconUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
+                    Log.d("LogoURL", iconUri);
+                    configBuilder.setMerchantIcon(iconUri);
+                }
+            }
+            
+            start3DsPayment(paymentDetails, savedCardInfo, token, configBuilder);
+
+        } catch (Exception e) {
+            promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
+        }
+    }
+
+    
+    @ReactMethod
+    public void startPaymentWithSavedCards(
+        final String arguments,
+        final Boolean support3DS,
+        final Promise promise) {
+        this.promise = promise;
+        try {
+            final JSONObject paymentDetails = new JSONObject(arguments);
+            final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
+            if  (!paymentDetails.isNull("theme")) {
+                if  (!paymentDetails.optJSONObject("theme").isNull("merchantLogo")) { 
+                    String iconUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
+                    Log.d("LogoURL", iconUri);
+                    configBuilder.setMerchantIcon(iconUri);
+                }
+            }
+            
+            startSavedCardPayment(paymentDetails, support3DS, configBuilder);
+
+        } catch (Exception e) {
+            promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
+        }
+    }
+
     public static String optString(JSONObject json, String key) {
         if (json.isNull(key))
          return "";
@@ -132,7 +184,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
 
      
 
-    private void startTokenizedPayment(
+     private void startTokenizedPayment(
         JSONObject paymentDetails, 
         final String token,
         final String transactionRef,
@@ -143,6 +195,32 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
             configBuilder.build(),
             token,
             transactionRef,
+             this);
+    }
+
+    private void start3DsPayment(
+        JSONObject paymentDetails, 
+        final PaymentSDKSavedCardInfo savedCardInfo,
+        final String token,
+        PaymentSdkConfigBuilder configBuilder) {
+        String samsungToken = paymentDetails.optString("samsungToken");
+        PaymentSdkActivity.start3DSecureTokenizedCardPayment(
+            reactContext.getCurrentActivity(), 
+            configBuilder.build(),
+            savedCardInfo,
+            token,
+            this);
+    }
+
+    private void startSavedCardPayment(
+        JSONObject paymentDetails, 
+        final Boolean support3DS,
+        PaymentSdkConfigBuilder configBuilder) {
+        String samsungToken = paymentDetails.optString("samsungToken");
+        PaymentSdkActivity.startPaymentWithSavedCards(
+            reactContext.getCurrentActivity(), 
+            configBuilder.build(),
+            support3DS,
              this);
     }
 
