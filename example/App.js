@@ -123,6 +123,47 @@ export default class App extends Component {
   }
 
 
+  onPressSavedCardPayment() {
+    let configuration = new PaymentSDKConfiguration();
+    configuration.profileID = '63904'
+    configuration.serverKey = 'STJNNNTDKB-JBKWMD9Z9R-LKLNZBJLG2'
+    configuration.clientKey = 'CHKMMD-6MQ962-KVNDP9-NVRM92'
+    configuration.cartID = "545454"
+    configuration.currency = "EGP"
+    configuration.cartDescription = "Flowers"
+    configuration.merchantCountryCode = "eg"
+    configuration.merchantName = "Flowers Store"
+    configuration.amount = 20
+    configuration.screenTitle = "Pay with Card"
+    configuration.tokeniseType = "merchantMandatory"
+
+    let billingDetails = new PaymentSDKBillingDetails(name= "Jone Smith",
+                                  email= "email@domain.com",
+                                  phone= "97311111111",
+                                  addressLine= "Flat 1,Building 123, Road 2345",
+                                  city= "Dubai",
+                                  state= "Dubai",
+                                  countryCode= "EG",
+                                  zip= "1234")
+    configuration.billingDetails = billingDetails
+    let theme = new PaymentSDKTheme()    
+
+    RNPaymentSDKLibrary.startPaymentWithSavedCards(
+      JSON.stringify(configuration),
+      false,
+    ).then( result => {
+      if(result["PaymentDetails"] != null) {
+        let paymentDetails = result["PaymentDetails"]
+        console.log(paymentDetails)
+      } else if(result["Event"] == "CancelPayment") {
+        console.log("Cancel Payment Event")
+      } 
+     }, function(error) {
+      console.log(error)
+     });
+  }
+
+
   onPressApplePay() {
     let configuration = new PaymentSDKConfiguration();
     configuration.profileID = '*profile id*'
@@ -205,6 +246,8 @@ export default class App extends Component {
         <Button onPress={this.onPressPay} title="Pay with Card" color="#c00" />
         <View style={{height: 20}}></View>
         <Button onPress={this.onPressTokenizedPayment} title="Start tokenized payment" color="#c00" />
+        <View style={{height: 20}}></View>
+        <Button onPress={this.onPressSavedCardPayment} title="Start saved card payment" color="#c00" />
         <View style={{height: 20}}></View>
         <Button
           onPress={this.onPressApplePay}
