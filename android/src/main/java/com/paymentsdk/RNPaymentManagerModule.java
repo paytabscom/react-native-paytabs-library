@@ -120,13 +120,16 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
     @ReactMethod
     public void start3DSecureTokenizedCardPayment(
         final String arguments,
-        final PaymentSDKSavedCardInfo savedCardInfo,
+        final String savedCardInfo,
         final String token,
         final Promise promise) {
         this.promise = promise;
         try {
             final JSONObject paymentDetails = new JSONObject(arguments);
             final PaymentSdkConfigBuilder configBuilder = createConfiguration(paymentDetails);
+            
+            final JSONObject savedCardObject = new JSONObject(savedCardInfo);
+            final PaymentSDKSavedCardInfo paymentSDKSavedCardInfo = createSavedCardInfo(savedCardObject);
             if  (!paymentDetails.isNull("theme")) {
                 if  (!paymentDetails.optJSONObject("theme").isNull("merchantLogo")) { 
                     String iconUri = paymentDetails.optJSONObject("theme").optJSONObject("merchantLogo").optString("uri");
@@ -135,7 +138,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
                 }
             }
             
-            start3DsPayment(paymentDetails, savedCardInfo, token, configBuilder);
+            start3DsPayment(paymentDetails, paymentSDKSavedCardInfo, token, configBuilder);
 
         } catch (Exception e) {
             promise.reject("Error", e.getMessage(), new Throwable(e.getMessage()));
@@ -198,6 +201,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
              this);
     }
 
+
     private void start3DsPayment(
         JSONObject paymentDetails, 
         final PaymentSDKSavedCardInfo savedCardInfo,
@@ -211,6 +215,7 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
             token,
             this);
     }
+
 
     private void startSavedCardPayment(
         JSONObject paymentDetails, 
@@ -300,6 +305,16 @@ public class RNPaymentManagerModule extends ReactContextBaseJavaModule implement
                 .setTransactionType(transactionType);
 
         return configData;
+    }
+
+    private PaymentSDKSavedCardInfo createSavedCardInfo(JSONObject jsonCardInfo) {
+        String maskedCard = jsonCardInfo.optString("maskedCard");
+        String cardType = jsonCardInfo.optString("cardType");
+
+
+        PaymentSDKSavedCardInfo cardInfo = new PaymentSDKSavedCardInfo(
+                maskedCard, cardType);
+        return cardInfo;
     }
 
     private void getDrawableFromUri(final String path, final RetrieveDrawableListener listener) {
