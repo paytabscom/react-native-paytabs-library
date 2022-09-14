@@ -16,8 +16,8 @@ import {
   PaymentSDKBillingDetails,
   PaymentSDKTheme,
   PaymentSDKConstants,
+  PaymentSDKSavedCardInfo,
 } from '@paytabs/react-native-paytabs';
-import PaymentSDKSavedCardInfo from '../src/PaymentSDKSavedCardInfo';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',

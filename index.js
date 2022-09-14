@@ -4,3 +4,4 @@ export { default as PaymentSDKBillingDetails} from './src/PaymentSDKBillingDetai
 export { default as PaymentSDKShippingDetails} from './src/PaymentSDKShippingDetails';
 export { default as PaymentSDKTheme} from './src/PaymentSDKTheme';
 export { default as PaymentSDKConstants} from './src/PaymentSDKConstants';
+export { default as PaymentSDKSavedCardInfo} from './src/PaymentSDKSavedCardInfo';
