@@ -324,9 +324,9 @@ export default class App extends Component {
         <Text style={styles.instructions}>{this.state.message}</Text>
         <Button onPress={this.onPressPay} title="Pay with Card" color="#c00" />
         <View style={{height: 20}}></View>
-        <Button onPress={this.onPress3DsPayment} title="Start tokenized payment" color="#c00" />
+        <Button onPress={this.onPressTokenizedPayment} title="Start tokenized payment" color="#c00" />
         <View style={{height: 20}}></View>
-        <Button onPress={this.onPressSavedCardPayment} title="Start saved card payment" color="#c00" />
+        <Button onPress={this.onPress3DsPayment} title="Start 3DS Tokenized Card payment" color="#c00" />
         <View style={{height: 20}}></View>
         <Button onPress={this.onPressSavedCardPayment} title="Start saved card payment" color="#c00" />
         <View style={{height: 20}}></View>
