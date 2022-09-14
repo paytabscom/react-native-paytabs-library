@@ -187,7 +187,7 @@ support3DsBool).then( result => {
      });
      
 ```
-<img width="197" alt="rec 3ds" src="https://user-images.githubusercontent.com/17829232/188843928-46f801d4-4dbc-4db6-a982-5297127752a6.jpeg">
+<img width="197" alt="rec 3ds" src="https://user-images.githubusercontent.com/17829232/190152848-bfc83f8c-1a4b-4a55-99ec-af3c22a3de66.png">
 
 
 ### Pay with Apple Pay
