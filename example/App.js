@@ -85,9 +85,9 @@ export default class App extends Component {
 
   onPressTokenizedPayment() {
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = '63904'
-    configuration.serverKey = 'STJNNNTDKB-JBKWMD9Z9R-LKLNZBJLG2'
-    configuration.clientKey = 'CHKMMD-6MQ962-KVNDP9-NVRM92'
+    configuration.profileID = 'profileID'
+    configuration.serverKey = 'serverKey'
+    configuration.clientKey = 'clientKey'
     configuration.cartID = "545454"
     configuration.currency = "EGP"
     configuration.cartDescription = "Flowers"
@@ -109,8 +109,8 @@ export default class App extends Component {
 
     RNPaymentSDKLibrary.startTokenizedCardPayment(
       JSON.stringify(configuration),
-      "2C4652BF67A3EA33C6B590FE658078BD",
-      "TST2224201325593"
+      "Token",
+      "TransactionReference"
     ).then( result => {
       if(result["PaymentDetails"] != null) {
         let paymentDetails = result["PaymentDetails"]
@@ -124,9 +124,9 @@ export default class App extends Component {
   }
   onPress3DsPayment() {
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = '63904'
-    configuration.serverKey = 'STJNNNTDKB-JBKWMD9Z9R-LKLNZBJLG2'
-    configuration.clientKey = 'CHKMMD-6MQ962-KVNDP9-NVRM92'
+    configuration.profileID = 'profileID'
+    configuration.serverKey = 'serverKey'
+    configuration.clientKey = 'clientKey'
     configuration.cartID = "545454"
     configuration.currency = "EGP"
     configuration.cartDescription = "Flowers"
@@ -149,46 +149,7 @@ export default class App extends Component {
     RNPaymentSDKLibrary.start3DSecureTokenizedCardPayment(
       JSON.stringify(configuration),
       JSON.stringify(cardInfo),
-      "2C4652BF67A3EA33C6B590FE658078BD"
-    ).then( result => {
-      if(result["PaymentDetails"] != null) {
-        let paymentDetails = result["PaymentDetails"]
-        console.log(paymentDetails)
-      } else if(result["Event"] == "CancelPayment") {
-        console.log("Cancel Payment Event")
-      } 
-     }, function(error) {
-      console.log(error)
-     });
-  }
-  onPressSavedCardPayment() {
-    let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = '63904'
-    configuration.serverKey = 'STJNNNTDKB-JBKWMD9Z9R-LKLNZBJLG2'
-    configuration.clientKey = 'CHKMMD-6MQ962-KVNDP9-NVRM92'
-    configuration.cartID = "545454"
-    configuration.currency = "EGP"
-    configuration.cartDescription = "Flowers"
-    configuration.merchantCountryCode = "eg"
-    configuration.merchantName = "Flowers Store"
-    configuration.amount = 20
-    configuration.screenTitle = "Pay with Card"
-
-    let billingDetails = new PaymentSDKBillingDetails(name= "Jone Smith",
-                                  email= "email@domain.com",
-                                  phone= "97311111111",
-                                  addressLine= "Flat 1,Building 123, Road 2345",
-                                  city= "Dubai",
-                                  state= "Dubai",
-                                  countryCode= "EG",
-                                  zip= "1234")
-    configuration.billingDetails = billingDetails
-    let theme = new PaymentSDKTheme()    
-
-    RNPaymentSDKLibrary.startTokenizedCardPayment(
-      JSON.stringify(configuration),
-      "2C4652BF67A3EA33C6B590FE658078BD",
-      "TST2224201325593"
+      "Token"
     ).then( result => {
       if(result["PaymentDetails"] != null) {
         let paymentDetails = result["PaymentDetails"]
@@ -201,12 +162,11 @@ export default class App extends Component {
      });
   }
 
-
   onPressSavedCardPayment() {
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = '63904'
-    configuration.serverKey = 'STJNNNTDKB-JBKWMD9Z9R-LKLNZBJLG2'
-    configuration.clientKey = 'CHKMMD-6MQ962-KVNDP9-NVRM92'
+    configuration.profileID = 'profileID'
+    configuration.serverKey = 'serverKey'
+    configuration.clientKey = 'clientKey'
     configuration.cartID = "545454"
     configuration.currency = "EGP"
     configuration.cartDescription = "Flowers"
