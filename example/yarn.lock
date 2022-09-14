@@ -932,9 +932,11 @@
     "@types/yargs" "^15.0.0"
     "chalk" "^4.0.0"
 
-"@paytabs/react-native-paytabs@file:../":
+"@paytabs/react-native-paytabs@file:..":
   "resolved" "file:.."
-  "version" "2.3.5"
+  "version" "2.3.11"
+  dependencies:
+    "react-dom" "^17.0.2"
 
 "@react-native-community/cli-debugger-ui@^5.0.1-alpha.1":
   "integrity" "sha512-o6msDywXU7q0dPKhCTo8IrpmJ+7o+kVghyHlrAndnb30p6vnm4pID5Yi7lHXGfs6bQXorKUWX8oD5xYwWkN8qw=="

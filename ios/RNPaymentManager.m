@@ -15,6 +15,20 @@
 RCT_EXTERN_METHOD(startCardPayment:(NSString *)paymentDetails
                   withResolver:(RCTPromiseResolveBlock)resolve                  
                   withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startTokenizedCardPayment:(NSString *)paymentDetails
+                  withToken:(NSString*) token
+                  withTransactionRef:(NSString*) transactionRef
+                  withResolver:(RCTPromiseResolveBlock)resolve                  
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startPaymentWithSavedCards:(NSString *)paymentDetails
+                  withSupport3DS:(BOOL*) support3DS
+                  withResolver:(RCTPromiseResolveBlock)resolve                  
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(start3DSecureTokenizedCardPayment:(NSString *)paymentDetails
+                  withSavedCardInfo:(NSString*) savedCardInfo
+                  withToken:(NSString*) token
+                  withResolver:(RCTPromiseResolveBlock)resolve                  
+                  withRejecter:(RCTPromiseRejectBlock)reject)
 RCT_EXTERN_METHOD(startApplePayPayment:(NSString *)paymentDetails
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)

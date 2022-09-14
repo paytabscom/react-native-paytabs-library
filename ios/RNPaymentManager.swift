@@ -31,6 +31,76 @@ class RNPaymentManager: NSObject {
             reject("Error", error.localizedDescription, error)
         }
     }
+
+     @objc(startTokenizedCardPayment:withToken:withTransactionRef:withResolver:withRejecter:)
+    func startTokenizedCardPayment(paymentDetails: NSString,
+                                    token: NSString,
+                                    transactionRef: NSString,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+        
+        let data = Data((paymentDetails as String).utf8)
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let configuration = generateConfiguration(dictionary: dictionary)
+            if let rootViewController = getRootController() {
+                PaymentManager.startTokenizedCardPayment(on: rootViewController, configuration: configuration, token: (token as String), transactionRef: (transactionRef as String), delegate: self)
+            }
+        } catch let error {
+            reject("Error", error.localizedDescription, error)
+        }
+    }
+
+      @objc(startPaymentWithSavedCards:withSupport3DS:withResolver:withRejecter:)
+    func startPaymentWithSavedCards(paymentDetails: NSString,
+                                    support3DS: Bool,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+        
+        let data = Data((paymentDetails as String).utf8)
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let configuration = generateConfiguration(dictionary: dictionary)
+            if let rootViewController = getRootController() {
+                PaymentManager.startPaymentWithSavedCards(on: rootViewController, configuration: configuration, support3DS: support3DS, delegate: self)
+            }
+        } catch let error {
+            reject("Error", error.localizedDescription, error)
+        }
+    }
+
+      @objc(start3DSecureTokenizedCardPayment:withSavedCardInfo:withToken:withResolver:withRejecter:)
+    func start3DSecureTokenizedCardPayment(paymentDetails: NSString,
+                                    savedCardInfo: NSString,
+                                    token: NSString,
+                          resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+        
+        let data = Data((paymentDetails as String).utf8)
+        let savedCardData = Data((savedCardInfo as String).utf8)
+        do {
+            let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let configuration = generateConfiguration(dictionary: dictionary)
+            let savedCardDictionary = try JSONSerialization.jsonObject(with: savedCardData, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+            let savedCardInfoObject = generateSavedCardInfo(dictionary: savedCardDictionary) 
+            if let rootViewController = getRootController(), let _savedCardInfo = savedCardInfoObject {
+                PaymentManager.start3DSecureTokenizedCardPayment(on: rootViewController,
+                                                                 configuration: configuration,
+                                                                 savedCardInfo: _savedCardInfo,
+                                                                 token: (token as String),
+                                                                 delegate: self)
+            }
+        } catch let error {
+            reject("Error", error.localizedDescription, error)
+        }
+    }
+
     
     @objc(startApplePayPayment:withResolver:withRejecter:)
     func startApplePayPayment(paymentDetails: NSString,
@@ -127,6 +197,13 @@ class RNPaymentManager: NSObject {
             configuration.alternativePaymentMethods = generateAlternativePaymentMethods(apmsArray: alternativePaymentMethods)
         }
         return configuration
+    }
+
+    private func generateSavedCardInfo(dictionary: [String: Any]) -> PaymentSDKSavedCardInfo? { 
+        guard let maskedCard = dictionary["maskedCard"] as? String,
+        let cardType = dictionary["cardType"] as? String else { return nil }
+
+       return PaymentSDKSavedCardInfo(maskedCard: maskedCard, cardType: cardType)
     }
     
     
