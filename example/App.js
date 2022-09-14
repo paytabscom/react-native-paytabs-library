@@ -145,7 +145,7 @@ export default class App extends Component {
                                   zip= "1234")
     configuration.billingDetails = billingDetails
     let theme = new PaymentSDKTheme()    
-    let cardInfo = PaymentSDKSavedCardInfo("4111 11## #### 1111", "visa")
+    let cardInfo = new PaymentSDKSavedCardInfo("4111 11## #### 1111", "visa")
     RNPaymentSDKLibrary.start3DSecureTokenizedCardPayment(
       JSON.stringify(configuration),
       JSON.stringify(cardInfo),
