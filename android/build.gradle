@@ -10,10 +10,10 @@
 //   original location:
 //   - https://github.com/facebook/react-native/blob/0.58-stable/local-cli/templates/HelloWorld/android/app/build.gradle
 
-def DEFAULT_COMPILE_SDK_VERSION = 31
+def DEFAULT_COMPILE_SDK_VERSION = 30
 def DEFAULT_BUILD_TOOLS_VERSION = '28.0.3'
 def DEFAULT_MIN_SDK_VERSION = 21
-def DEFAULT_TARGET_SDK_VERSION = 31
+def DEFAULT_TARGET_SDK_VERSION = 30
 
 def safeExtGet(prop, fallback) {
     rootProject.ext.has(prop) ? rootProject.ext.get(prop) : fallback
@@ -104,7 +104,7 @@ def configureReactNativePom(def pom) {
 
         developers {
             developer {
-                id packageJson.author.username
+                id packageJson.author.email
                 name packageJson.author.name
             }
         }
@@ -159,11 +159,14 @@ afterEvaluate { project ->
 repositories {
     google()
     jcenter()
-    mavenCentral()
+    maven { url 'https://jitpack.io' }
+    maven {
+        url  "https://dl.bintray.com/alinma/alinma-repo"
+    }
+    maven { url "http://pay.cards/maven" }
 }
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
-    implementation 'com.paytabs:payment-sdk:6.3.2'
+    implementation 'sa.com.clickpay:payment-sdk:6.3.0'
 }
-  

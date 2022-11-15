@@ -17,7 +17,7 @@ import {
   PaymentSDKTheme,
   PaymentSDKConstants,
   PaymentSDKSavedCardInfo,
-} from '@paytabs/react-native-paytabs';
+} from '@clickpay.sa/react-native-clickpay';
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -38,13 +38,13 @@ export default class App extends Component {
 
   onPressPay() {
     let configuration = new PaymentSDKConfiguration();
-    configuration.profileID = '*profile id*'
-    configuration.serverKey = '*server key*'
-    configuration.clientKey = '*client key*'
+    configuration.profileID = '42349'
+    configuration.serverKey = 'SLJNLK92TH-JGDLKLM9TR-KH62LRBK6J'
+    configuration.clientKey = 'CQKMDV-MDTK6T-DBKBNP-2HHR79'
     configuration.cartID = "545454"
-    configuration.currency = "AED"
+    configuration.currency = "SAR"
     configuration.cartDescription = "Flowers"
-    configuration.merchantCountryCode = "ae"
+    configuration.merchantCountryCode = "SA"
     configuration.merchantName = "Flowers Store"
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
