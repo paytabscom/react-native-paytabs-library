@@ -1,0 +1,39 @@
+#import <React/RCTBridgeModule.h>
+
+@interface RCT_EXTERN_MODULE(RNPaymentManager, NSObject)
+
+- (dispatch_queue_t)methodQueue
+{
+    return dispatch_get_main_queue();
+}
+
++ (BOOL)requiresMainQueueSetup
+{
+    return YES;
+}
+
+RCT_EXTERN_METHOD(startCardPayment:(NSString *)paymentDetails
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startTokenizedCardPayment:(NSString *)paymentDetails
+                  withToken:(NSString*) token
+                  withTransactionRef:(NSString*) transactionRef
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startPaymentWithSavedCards:(NSString *)paymentDetails
+                  withSupport3DS:(BOOL*) support3DS
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(start3DSecureTokenizedCardPayment:(NSString *)paymentDetails
+                  withSavedCardInfo:(NSString*) savedCardInfo
+                  withToken:(NSString*) token
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startApplePayPayment:(NSString *)paymentDetails
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(startAlternativePaymentMethod:(NSString *)paymentDetails
+                  withResolver:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
+
+@end
