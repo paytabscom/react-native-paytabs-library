@@ -9,14 +9,15 @@ Library Support:
 * [x] iOS
 * [x] Android
 
-#### React Version: 18.1.0
+Library Version:
 
-#### React-Native Version: 0.70.6
+* [x] React Version: 18.1.0
+* [x] React-Native Version: 0.70.6
 
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.5.0 --save --force
+$ npm install @paytabs/react-native-paytabs@2.5.0 --save
 ```
 
 ### Expo
@@ -24,6 +25,10 @@ $ npm install @paytabs/react-native-paytabs@2.5.0 --save --force
 ```sh
 expo install @paytabs/react-native-paytabs
 ```
+
+### Deprecation of ExpoKit:
+
+Expo is no longer supported as the ExpoKit is deprecated now. Please see https://docs.expo.dev/expokit/eject
 
 ### Follow the below steps to complete the installation
 
@@ -98,7 +103,7 @@ let configuration = new PaymentSDKConfiguration();
 	 configuration.forceShippingInfo = false
 ```
 
-Options to show billing and shipping ifno
+Options to show billing and shipping info
 
 ```javascript
 
