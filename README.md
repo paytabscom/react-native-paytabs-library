@@ -26,10 +26,6 @@ $ npm install @paytabs/react-native-paytabs@2.5.0 --save
 expo install @paytabs/react-native-paytabs
 ```
 
-### Deprecation of ExpoKit:
-
-Expo is no longer supported as the ExpoKit is deprecated now. Please see https://docs.expo.dev/expokit/eject
-
 ### Follow the below steps to complete the installation
 
 * Android
