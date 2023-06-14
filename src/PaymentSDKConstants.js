@@ -4,6 +4,7 @@ export default class PaymentSDKConstants {
     merchantMandatory: 'merchantMandatory',
     userMandatory: 'userMandatory',
     userOptional: 'userOptional',
+    userOptionalDefaultOn: 'userOptionalDefaultOn',
   };
   static TokeniseFormat = {
     none: '1',

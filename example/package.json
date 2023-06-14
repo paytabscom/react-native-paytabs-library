@@ -9,13 +9,14 @@
     "pods": "pod-install --quiet"
   },
   "dependencies": {
+    "@paytabs/react-native-paytabs": "file:..",
     "react": "18.1.0",
     "react-native": "0.70.6"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
-    "metro-react-native-babel-preset": "0.72.3",
-    "babel-plugin-module-resolver": "^4.1.0"
+    "babel-plugin-module-resolver": "^4.1.0",
+    "metro-react-native-babel-preset": "0.72.3"
   }
 }

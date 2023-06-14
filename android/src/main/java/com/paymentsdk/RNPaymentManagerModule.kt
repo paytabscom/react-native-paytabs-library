@@ -194,7 +194,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       .setTokenise(tokeniseType, tokenFormat).setTokenisationData(token, transRef).hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
       .showBillingInfo(paymentDetails.optBoolean("showBillingInfo")).showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
       .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo")).setScreenTitle(screenTitle).setAlternativePaymentMethods(apmsList)
-      .setTransactionType(transactionType)
+      .setTransactionType(transactionType).isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct")).enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts"))
   }
 
   private fun createSavedCardInfo(jsonCardInfo: JSONObject): PaymentSDKSavedCardInfo {
