@@ -28,7 +28,9 @@ export default class PaymentSDKConfiguration {
     token,
     transactionReference,
     samsungToken,
-    theme
+    theme,
+    isDigitalProduct,
+    enableZeroContacts
   ) {
     this.profileID = profileID;
     this.serverKey = serverKey;
@@ -59,5 +61,7 @@ export default class PaymentSDKConfiguration {
     this.transactionReference = transactionReference;
     this.theme = theme;
     this.samsungToken = samsungToken;
+    this.isDigitalProduct = isDigitalProduct;
+    this.enableZeroContacts = enableZeroContacts;
   }
 }
