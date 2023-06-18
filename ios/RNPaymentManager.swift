@@ -168,6 +168,9 @@ class RNPaymentManager: NSObject {
         configuration.transactionReference = dictionary["transactionReference"] as? String
         configuration.hideCardScanner = dictionary["hideCardScanner"] as? Bool ?? false
         configuration.serverIP = dictionary["serverIP"] as? String
+        configuration.isDigitalProduct = dictionary["isDigitalProduct"] as? Bool ?? false
+        configuration.enableZeroContacts = dictionary["enableZeroContacts"] as? Bool ?? false
+
         if let tokeniseType = dictionary["tokeniseType"] as? String,
            let type = mapTokeiseType(tokeniseType: tokeniseType) {
             configuration.tokeniseType = type
@@ -302,6 +305,8 @@ class RNPaymentManager: NSObject {
     private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
         var type = 0
         switch tokeniseType {
+        case "userOptionalDefaultOn":
+            type = 4
         case "userOptional":
             type = 3
         case "userMandatory":
