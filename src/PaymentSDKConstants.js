@@ -25,5 +25,8 @@ export default class PaymentSDKConstants {
     knetCredit: 'knetcredit',
     knetDebit: 'knetdebit',
     fawry: 'fawry',
+    aman: 'aman',
+    urPay: 'urpay',
+    samsungPay: 'samsungpay',
   };
 }

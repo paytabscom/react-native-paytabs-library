@@ -1,6 +1,6 @@
 
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.5.1-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.5.2-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs seamlessly.
 
@@ -17,7 +17,7 @@ Library Version:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.5.1 --save
+$ npm install @paytabs/react-native-paytabs@2.5.2 --save
 ```
 
 ### Expo
@@ -250,7 +250,7 @@ configuration.samsungToken = "token"
 
 ### Pay with Alternative Payment Methods
 
-It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet, Valu, Fawry, UnionPay, and Meeza, to serve a large sector of customers.
+It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet, Valu, Fawry, UnionPay, SamsungPay, and Meeza, to serve a large sector of customers.
 
 1. Do the steps 1 and 2 from **Pay with Card**.
 
@@ -353,7 +353,7 @@ configuration.transactionType = PaymentSDKConstants.TransactionType.sale
 * Alternative payment methods
 
 ```javascript
-AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry", "aman": "aman", "urpay": "urpay"};
+AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry", "aman": "aman", "urPay": "urpay", "samsungPay": "samsungpay"};
 ```
 
 ```javascript
