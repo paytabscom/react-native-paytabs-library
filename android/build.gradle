@@ -134,7 +134,7 @@ dependencies {
     //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  implementation 'com.paytabs:payment-sdk:6.4.15'
+  implementation 'com.paytabs:payment-sdk:6.5.0'
 // From node_modules
 }
 
