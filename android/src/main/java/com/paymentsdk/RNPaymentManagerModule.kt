@@ -215,6 +215,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     val token = paymentDetails.optString("token")
     val transRef = paymentDetails.optString("transactionReference")
     val amount = paymentDetails.optDouble("amount")
+    val timeout = paymentDetails.optLong("expiryTime")
     val tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"))
     val tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"))
     val transactionType =
@@ -273,6 +274,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       .setAlternativePaymentMethods(apmsList)
       .setTransactionType(transactionType)
       .isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct"))
+      .setPaymentExpiry(timeout)
       .enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts"))
   }
 
