@@ -196,8 +196,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
   fun cancelPayment(promise: Promise) {
     this.promise = promise
     try {
-      PaymentSdkActivity.cancelPayment()
-      promise.resolve(true)
+      val cancelPayment = PaymentSdkActivity.cancelPayment()
+      promise.resolve(cancelPayment)
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
