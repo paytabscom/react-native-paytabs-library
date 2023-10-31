@@ -19,6 +19,8 @@ declare module '@paytabs/react-native-paytabs' {
     ): Promise<any>;
 
     static startPaymentWithSavedCards(config, support3DS): Promise<any>;
+
+    static cancelPayment(): Promise<any>
   }
 
   export class PaymentSDKConstants {
