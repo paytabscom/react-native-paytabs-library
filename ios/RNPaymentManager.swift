@@ -19,6 +19,9 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            resolve(["cancelNow": "cancel"])
+        }
         
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -139,6 +142,29 @@ class RNPaymentManager: NSObject {
             reject("Error", error.localizedDescription, error)
         }
     }
+
+    @objc(cancelPayment:withRejecter:)
+    func cancelPayment(resolve: @escaping RCTPromiseResolveBlock,
+                          reject: @escaping RCTPromiseRejectBlock) -> Void {
+        self.resolve = resolve
+        self.reject = reject
+
+          PaymentManager.cancelPayment { [weak self ] _ in
+            
+        }
+        
+        // let data = Data((paymentDetails as String).utf8)
+        // PaymentManager.cancelPayment
+        // do {
+        //     let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
+        //     let configuration = generateConfiguration(dictionary: dictionary)
+        //     if let rootViewController = getRootController() {
+        //         PaymentManager.startAlternativePaymentMethod(on: rootViewController, configuration: configuration, delegate: self)
+        //     }
+        // } catch let error {
+        //     reject("Error", error.localizedDescription, error)
+        // }
+    }
     
     func getRootController() -> UIViewController? {
         let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
@@ -170,6 +196,7 @@ class RNPaymentManager: NSObject {
         configuration.serverIP = dictionary["serverIP"] as? String
         configuration.isDigitalProduct = dictionary["isDigitalProduct"] as? Bool ?? false
         configuration.enableZeroContacts = dictionary["enableZeroContacts"] as? Bool ?? false
+        configuration.expiryTime = dictionary["expiryTime"] as? Int ?? 0
 
         if let tokeniseType = dictionary["tokeniseType"] as? String,
            let type = mapTokeiseType(tokeniseType: tokeniseType) {

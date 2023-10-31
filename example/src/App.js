@@ -32,6 +32,7 @@ configuration.merchantCountryCode = 'SA';
 configuration.merchantName = 'Flowers Store';
 configuration.amount = 20;
 configuration.screenTitle = 'Pay with Card';
+configuration.expiryTime = 65;
 
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;

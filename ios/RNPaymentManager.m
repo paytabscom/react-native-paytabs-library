@@ -35,5 +35,7 @@ RCT_EXTERN_METHOD(startApplePayPayment:(NSString *)paymentDetails
 RCT_EXTERN_METHOD(startAlternativePaymentMethod:(NSString *)paymentDetails
                   withResolver:(RCTPromiseResolveBlock)resolve
                   withRejecter:(RCTPromiseRejectBlock)reject)
+RCT_EXTERN_METHOD(cancelPayment:(RCTPromiseResolveBlock)resolve
+                  withRejecter:(RCTPromiseRejectBlock)reject)
 
 @end
