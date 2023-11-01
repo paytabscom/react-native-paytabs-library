@@ -107,6 +107,25 @@ Options to show billing and shipping info
 	configuration.showShippingInfo = true
 
 ```
+Options to set expiry timeout for the card payment screen
+
+```javascript
+
+/** To establish a timeout of 2 minutes.
+ * Set to zero to deactivate the timeout feature.
+ * Note that the expiryTime cannot be set to less than 60 seconds.
+ * */
+configuration.expiryTime = 120;
+
+```
+
+You can dismiss the payment screen if there is no transaction in progress.
+
+```javascript
+
+RNPaymentSDKLibrary.cancelPayment()
+
+```
 
 # 1- Pay with card
 Start payment by calling `startCardPayment` method and handle the transaction details
