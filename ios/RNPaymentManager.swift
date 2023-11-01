@@ -149,8 +149,13 @@ class RNPaymentManager: NSObject {
         self.resolve = resolve
         self.reject = reject
 
-          PaymentManager.cancelPayment { [weak self ] _ in
-            
+          PaymentManager.cancelPayment { [weak self ] didCancel in
+            if let resolve = resolve {
+                if didCancel {
+                    resolve(["Event": "CancelPayment"])
+                } 
+            self.resolve = nil
+        }
         }
         
         // let data = Data((paymentDetails as String).utf8)
