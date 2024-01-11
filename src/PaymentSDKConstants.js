@@ -26,9 +26,9 @@ export default class PaymentSDKConstants {
     knetDebit: 'knetdebit',
     fawry: 'fawry',
     aman: 'aman',
-    urpay = "urpay",
-    applePay = "applePay",
-    souhoola = "souhoola",
-    tabby = "tabby"
+    urpay:  "urpay",
+    applePay: "applePay",
+    souhoola: "souhoola",
+    tabby: "tabby"
   };
 }
