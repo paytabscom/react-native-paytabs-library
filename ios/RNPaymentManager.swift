@@ -19,10 +19,7 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-            resolve(["cancelNow": "cancel"])
-        }
-        
+       
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -157,17 +154,6 @@ class RNPaymentManager: NSObject {
             
         }
         
-        // let data = Data((paymentDetails as String).utf8)
-        // PaymentManager.cancelPayment
-        // do {
-        //     let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
-        //     let configuration = generateConfiguration(dictionary: dictionary)
-        //     if let rootViewController = getRootController() {
-        //         PaymentManager.startAlternativePaymentMethod(on: rootViewController, configuration: configuration, delegate: self)
-        //     }
-        // } catch let error {
-        //     reject("Error", error.localizedDescription, error)
-        // }
     }
     
     func getRootController() -> UIViewController? {
