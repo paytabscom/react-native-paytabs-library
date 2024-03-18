@@ -216,6 +216,12 @@ class RNPaymentManager: NSObject {
         if let alternativePaymentMethods = dictionary["alternativePaymentMethods"] as? [String] {
             configuration.alternativePaymentMethods = generateAlternativePaymentMethods(apmsArray: alternativePaymentMethods)
         }
+
+        if let discountsDictionary = dictionary["cardDiscounts"] as?  [[String: Any]] {
+            configuration.cardDiscounts = generateDiscountDetails(dictionary: discountsDictionary)
+        }
+        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.5"]
+
         return configuration
     }
 
@@ -251,6 +257,22 @@ class RNPaymentManager: NSObject {
         shippingDetails.zip = dictionary["zip"] as? String ?? ""
         return shippingDetails
     }
+
+       private func generateDiscountDetails(dictionary: [[String: Any]]) -> [PaymentSDKCardDiscount]? {
+    var discounts = [PaymentSDKCardDiscount]()
+    
+    for dict in dictionary {
+        if let discountCard = dict["discountCards"] as? [String],
+           let discountValue = dict["discountValue"] as? Double,
+           let discountTitle = dict["discountTitle"] as? String,
+           let isPercentage = dict["isPercentage"] as? Bool {
+            let discount = PaymentSDKCardDiscount(discountCards: discountCard, dicsountValue: discountValue, discountTitle: discountTitle, isPercentage: isPercentage)
+            discounts.append(discount)
+        }
+    }
+    
+    return discounts.isEmpty ? nil : discounts
+}
     
     private func generateTheme(dictionary: [String: Any]) -> PaymentSDKTheme? {
         let theme = PaymentSDKTheme.default
