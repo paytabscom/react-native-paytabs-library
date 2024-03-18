@@ -200,7 +200,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     if (apmsJSONArray != null) {
       apmsList.addAll(createAPMs(apmsJSONArray))
     }
-    return PaymentSdkConfigBuilder(profileId, serverKey, clientKey, amount, currency).setCartDescription(cartDesc).setLanguageCode(locale).setBillingData(billingData).setMerchantCountryCode(paymentDetails.optString("merchantCountryCode")).setShippingData(shippingData).setCartId(orderId).setTokenise(tokeniseType, tokenFormat).setTokenisationData(token, transRef).hideCardScanner(paymentDetails.optBoolean("hideCardScanner")).showBillingInfo(paymentDetails.optBoolean("showBillingInfo")).showShippingInfo(paymentDetails.optBoolean("showShippingInfo")).forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo")).setScreenTitle(screenTitle).setAlternativePaymentMethods(apmsList).setTransactionType(transactionType).isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct")).setPaymentExpiry(timeout).enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts")).setCardDiscount(getPaymentSdkCardDiscounts(paymentDetails))
+    return PaymentSdkConfigBuilder(profileId, serverKey, clientKey, amount, currency).setCartDescription(cartDesc).setLanguageCode(locale).setBillingData(billingData).setMerchantCountryCode(paymentDetails.optString("merchantCountryCode")).setShippingData(shippingData).setCartId(orderId).setTokenise(tokeniseType, tokenFormat).setTokenisationData(token, transRef).hideCardScanner(paymentDetails.optBoolean("hideCardScanner")).showBillingInfo(paymentDetails.optBoolean("showBillingInfo")).showShippingInfo(paymentDetails.optBoolean("showShippingInfo")).forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo")).setScreenTitle(screenTitle).setAlternativePaymentMethods(apmsList).setTransactionType(transactionType).isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct")).setPaymentExpiry(timeout).enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts"))
+      .setCardDiscount(getPaymentSdkCardDiscounts(paymentDetails)).setMetadata(getMetadata())
   }
 
   private fun getPaymentSdkCardDiscounts(paymentDetails: JSONObject): List<PaymentSdkCardDiscount> {
@@ -222,6 +223,13 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       paymentSdkCardDiscounts.add(cardDiscount)
     }
     return paymentSdkCardDiscounts
+  }
+
+  private fun getMetadata(): Map<String, Any> {
+    val metadata: MutableMap<String, Any> = HashMap()
+    metadata["PaymentSDKPluginName"] = "react-native"
+    metadata["PaymentSDKPluginVersion"] = "1.0.4"
+    return metadata
   }
 
   private fun createSavedCardInfo(jsonCardInfo: JSONObject): PaymentSDKSavedCardInfo {
