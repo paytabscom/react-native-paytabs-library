@@ -17,7 +17,7 @@ Library Version:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.6.4 --save
+$ npm install @paytabs/react-native-paytabs@2.6.5 --save
 ```
 
 ### Expo
