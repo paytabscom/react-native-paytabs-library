@@ -31,8 +31,9 @@ export default class PaymentSDKConfiguration {
     theme,
     isDigitalProduct,
     enableZeroContacts,
-    expiryTime
-  ) {
+    expiryTime,
+    cardDiscounts
+) {
     this.profileID = profileID;
     this.serverKey = serverKey;
     this.clientKey = clientKey;
@@ -65,5 +66,6 @@ export default class PaymentSDKConfiguration {
     this.isDigitalProduct = isDigitalProduct;
     this.enableZeroContacts = enableZeroContacts;
     this.expiryTime = expiryTime;
+    this.cardDiscounts = cardDiscounts;
   }
 }

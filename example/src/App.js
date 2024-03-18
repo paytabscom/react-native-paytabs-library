@@ -11,7 +11,11 @@
 import React, { Component } from 'react';
 import { Platform, StyleSheet, Text, Button, View } from 'react-native';
 import {
-  RNPaymentSDKLibrary, PaymentSDKConfiguration, PaymentSDKBillingDetails, PaymentSDKSavedCardInfo,
+  RNPaymentSDKLibrary,
+  PaymentSDKConfiguration,
+  PaymentSDKBillingDetails,
+  PaymentSDKSavedCardInfo,
+  PaymentSDKCardDiscount,
 } from '@paytabs/react-native-paytabs';
 import { PaymentSDKConstants, PaymentSDKTheme } from '../../lib/module';
 import { delay } from 'react-native/Libraries/Animated/AnimatedImplementation';
@@ -20,7 +24,6 @@ const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
   android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
 });
-
 let configuration = new PaymentSDKConfiguration();
 configuration.profileID = '****';
 configuration.serverKey = '****';
@@ -33,6 +36,19 @@ configuration.merchantName = 'Flowers Store';
 configuration.amount = 20;
 configuration.screenTitle = 'Pay with Card';
 configuration.expiryTime = 65;
+
+let cardDiscount1 = new PaymentSDKCardDiscount();
+cardDiscount1.discountCards = ['4111', '40001'];
+cardDiscount1.discountValue = 10;
+cardDiscount1.discountTitle = 'Discount 10% on 4111,40001 cards';
+cardDiscount1.isPercentage = true;
+
+let cardDiscount2 = new PaymentSDKCardDiscount();
+cardDiscount2.discountCards = ['42222', '40002'];
+cardDiscount2.discountValue = 5;
+cardDiscount2.discountTitle = 'Discount 5 EGP on 42222,40002 cards';
+cardDiscount2.isPercentage = false;
+configuration.cardDiscounts = Array.of(cardDiscount1, cardDiscount2);
 
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;
