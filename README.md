@@ -379,6 +379,26 @@ AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "v
 configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay,]
 ```
 
+## Discounts
+* To apply discounts on the transaction, you can pass the discount amount and the discount type.
+
+```javascript
+let cardDiscount1 = new PaymentSDKCardDiscount();
+cardDiscount1.discountCards = ['4111', '40001'];
+cardDiscount1.discountValue = 10;
+cardDiscount1.discountTitle = 'Discount 10% on 4111,40001 cards';
+cardDiscount1.isPercentage = true;
+
+let cardDiscount2 = new PaymentSDKCardDiscount();
+cardDiscount2.discountCards = ['42222', '40002'];
+cardDiscount2.discountValue = 5;
+cardDiscount2.discountTitle = 'Discount 5 EGP on 42222,40002 cards';
+cardDiscount2.isPercentage = false;
+
+configuration.cardDiscounts = Array.of(cardDiscount1, cardDiscount2);
+````
+
+
 ## Show/Hide Card Scanner
 
 ```javascript
