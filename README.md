@@ -330,7 +330,8 @@ TokeniseType = {
 "none":"none", // tokenise is off
 "merchantMandatory":"merchantMandatory", // tokenise is forced
 "userMandatory":"userMandatory", // tokenise is forced as per user approval
-"userOptinoal":"userOptional" // tokenise if optional as per user approval
+"userOptional":"userOptional", // tokenise if optional as per user approval, default is off.
+"userOptionalDefaultOn": "userOptionalDefaultOn" // tokenise if optional as per user approval, default is on.
 };
 ```
 
