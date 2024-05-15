@@ -12,14 +12,14 @@ import PaymentSDK
 class RNPaymentManager: NSObject {
     var resolve: RCTPromiseResolveBlock?
     var reject: RCTPromiseRejectBlock?
-    
+
     @objc(startCardPayment:withResolver:withRejecter:)
     func startCardPayment(paymentDetails: NSString,
                           resolve: @escaping RCTPromiseResolveBlock,
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-       
+
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -40,7 +40,7 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        
+
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -60,7 +60,7 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        
+
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -81,7 +81,7 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        
+
         let data = Data((paymentDetails as String).utf8)
         let savedCardData = Data((savedCardInfo as String).utf8)
         do {
@@ -101,14 +101,14 @@ class RNPaymentManager: NSObject {
         }
     }
 
-    
+
     @objc(startApplePayPayment:withResolver:withRejecter:)
     func startApplePayPayment(paymentDetails: NSString,
                           resolve: @escaping RCTPromiseResolveBlock,
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        
+
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -120,14 +120,14 @@ class RNPaymentManager: NSObject {
             reject("Error", error.localizedDescription, error)
         }
     }
-    
+
     @objc(startAlternativePaymentMethod:withResolver:withRejecter:)
     func startAlternativePaymentMethod(paymentDetails: NSString,
                           resolve: @escaping RCTPromiseResolveBlock,
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
-        
+
         let data = Data((paymentDetails as String).utf8)
         do {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
@@ -148,20 +148,20 @@ class RNPaymentManager: NSObject {
 
         PaymentManager.cancelPayment { [weak self ] didCancel in
             guard let self = self else { return }
-            
+
             resolve(["Event": "CancelPayment"])
             self.resolve = nil
-            
+
         }
-        
+
     }
-    
+
     func getRootController() -> UIViewController? {
         let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
             let topController = keyWindow?.rootViewController
             return topController
         }
-    
+
     private func generateConfiguration(dictionary: [String: Any]) -> PaymentSDKConfiguration {
         let configuration = PaymentSDKConfiguration()
         configuration.profileID = dictionary["profileID"] as? String ?? ""
@@ -196,11 +196,11 @@ class RNPaymentManager: NSObject {
            let type = TokenFormat.getType(type: tokenFormat) {
             configuration.tokenFormat = type
         }
-        
+
         if let transactionType = dictionary["transactionType"] as? String {
             configuration.transactionType = TransactionType.init(rawValue: transactionType) ?? .sale
         }
-        
+
         if let themeDictionary = dictionary["theme"] as? [String: Any],
            let theme = generateTheme(dictionary: themeDictionary) {
             configuration.theme = theme
@@ -220,7 +220,7 @@ class RNPaymentManager: NSObject {
         if let discountsDictionary = dictionary["cardDiscounts"] as?  [[String: Any]] {
             configuration.cardDiscounts = generateDiscountDetails(dictionary: discountsDictionary)
         }
-        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.5"]
+        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.6"]
 
         return configuration
     }
@@ -231,8 +231,8 @@ class RNPaymentManager: NSObject {
 
        return PaymentSDKSavedCardInfo(maskedCard: maskedCard, cardType: cardType)
     }
-    
-    
+
+
     private func generateBillingDetails(dictionary: [String: Any]) -> PaymentSDKBillingDetails? {
         let billingDetails = PaymentSDKBillingDetails()
         billingDetails.name = dictionary["name"] as? String ?? ""
@@ -260,7 +260,7 @@ class RNPaymentManager: NSObject {
 
        private func generateDiscountDetails(dictionary: [[String: Any]]) -> [PaymentSDKCardDiscount]? {
     var discounts = [PaymentSDKCardDiscount]()
-    
+
     for dict in dictionary {
         if let discountCard = dict["discountCards"] as? [String],
            let discountValue = dict["discountValue"] as? Double,
@@ -270,34 +270,46 @@ class RNPaymentManager: NSObject {
             discounts.append(discount)
         }
     }
-    
+
     return discounts.isEmpty ? nil : discounts
 }
-    
+
     private func generateTheme(dictionary: [String: Any]) -> PaymentSDKTheme? {
+     var isDark = false
+                if let traitCollection = UIApplication.shared.keyWindow?.traitCollection {
+                    if #available(iOS 12.0, *) {
+                        switch traitCollection.userInterfaceStyle {
+                        case .light, .unspecified:
+                            isDark = false
+                        case .dark:
+                            isDark = true
+                        }
+                    }
+                }
+
         let theme = PaymentSDKTheme.default
         if let resolvedImage = dictionary["merchantLogo"] {
             theme.logoImage = RCTConvert.uiImage(resolvedImage)
         }
-        if let colorHex = dictionary["primaryColor"] as? String {
+        if let colorHex = dictionary["primaryColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.primaryColor = UIColor(hex: colorHex)
         }
-        if let colorHex = dictionary["primaryFontColor"] as? String {
+        if let colorHex = dictionary["primaryFontColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.primaryFontColor = UIColor(hex: colorHex)
         }
         if let fontName = dictionary["primaryFont"] as? String {
             theme.primaryFont = UIFont.init(name: fontName, size: 16)
         }
-        if let colorHex = dictionary["secondaryColor"] as? String {
+        if let colorHex = dictionary["secondaryColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.secondaryColor = UIColor(hex: colorHex)
         }
-        if let colorHex = dictionary["secondaryFontColor"] as? String {
+        if let colorHex = dictionary["secondaryFontColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.secondaryFontColor = UIColor(hex: colorHex)
         }
         if let fontName = dictionary["secondaryFont"] as? String {
             theme.secondaryFont = UIFont.init(name: fontName, size: 16)
         }
-        if let colorHex = dictionary["strokeColor"] as? String {
+        if let colorHex = dictionary["strokeColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.strokeColor = UIColor(hex: colorHex)
         }
         if let value = dictionary["strokeThinckness"] as? CGFloat {
@@ -306,30 +318,30 @@ class RNPaymentManager: NSObject {
         if let value = dictionary["inputsCornerRadius"] as? CGFloat {
             theme.inputsCornerRadius = value
         }
-        if let colorHex = dictionary["buttonColor"] as? String {
+        if let colorHex = dictionary["buttonColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.buttonColor = UIColor(hex: colorHex)
         }
-        if let colorHex = dictionary["buttonFontColor"] as? String {
+        if let colorHex = dictionary["buttonFontColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.buttonFontColor = UIColor(hex: colorHex)
         }
         if let fontName = dictionary["buttonFont"] as? String {
             theme.buttonFont = UIFont.init(name: fontName, size: 16)
         }
-        if let colorHex = dictionary["titleFontColor"] as? String {
+        if let colorHex = dictionary["titleFontColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.titleFontColor = UIColor(hex: colorHex)
         }
         if let fontName = dictionary["titleFont"] as? String {
             theme.titleFont = UIFont.init(name: fontName, size: 16)
         }
-        if let colorHex = dictionary["backgroundColor"] as? String {
+        if let colorHex = dictionary["backgroundColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.backgroundColor = UIColor(hex: colorHex)
         }
-        if let colorHex = dictionary["placeholderColor"] as? String {
+        if let colorHex = dictionary["placeholderColor" + "\(isDark ? "Dark" : "")"] as? String {
             theme.placeholderColor = UIColor(hex: colorHex)
         }
         return theme
     }
-    
+
     private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
         var apms = [AlternativePaymentMethod]()
         for apmValue in apmsArray {
@@ -339,7 +351,7 @@ class RNPaymentManager: NSObject {
         }
         return apms
     }
-    
+
     // to be fixed in next versions
     private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
         var type = 0
@@ -381,7 +393,7 @@ extension RNPaymentManager: PaymentManagerDelegate {
             }
         }
     }
-    
+
     func paymentManager(didCancelPayment error: Error?) {
         if let resolve = resolve {
             resolve(["Event": "CancelPayment"])

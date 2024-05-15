@@ -40,6 +40,12 @@ configuration.expiryTime = 65;
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;
 
+let theme = new PaymentSDKTheme();
+theme.primaryColorDark = "#c1ab7c";
+theme.primaryColor = "#862425";
+
+configuration.theme = theme
+
 export default class App extends Component {
   state = {
     message: '--',
