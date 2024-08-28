@@ -56,7 +56,7 @@ declare module '@paytabs/react-native-paytabs' {
     hideCardScanner?: string;
     merchantIdentifier?: string;
     simplifyApplePayValidation?: string;
-    paymentNetworks?: Array<string>;
+    paymentNetworks?: Array<PaymentSDKNetwork>;
     token?: string;
     transactionReference?: string;
     samsungToken?: string;

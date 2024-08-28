@@ -7,6 +7,8 @@
 
 import Foundation
 import PaymentSDK
+import PassKit
+
 
 @objc(RNPaymentManager)
 class RNPaymentManager: NSObject {
@@ -220,9 +222,24 @@ class RNPaymentManager: NSObject {
         if let discountsDictionary = dictionary["cardDiscounts"] as?  [[String: Any]] {
             configuration.cardDiscounts = generateDiscountDetails(dictionary: discountsDictionary)
         }
-        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.6"]
+
+      if let paymentNetworksArray = dictionary["paymentNetworks"] as? [String] {
+              configuration.paymentNetworks = generatePaymentNetworks(paymentsArray: paymentNetworksArray)
+          }
+
+        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.7"]
 
         return configuration
+    }
+
+    private func generatePaymentNetworks(paymentsArray: [String]) -> [PKPaymentNetwork] {
+        var networks = [PKPaymentNetwork]()
+        for paymentNetwork in paymentsArray {
+            if let network = PKPaymentNetwork.fromString(paymentNetwork) {
+                networks.append(network)
+            }
+        }
+        return networks
     }
 
     private func generateSavedCardInfo(dictionary: [String: Any]) -> PaymentSDKSavedCardInfo? {

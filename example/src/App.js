@@ -16,6 +16,7 @@ import {
   PaymentSDKBillingDetails,
   PaymentSDKSavedCardInfo,
   PaymentSDKCardDiscount,
+  PaymentSDKNetworks,
 } from '@paytabs/react-native-paytabs';
 import { PaymentSDKConstants, PaymentSDKTheme } from '../../lib/module';
 import { delay } from 'react-native/Libraries/Animated/AnimatedImplementation';
@@ -31,18 +32,30 @@ configuration.clientKey = '****';
 configuration.cartID = '****';
 configuration.currency = 'SAR';
 configuration.cartDescription = 'Flowers';
-configuration.merchantCountryCode = 'SA';
-configuration.merchantName = 'Flowers Store';
+configuration.merchantCountryCode = 'AE';
+configuration.merchantName = 'Flowers Store2';
 configuration.amount = 20;
-configuration.screenTitle = 'Pay with Card';
+configuration.screenTitle = 'Pay using Card';
 configuration.expiryTime = 65;
 
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;
 
-let theme = new PaymentSDKTheme();
-theme.primaryColorDark = "#c1ab7c";
-theme.primaryColor = "#862425";
+const paymentNetworksSample: PaymentSDKNetworks[] = [
+ PaymentSDKNetworks.VISA
+ PaymentSDKNetworks.DISCOVER
+];
+
+configuration.paymentNetworks = paymentNetworksSample
+
+let theme = new PaymentSDKTheme()
+theme.backgroundColor = "a83297"
+theme.primaryColor = "956596"
+// Set the merchant logo
+//const merchantLogo = require('./Logo.png');
+//const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
+//const resolvedMerchantLogo = resolveAssetSource(merchantLogo);
+//theme.merchantLogo = resolvedMerchantLogo
 
 configuration.theme = theme
 
@@ -110,7 +123,7 @@ export default class App extends Component {
   }
 
   onPressApplePay() {
-    RNPaymentSDKLibrary.startAlternativePaymentMethod(JSON.stringify(configuration)).then((result) => {
+    RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configuration)).then((result) => {
       if (result.PaymentDetails != null) {
         let paymentDetails = result.PaymentDetails;
         console.log(paymentDetails);

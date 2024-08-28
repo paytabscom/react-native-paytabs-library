@@ -1108,7 +1108,7 @@
     "@jridgewell/sourcemap-codec" "1.4.14"
 
 "@paytabs/react-native-paytabs@file:..":
-  version "2.6.5"
+  version "2.6.6"
   resolved "file:.."
 
 "@react-native-community/cli-clean@^9.2.1":
