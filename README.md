@@ -15,7 +15,12 @@ Library Version:
 * [x] React-Native Version: 0.70.6
 
 # Installation
+const paymentNetworks: PaymentSDKNetworks[] = [
+ PaymentSDKNetworks.VISA
+ PaymentSDKNetworks.DISCOVER
+];
 
+configuration.paymentNetworks = paymentNetworks
 ```sh
 $ npm install @paytabs/react-native-paytabs@2.6.7 --save
 ```
@@ -233,6 +238,15 @@ let configuration = new PaymentSDKConfiguration();
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
     configuration.merchantIdentifier = "merchant.com.bundleID"
+
+//ignore this if you want to use default Networks
+
+    const paymentNetworks: PaymentSDKNetworks[] = [
+     PaymentSDKNetworks.VISA
+     PaymentSDKNetworks.DISCOVER
+    ];
+
+    configuration.paymentNetworks = paymentNetworks
 
 ```
 
