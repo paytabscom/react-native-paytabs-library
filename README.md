@@ -15,10 +15,7 @@ Library Version:
 * [x] React-Native Version: 0.70.6
 
 # Installation
-const paymentNetworks: PaymentSDKNetworks[] = [
- PaymentSDKNetworks.VISA
- PaymentSDKNetworks.DISCOVER
-];
+
 
 configuration.paymentNetworks = paymentNetworks
 ```sh
@@ -225,6 +222,7 @@ support3DsBool).then( result => {
 2. Do the steps 1 and 2 from **Pay with Card** although you can ignore Billing & Shipping details and Apple Pay will handle it, also you must pass the **merchant name** and **merchant identifier**.
 
 ```javascript
+
 
 let configuration = new PaymentSDKConfiguration();
     configuration.profileID = "*your profile id*"
