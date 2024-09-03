@@ -56,7 +56,7 @@ declare module '@paytabs/react-native-paytabs' {
     hideCardScanner?: string;
     merchantIdentifier?: string;
     simplifyApplePayValidation?: string;
-    paymentNetworks?: Array<PaymentSDKNetwork>;
+    paymentNetworks?: String[];
     token?: string;
     transactionReference?: string;
     samsungToken?: string;
@@ -111,6 +111,7 @@ declare module '@paytabs/react-native-paytabs' {
     maskedCard?: string;
     cardType?: string;
   }
+
   export class PaymentSDKCardDiscount {
     /**
      * discountCards: An array of strings representing the cards that the discount can be applied to.
@@ -132,4 +133,37 @@ declare module '@paytabs/react-native-paytabs' {
      */
     isPercentage: boolean;
   }
+
+  // Add PaymentSDKNetworks here
+  export const PaymentSDKNetworks: {
+    AMEX: 'amex',
+    PAGO_BANCOMAT: 'pagoBancomat',
+    BANCONTACT: 'bancontact',
+    CARTES_BANCAIRES: 'cartesBancaires',
+    CHINA_UNION_PAY: 'chinaUnionPay',
+    DANKORT: 'dankort',
+    DISCOVER: 'discover',
+    EFTPOS: 'eftpos',
+    ELECTRON: 'electron',
+    ELO: 'elo',
+    ID_CREDIT: 'idCredit',
+    INTERAC: 'interac',
+    JCB: 'JCB',
+    MADA: 'mada',
+    MAESTRO: 'maestro',
+    MASTERCARD: 'masterCard',
+    MIR: 'mir',
+    PRIVATE_LABEL: 'privateLabel',
+    QUIC_PAY: 'quicPay',
+    SUICA: 'suica',
+    VISA: 'visa',
+    V_PAY: 'vPay',
+    BARCODE: 'barcode',
+    GIROCARD: 'girocard',
+    WAON: 'waon',
+    NANACO: 'nanaco',
+    POST_FINANCE: 'postFinance',
+    T_MONEY: 'tmoney',
+    MEEZA: 'meeza',
+  };
 }

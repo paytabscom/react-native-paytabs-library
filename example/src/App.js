@@ -41,23 +41,20 @@ configuration.expiryTime = 65;
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;
 
-const paymentNetworksSample: PaymentSDKNetworks[] = [
- PaymentSDKNetworks.VISA
- PaymentSDKNetworks.DISCOVER
-];
+const selectedNetworks = [PaymentSDKNetworks.VISA, PaymentSDKNetworks.MASTERCARD];
 
-configuration.paymentNetworks = paymentNetworksSample
+configuration.paymentNetworks = selectedNetworks;
 
-let theme = new PaymentSDKTheme()
-theme.backgroundColor = "a83297"
-theme.primaryColor = "956596"
+let theme = new PaymentSDKTheme();
+theme.backgroundColor = 'a83297';
+theme.primaryColor = '956596';
 // Set the merchant logo
 //const merchantLogo = require('./Logo.png');
 //const resolveAssetSource = require('react-native/Libraries/Image/resolveAssetSource');
 //const resolvedMerchantLogo = resolveAssetSource(merchantLogo);
 //theme.merchantLogo = resolvedMerchantLogo
 
-configuration.theme = theme
+configuration.theme = theme;
 
 export default class App extends Component {
   state = {

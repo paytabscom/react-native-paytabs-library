@@ -1,4 +1,4 @@
-export const PaymentSDKNetworks = {
+const PaymentSDKNetworks = Object.freeze({
   AMEX: 'amex',
   PAGO_BANCOMAT: 'pagoBancomat',
   BANCONTACT: 'bancontact',
@@ -28,6 +28,5 @@ export const PaymentSDKNetworks = {
   POST_FINANCE: 'postFinance',
   T_MONEY: 'tmoney',
   MEEZA: 'meeza',
-};
-
+});
 module.exports = PaymentSDKNetworks;
