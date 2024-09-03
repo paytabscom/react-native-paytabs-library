@@ -227,7 +227,7 @@ class RNPaymentManager: NSObject {
               configuration.paymentNetworks = generatePaymentNetworks(paymentsArray: paymentNetworksArray)
           }
 
-        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.7"]
+        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.8"]
 
         return configuration
     }

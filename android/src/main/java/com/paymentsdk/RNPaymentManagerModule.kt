@@ -228,7 +228,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
   private fun getMetadata(): Map<String, Any> {
     val metadata: MutableMap<String, Any> = HashMap()
     metadata["PaymentSDKPluginName"] = "react-native"
-    metadata["PaymentSDKPluginVersion"] = "2.6.5"
+    metadata["PaymentSDKPluginVersion"] = "2.6.8"
     return metadata
   }
 
