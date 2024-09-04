@@ -16,8 +16,6 @@ Library Version:
 
 # Installation
 
-
-configuration.paymentNetworks = paymentNetworks
 ```sh
 $ npm install @paytabs/react-native-paytabs@2.6.8 --save
 ```
