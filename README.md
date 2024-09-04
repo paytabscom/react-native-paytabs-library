@@ -237,12 +237,8 @@ let configuration = new PaymentSDKConfiguration();
 
 //ignore this if you want to use default Networks
 
-    const paymentNetworks: PaymentSDKNetworks[] = [
-     PaymentSDKNetworks.VISA
-     PaymentSDKNetworks.DISCOVER
-    ];
-
-    configuration.paymentNetworks = paymentNetworks
+const selectedNetworks = [PaymentSDKNetworks.DISCOVER];
+configuration.paymentNetworks = selectedNetworks;
 
 ```
 
