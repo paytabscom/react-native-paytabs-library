@@ -16,6 +16,8 @@ Library Version:
 
 # Installation
 
+
+configuration.paymentNetworks = paymentNetworks
 ```sh
 $ npm install @paytabs/react-native-paytabs@2.6.8 --save
 ```
@@ -221,6 +223,7 @@ support3DsBool).then( result => {
 
 ```javascript
 
+
 let configuration = new PaymentSDKConfiguration();
     configuration.profileID = "*your profile id*"
     configuration.serverKey= "*server key*"
@@ -233,6 +236,15 @@ let configuration = new PaymentSDKConfiguration();
     configuration.amount = 20
     configuration.screenTitle = "Pay with Card"
     configuration.merchantIdentifier = "merchant.com.bundleID"
+
+//ignore this if you want to use default Networks
+
+    const paymentNetworks: PaymentSDKNetworks[] = [
+     PaymentSDKNetworks.VISA
+     PaymentSDKNetworks.DISCOVER
+    ];
+
+    configuration.paymentNetworks = paymentNetworks
 
 ```
 
