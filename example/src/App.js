@@ -27,9 +27,9 @@ const instructions = Platform.select({
   android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu',
 });
 let configuration = new PaymentSDKConfiguration();
-configuration.profileID = '116078';
-configuration.serverKey = 'S2JNJMG29K-J622TZHZT6-RRGMN6BGRW';
-configuration.clientKey = 'CQKMR2-BDD26G-MM79H9-7PQPV9';
+configuration.profileID = 'ProfileId';
+configuration.serverKey = 'ServerKey';
+configuration.clientKey = 'clientKey';
 configuration.cartID = '****';
 configuration.currency = 'EGP';
 configuration.cartDescription = 'Flowers';
@@ -42,8 +42,6 @@ configuration.expiryTime = 65;
 let billingDetails = new PaymentSDKBillingDetails('Jones Smith', 'email@domain.com', '97311111111', 'Flat 1,Building 123, Road 2345', 'Dubai', 'Dubai', 'AE', '1234');
 configuration.billingDetails = billingDetails;
 
-let cardArppoval = new PaymentSDKCardApproval("https://webhook.site/8c1ba496-18b9-46c0-9277-94e8a883344b", 8, true);
-configuration.cardApproval = cardArppoval;
 
 const selectedNetworks = [PaymentSDKNetworks.VISA, PaymentSDKNetworks.MASTERCARD];
 
