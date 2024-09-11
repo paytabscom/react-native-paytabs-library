@@ -226,6 +226,9 @@ class RNPaymentManager: NSObject {
       if let paymentNetworksArray = dictionary["paymentNetworks"] as? [String] {
               configuration.paymentNetworks = generatePaymentNetworks(paymentsArray: paymentNetworksArray)
           }
+          if let cardApproval = dictionary["cardApproval"] as? [String: Any] {
+          configuration.cardApproval = generateCardApproval(dictionary: cardApproval)
+          }
 
         configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.8"]
 
@@ -273,6 +276,15 @@ class RNPaymentManager: NSObject {
         shippingDetails.state = dictionary["state"] as? String ?? ""
         shippingDetails.zip = dictionary["zip"] as? String ?? ""
         return shippingDetails
+    }
+
+    private func generateCardApproval(dictionary: [String: Any]) -> PaymentSDKCardApproval? {
+       if let validationUrl = dictionary["validationUrl"] as? String,
+                let binLength = dictionary["binLength"] as? Int,
+                let blockIfNoResponse = dictionary["blockIfNoResponse"] as? Bool {
+               return PaymentSDKCardApproval(validationUrl: validationUrl, binLength: binLength, blockIfNoResponse: blockIfNoResponse)
+                }
+              return nil
     }
 
        private func generateDiscountDetails(dictionary: [[String: Any]]) -> [PaymentSDKCardDiscount]? {

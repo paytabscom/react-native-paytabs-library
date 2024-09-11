@@ -63,6 +63,7 @@ declare module '@paytabs/react-native-paytabs' {
     theme?: PaymentSDKTheme;
     alternativePaymentMethods?: Array<string>;
     cardDiscounts?: Array<PaymentSDKCardDiscount>;
+    cardApproval?: PaymentSDKCardApproval;
   }
 
   export class PaymentSDKBillingDetails {
@@ -111,6 +112,12 @@ declare module '@paytabs/react-native-paytabs' {
     maskedCard?: string;
     cardType?: string;
   }
+
+  export class PaymentSDKCardApproval { 
+      validationUrl?: string;
+      binLength?: number;
+      blockIfNoResponse?: boolean;
+      }
 
   export class PaymentSDKCardDiscount {
     /**

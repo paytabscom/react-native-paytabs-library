@@ -11,3 +11,4 @@ export { default as PaymentSDKConstants } from './PaymentSDKConstants';
 export { default as PaymentSDKSavedCardInfo } from './PaymentSDKSavedCardInfo';
 export { default as PaymentSDKCardDiscount } from './PaymentSDKCardDiscount';
 export { default as PaymentSDKNetworks } from './PaymentSDKNetworks';
+export { default as PaymentSDKCardApproval } from './PaymentSDKCardApproval';
