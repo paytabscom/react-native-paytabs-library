@@ -230,7 +230,7 @@ class RNPaymentManager: NSObject {
           configuration.cardApproval = generateCardApproval(dictionary: cardApproval)
           }
 
-        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.8"]
+        configuration.metaData = ["PaymentSDKPluginName": "react-native", "PaymentSDKPluginVersion": "2.6.9"]
 
         return configuration
     }
