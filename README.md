@@ -1,8 +1,9 @@
-
 # react-native-paytabs
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.6.8-green)
 
-React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you integrate with PayTabs seamlessly.
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.6.9-green)
+
+React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you
+integrate with PayTabs seamlessly.
 
 Library Support:
 
@@ -17,7 +18,7 @@ Library Version:
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.6.8 --save
+$ npm install @paytabs/react-native-paytabs@2.6.9 --save
 ```
 
 ### Expo
@@ -80,6 +81,7 @@ let shippingDetails = new PaymentSDKShippingDetails(name= "John Smith",
                                   zip= "1234")
 
 ```
+
 2. Create object of `PaymentSDKConfiguration` and fill it with your credentials and payment details.
 
 ```javascript
@@ -107,6 +109,7 @@ Options to show billing and shipping info
 	configuration.showShippingInfo = true
 
 ```
+
 Options to set expiry timeout for the card payment screen
 
 ```javascript
@@ -128,6 +131,7 @@ RNPaymentSDKLibrary.cancelPayment()
 ```
 
 # 1- Pay with card
+
 Start payment by calling `startCardPayment` method and handle the transaction details
 
 ```javascript
@@ -144,10 +148,11 @@ RNPaymentSDKLibrary.startCardPayment(JSON.stringify(configuration)).then( result
      });
 
 ```
+
 <img width="191" alt="card" src="https://user-images.githubusercontent.com/17829232/188835902-c50f41d1-5e3d-4d4c-a49a-e75b81480b75.png">
 
-
 # 2- Pay with Token
+
 Start payment by calling `startTokenizedCardPayment` method and handle the transaction details
 
 ```javascript
@@ -169,7 +174,9 @@ RNPaymentSDKLibrary.startTokenizedCardPayment(JSON.stringify(configuration),
 ```
 
 # 3- Pay with 3DS Secured Token
-Start payment by calling `start3DSecureTokenizedCardPayment` method and handle the transaction details
+
+Start payment by calling `start3DSecureTokenizedCardPayment` method and handle the transaction
+details
 
 ```javascript
 let cardInfo = new PaymentSDKSavedCardInfo("Card mask", "cardType")
@@ -189,10 +196,11 @@ RNPaymentSDKLibrary.start3DSecureTokenizedCardPayment(
      });
 
 ```
+
 <img width="197" alt="rec 3ds" src="https://user-images.githubusercontent.com/17829232/188836295-d8d48978-a80f-40d3-bda3-439423fcdec0.png">
 
-
 # 4- Pay with saved card
+
 Start payment by calling `startPaymentWithSavedCards` method and handle the transaction details
 
 ```javascript
@@ -210,14 +218,17 @@ support3DsBool).then( result => {
      });
 
 ```
-<img width="197" alt="rec 3ds" src="https://user-images.githubusercontent.com/17829232/190152848-bfc83f8c-1a4b-4a55-99ec-af3c22a3de66.png">
 
+<img width="197" alt="rec 3ds" src="https://user-images.githubusercontent.com/17829232/190152848-bfc83f8c-1a4b-4a55-99ec-af3c22a3de66.png">
 
 ### Pay with Apple Pay
 
-1. Follow the guide [Steps to configure Apple Pay][applepayguide] to learn how to configure ApplePay with PayTabs.
+1. Follow the guide [Steps to configure Apple Pay][applepayguide] to learn how to configure ApplePay
+   with PayTabs.
 
-2. Do the steps 1 and 2 from **Pay with Card** although you can ignore Billing & Shipping details and Apple Pay will handle it, also you must pass the **merchant name** and **merchant identifier**.
+2. Do the steps 1 and 2 from **Pay with Card** although you can ignore Billing & Shipping details
+   and Apple Pay will handle it, also you must pass the **merchant name** and **merchant identifier
+   **.
 
 ```javascript
 
@@ -242,7 +253,8 @@ configuration.paymentNetworks = selectedNetworks;
 
 ```
 
-3. To simplify ApplePay validation on all user's billing info, pass **simplifyApplePayValidation** parameter in the configuration with **true**.
+3. To simplify ApplePay validation on all user's billing info, pass **simplifyApplePayValidation**
+   parameter in the configuration with **true**.
 
 ```javascript
 
@@ -275,7 +287,8 @@ configuration.samsungToken = "token"
 
 ### Pay with Alternative Payment Methods
 
-It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet, Valu, Fawry, UnionPay, and Meeza, to serve a large sector of customers.
+It becomes easy to integrate with other payment methods in your region like STCPay, OmanNet, KNet,
+Valu, Fawry, UnionPay, and Meeza, to serve a large sector of customers.
 
 1. Do the steps 1 and 2 from **Pay with Card**.
 
@@ -285,7 +298,8 @@ It becomes easy to integrate with other payment methods in your region like STCP
 configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay]
 ```
 
-3. Start payment by calling `startAlternativePaymentMethod` method and handle the transaction details
+3. Start payment by calling `startAlternativePaymentMethod` method and handle the transaction
+   details
 
 ```javascript
 
@@ -313,7 +327,9 @@ configuration.tokeniseType = PaymentSDKConstants.TokeniseType.userOptional // re
 configuration.tokenFormat = PaymentSDKConstants.TokeniseFormat.hex32 // read more about the tokenFormat in the enums section
 
 ```
-After passing those parameters, you will receive a token and transaction reference in the result callback, save them for future usage.
+
+After passing those parameters, you will receive a token and transaction reference in the result
+callback, save them for future usage.
 
 2. Pass the token & transaction reference
 
@@ -321,7 +337,6 @@ After passing those parameters, you will receive a token and transaction referen
 configuration.token = token
 configuration.transactionReference = transactionreference
 ```
-
 
 ## Enums
 
@@ -387,6 +402,7 @@ configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymen
 ```
 
 ## Discounts
+
 * To apply discounts on the transaction, you can pass the discount amount and the discount type.
 
 ```javascript
@@ -405,6 +421,15 @@ cardDiscount2.isPercentage = false;
 configuration.cardDiscounts = Array.of(cardDiscount1, cardDiscount2);
 ````
 
+## Card Validation
+
+* The Payment SDK allows you to customize BIN-based discounts through the `PaymentSDKCardApproval`
+  class, which collects approval details via an API.
+
+```javascript
+let cardApproval = new PaymentSDKCardApproval("https://webhook.site/8c1ba496-18b9-46c0-9277-94e8a883344b", 8, true);
+configuration.cardApproval = cardApproval;
+```
 
 ## Show/Hide Card Scanner
 
@@ -434,37 +459,41 @@ configuration.theme = theme
 ```
 
 - **Localization**:
-  <br />Use the keys from our localization string files ([English][iosenglish], [Arabic][iosarabic]), then add the same key to your app localizable string file and add your custom string.
+  <br />Use the keys from our localization string
+  files ([English][iosenglish], [Arabic][iosarabic]), then add the same key to your app localizable
+  string file and add your custom string.
 
 ### Android
 
 - **Theme**: <br />Edit your `styles.xml` to customize the theme.
 
 ````xml
+
 <resources>
   // to override colors
-     <color name="payment_sdk_primary_color">#5C13DF</color>
-     <color name="payment_sdk_secondary_color">#FFC107</color>
-     <color name="payment_sdk_primary_font_color">#111112</color>
-     <color name="payment_sdk_secondary_font_color">#6D6C70</color>
-     <color name="payment_sdk_separators_color">#FFC107</color>
-     <color name="payment_sdk_stroke_color">#673AB7</color>
-     <color name="payment_sdk_button_text_color">#FFF</color>
-     <color name="payment_sdk_title_text_color">#FFF</color>
-     <color name="payment_sdk_button_background_color">#3F51B5</color>
-     <color name="payment_sdk_background_color">#F9FAFD</color>
-     <color name="payment_sdk_card_background_color">#F9FAFD</color>
+  <color name="payment_sdk_primary_color">#5C13DF</color>
+  <color name="payment_sdk_secondary_color">#FFC107</color>
+  <color name="payment_sdk_primary_font_color">#111112</color>
+  <color name="payment_sdk_secondary_font_color">#6D6C70</color>
+  <color name="payment_sdk_separators_color">#FFC107</color>
+  <color name="payment_sdk_stroke_color">#673AB7</color>
+  <color name="payment_sdk_button_text_color">#FFF</color>
+  <color name="payment_sdk_title_text_color">#FFF</color>
+  <color name="payment_sdk_button_background_color">#3F51B5</color>
+  <color name="payment_sdk_background_color">#F9FAFD</color>
+  <color name="payment_sdk_card_background_color">#F9FAFD</color>
 
   // to override dimens
-     <dimen name="payment_sdk_primary_font_size">17sp</dimen>
-     <dimen name="payment_sdk_secondary_font_size">15sp</dimen>
-     <dimen name="payment_sdk_separator_thickness">1dp</dimen>
-     <dimen name="payment_sdk_stroke_thickness">.5dp</dimen>
-     <dimen name="payment_sdk_input_corner_radius">8dp</dimen>
-     <dimen name="payment_sdk_button_corner_radius">8dp</dimen>
+  <dimen name="payment_sdk_primary_font_size">17sp</dimen>
+  <dimen name="payment_sdk_secondary_font_size">15sp</dimen>
+  <dimen name="payment_sdk_separator_thickness">1dp</dimen>
+  <dimen name="payment_sdk_stroke_thickness">.5dp</dimen>
+  <dimen name="payment_sdk_input_corner_radius">8dp</dimen>
+  <dimen name="payment_sdk_button_corner_radius">8dp</dimen>
 
 </resources>
 ````
+
 - **Merchant Logo**:
 
 ```javascript
@@ -498,14 +527,24 @@ See [LICENSE][license].
 [Support][1] | [Terms of Use][2] | [Privacy Policy][3]
 
 [1]: https://www.paytabs.com/en/support/
+
 [2]: https://www.paytabs.com/en/terms-of-use/
+
 [3]: https://www.paytabs.com/en/privacy-policy/
+
 [license]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/LICENSE
+
 [applepayguide]: https://github.com/paytabscom/react-native-paytabs-library/blob/master/ApplePayConfiguration.md
+
 [example]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/example
+
 [expoexample]: https://github.com/paytabscom/react-native-paytabs-library/tree/master/expo-example
+
 [english]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings.xml
+
 [arabic]: https://github.com/paytabscom/paytabs-android-library-sample/blob/master/res/strings-ar.xml
+
 [iosenglish]: https://github.com/paytabscom/paytabs-ios-library-sample/blob/master/en.strings
+
 [iosarabic]: https://github.com/paytabscom/paytabs-ios-library-sample/blob/master/ar.strings
 
