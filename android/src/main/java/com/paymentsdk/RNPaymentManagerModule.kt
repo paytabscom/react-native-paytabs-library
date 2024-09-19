@@ -13,7 +13,8 @@ import org.json.JSONException
 import org.json.JSONObject
 
 
-class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) : ReactContextBaseJavaModule(reactContext), CallbackPaymentInterface {
+class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) :
+  ReactContextBaseJavaModule(reactContext), CallbackPaymentInterface {
   private var promise: Promise? = null
   override fun getName(): String {
     return PaymentSDKMODULE
@@ -32,7 +33,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       val configBuilder = createConfiguration(paymentDetails)
       if (!paymentDetails.isNull("theme")) {
         if (paymentDetails.optJSONObject("theme")?.isNull("merchantLogo") == false) {
-          val iconUri = paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
+          val iconUri =
+            paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
           configBuilder.setMerchantIcon(iconUri)
         }
       }
@@ -55,7 +57,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       val configBuilder = createConfiguration(paymentDetails)
       if (!paymentDetails.isNull("theme")) {
         if (paymentDetails.optJSONObject("theme")?.isNull("merchantLogo") == false) {
-          val iconUri = paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
+          val iconUri =
+            paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
           configBuilder.setMerchantIcon(iconUri)
         }
       }
@@ -80,7 +83,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       val paymentSDKSavedCardInfo = createSavedCardInfo(savedCardObject)
       if (!paymentDetails.isNull("theme")) {
         if (paymentDetails.optJSONObject("theme")?.isNull("merchantLogo") == false) {
-          val iconUri = paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
+          val iconUri =
+            paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
           configBuilder.setMerchantIcon(iconUri)
         }
       }
@@ -102,7 +106,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       val configBuilder = createConfiguration(paymentDetails)
       if (!paymentDetails.isNull("theme")) {
         if (paymentDetails.optJSONObject("theme")?.isNull("merchantLogo") == false) {
-          val iconUri = paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
+          val iconUri =
+            paymentDetails.optJSONObject("theme")?.optJSONObject("merchantLogo")?.optString("uri")
           configBuilder.setMerchantIcon(iconUri)
         }
       }
@@ -114,7 +119,16 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
 
   private fun startPayment(paymentDetails: JSONObject, configBuilder: PaymentSdkConfigBuilder) {
     val samsungToken = paymentDetails.optString("samsungToken")
-    if (samsungToken.isNotEmpty()) PaymentSdkActivity.startSamsungPayment(reactContext.currentActivity!!, configBuilder.build(), samsungToken, this) else PaymentSdkActivity.startCardPayment(reactContext.currentActivity!!, configBuilder.build(), this)
+    if (samsungToken.isNotEmpty()) PaymentSdkActivity.startSamsungPayment(
+      reactContext.currentActivity!!,
+      configBuilder.build(),
+      samsungToken,
+      this
+    ) else PaymentSdkActivity.startCardPayment(
+      reactContext.currentActivity!!,
+      configBuilder.build(),
+      this
+    )
   }
 
   private fun startTokenizedPayment(
@@ -124,7 +138,13 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     configBuilder: PaymentSdkConfigBuilder,
   ) {
     val samsungToken = paymentDetails.optString("samsungToken")
-    PaymentSdkActivity.startTokenizedCardPayment(reactContext.currentActivity!!, configBuilder.build(), token, transactionRef, this)
+    PaymentSdkActivity.startTokenizedCardPayment(
+      reactContext.currentActivity!!,
+      configBuilder.build(),
+      token,
+      transactionRef,
+      this
+    )
   }
 
   private fun start3DsPayment(
@@ -134,7 +154,13 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     configBuilder: PaymentSdkConfigBuilder,
   ) {
     val samsungToken = paymentDetails.optString("samsungToken")
-    PaymentSdkActivity.start3DSecureTokenizedCardPayment(reactContext.currentActivity!!, configBuilder.build(), savedCardInfo, token, this)
+    PaymentSdkActivity.start3DSecureTokenizedCardPayment(
+      reactContext.currentActivity!!,
+      configBuilder.build(),
+      savedCardInfo,
+      token,
+      this
+    )
   }
 
   private fun startSavedCardPayment(
@@ -143,7 +169,12 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     configBuilder: PaymentSdkConfigBuilder,
   ) {
     val samsungToken = paymentDetails.optString("samsungToken")
-    PaymentSdkActivity.startPaymentWithSavedCards(reactContext.currentActivity!!, configBuilder.build(), support3DS, this)
+    PaymentSdkActivity.startPaymentWithSavedCards(
+      reactContext.currentActivity!!,
+      configBuilder.build(),
+      support3DS,
+      this
+    )
   }
 
   @ReactMethod
@@ -152,7 +183,11 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     try {
       val paymentDetails = JSONObject(arguments)
       val configData = createConfiguration(paymentDetails)
-      PaymentSdkActivity.startAlternativePaymentMethods(reactContext.currentActivity!!, configData.build(), this)
+      PaymentSdkActivity.startAlternativePaymentMethods(
+        reactContext.currentActivity!!,
+        configData.build(),
+        this
+      )
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
@@ -184,24 +219,75 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     val timeout = paymentDetails.optLong("expiryTime")
     val tokeniseType = createPaymentSdkTokenise(paymentDetails.optString("tokeniseType"))
     val tokenFormat = createPaymentSdkTokenFormat(paymentDetails.optString("tokenFormat"))
-    val transactionType = createPaymentSdkTransactionType(paymentDetails.optString("transactionType"))
+    val transactionType =
+      createPaymentSdkTransactionType(paymentDetails.optString("transactionType"))
     val billingDetails = paymentDetails.optJSONObject("billingDetails")
     var billingData: PaymentSdkBillingDetails? = null
     if (billingDetails != null) {
-      billingData = PaymentSdkBillingDetails(billingDetails.optString("city"), billingDetails.optString("countryCode"), billingDetails.optString("email"), billingDetails.optString("name"), billingDetails.optString("phone"), billingDetails.optString("state"), billingDetails.optString("addressLine"), billingDetails.optString("zip"))
+      billingData = PaymentSdkBillingDetails(
+        billingDetails.optString("city"),
+        billingDetails.optString("countryCode"),
+        billingDetails.optString("email"),
+        billingDetails.optString("name"),
+        billingDetails.optString("phone"),
+        billingDetails.optString("state"),
+        billingDetails.optString("addressLine"),
+        billingDetails.optString("zip")
+      )
     }
     val shippingDetails = paymentDetails.optJSONObject("shippingDetails")
     var shippingData: PaymentSdkShippingDetails? = null
     if (shippingDetails != null) {
-      shippingData = PaymentSdkShippingDetails(shippingDetails.optString("city"), shippingDetails.optString("countryCode"), shippingDetails.optString("email"), shippingDetails.optString("name"), shippingDetails.optString("phone"), shippingDetails.optString("state"), shippingDetails.optString("addressLine"), shippingDetails.optString("zip"))
+      shippingData = PaymentSdkShippingDetails(
+        shippingDetails.optString("city"),
+        shippingDetails.optString("countryCode"),
+        shippingDetails.optString("email"),
+        shippingDetails.optString("name"),
+        shippingDetails.optString("phone"),
+        shippingDetails.optString("state"),
+        shippingDetails.optString("addressLine"),
+        shippingDetails.optString("zip")
+      )
     }
     val apmsJSONArray = paymentDetails.optJSONArray("alternativePaymentMethods")
     val apmsList = mutableListOf<PaymentSdkApms>()
     if (apmsJSONArray != null) {
       apmsList.addAll(createAPMs(apmsJSONArray))
     }
-    return PaymentSdkConfigBuilder(profileId, serverKey, clientKey, amount, currency).setCartDescription(cartDesc).setLanguageCode(locale).setBillingData(billingData).setMerchantCountryCode(paymentDetails.optString("merchantCountryCode")).setShippingData(shippingData).setCartId(orderId).setTokenise(tokeniseType, tokenFormat).setTokenisationData(token, transRef).hideCardScanner(paymentDetails.optBoolean("hideCardScanner")).showBillingInfo(paymentDetails.optBoolean("showBillingInfo")).showShippingInfo(paymentDetails.optBoolean("showShippingInfo")).forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo")).setScreenTitle(screenTitle).setAlternativePaymentMethods(apmsList).setTransactionType(transactionType).isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct")).setPaymentExpiry(timeout).enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts"))
-      .setCardDiscount(getPaymentSdkCardDiscounts(paymentDetails)).setMetadata(getMetadata())
+    val cardApproval = paymentDetails.optJSONObject("cardApproval")
+    val cardApprovalData: PaymentSdkCardApproval? = if (cardApproval != null) {
+      getCardApproval(cardApproval)
+    } else {
+      null
+    }
+    return PaymentSdkConfigBuilder(
+      profileId,
+      serverKey,
+      clientKey,
+      amount,
+      currency
+    ).setCartDescription(cartDesc).setLanguageCode(locale).setBillingData(billingData)
+      .setMerchantCountryCode(paymentDetails.optString("merchantCountryCode"))
+      .setShippingData(shippingData).setCartId(orderId).setTokenise(tokeniseType, tokenFormat)
+      .setTokenisationData(token, transRef)
+      .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
+      .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
+      .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
+      .forceShippingInfo(paymentDetails.optBoolean("forceShippingInfo")).setScreenTitle(screenTitle)
+      .setAlternativePaymentMethods(apmsList).setTransactionType(transactionType)
+      .isDigitalProduct(paymentDetails.optBoolean("isDigitalProduct")).setPaymentExpiry(timeout)
+      .enableZeroContacts(paymentDetails.optBoolean("enableZeroContacts"))
+      .setCardDiscount(getPaymentSdkCardDiscounts(paymentDetails))
+      .setCardApproval(cardApprovalData)
+      .setMetadata(getMetadata())
+  }
+
+  private fun getCardApproval(cardApproval: JSONObject): PaymentSdkCardApproval {
+    return PaymentSdkCardApproval(
+      cardApproval.optString("validationUrl"),
+      cardApproval.optInt("binLength"),
+      cardApproval.optBoolean("blockIfNoResponse"),
+    )
   }
 
   private fun getPaymentSdkCardDiscounts(paymentDetails: JSONObject): List<PaymentSdkCardDiscount> {
@@ -216,10 +302,12 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
           cards.add(cardsPrefixes.optString(j))
         }
       }
-      val cardDiscount = PaymentSdkCardDiscount(cards,
+      val cardDiscount = PaymentSdkCardDiscount(
+        cards,
         discount.optDouble("discountValue"),
         discount.optString("discountTitle"),
-        discount.optBoolean("isPercentage"))
+        discount.optBoolean("isPercentage")
+      )
       paymentSdkCardDiscounts.add(cardDiscount)
     }
     return paymentSdkCardDiscounts
