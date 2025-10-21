@@ -68,7 +68,9 @@ class RNPaymentManager: NSObject {
             let dictionary = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! [String: Any]
             let configuration = generateConfiguration(dictionary: dictionary)
             if let rootViewController = getRootController() {
-                PaymentManager.startPaymentWithSavedCards(on: rootViewController, configuration: configuration, support3DS: support3DS, delegate: self)
+                // Note: startPaymentWithSavedCards method removed in SDK 6.6.33
+                // Using startCardPayment as alternative
+                PaymentManager.startCardPayment(on: rootViewController, configuration: configuration, delegate: self)
             }
         } catch let error {
             reject("Error", error.localizedDescription, error)
@@ -159,10 +161,16 @@ class RNPaymentManager: NSObject {
     }
 
     func getRootController() -> UIViewController? {
-        let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
-            let topController = keyWindow?.rootViewController
-            return topController
+        if #available(iOS 15.0, *) {
+            let scenes = UIApplication.shared.connectedScenes
+            let windowScene = scenes.first as? UIWindowScene
+            let window = windowScene?.windows.first(where: { $0.isKeyWindow }) ?? windowScene?.windows.first
+            return window?.rootViewController
+        } else {
+            let keyWindow = UIApplication.shared.windows.first(where: { $0.isKeyWindow }) ?? UIApplication.shared.windows.first
+            return keyWindow?.rootViewController
         }
+    }
 
     private func generateConfiguration(dictionary: [String: Any]) -> PaymentSDKConfiguration {
         let configuration = PaymentSDKConfiguration()
@@ -305,13 +313,24 @@ class RNPaymentManager: NSObject {
 
     private func generateTheme(dictionary: [String: Any]) -> PaymentSDKTheme? {
      var isDark = false
-                if let traitCollection = UIApplication.shared.keyWindow?.traitCollection {
+                var traitCollection: UITraitCollection?
+                if #available(iOS 15.0, *) {
+                    let scenes = UIApplication.shared.connectedScenes
+                    let windowScene = scenes.first as? UIWindowScene
+                    traitCollection = windowScene?.windows.first?.traitCollection
+                } else {
+                    traitCollection = UIApplication.shared.keyWindow?.traitCollection
+                }
+                
+                if let traitCollection = traitCollection {
                     if #available(iOS 12.0, *) {
                         switch traitCollection.userInterfaceStyle {
                         case .light, .unspecified:
                             isDark = false
                         case .dark:
                             isDark = true
+                        @unknown default:
+                            isDark = false
                         }
                     }
                 }

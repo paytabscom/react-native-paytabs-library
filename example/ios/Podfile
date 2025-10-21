@@ -1,8 +1,8 @@
-source 'https://github.com/CocoaPods/Specs'
+source 'https://cdn.cocoapods.org/'
 require_relative '../node_modules/react-native/scripts/react_native_pods'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
-platform :ios, '12.4'
+platform :ios, '15.0'
 install! 'cocoapods', :deterministic_uuids => false
 
 target 'PaymentsdkExample' do
@@ -33,6 +33,14 @@ target 'PaymentsdkExample' do
   end
 
   post_install do |installer|
+    # Fix deployment target BEFORE react_native_post_install
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Fix deployment target warnings
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      end
+    end
+    
     react_native_post_install(
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
@@ -40,5 +48,19 @@ target 'PaymentsdkExample' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
+    
+    # Fix boost compatibility with C++17 by defining BOOST_NO_CXX98_FUNCTION_BASE
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Tell boost to not use std::unary_function (removed in C++17)
+        # Apply to both boost and RCT-Folly (which uses boost headers)
+        if target.name == 'boost' || target.name == 'RCT-Folly'
+          config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= ['$(inherited)']
+          unless config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'].include?('BOOST_NO_CXX98_FUNCTION_BASE')
+            config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] << 'BOOST_NO_CXX98_FUNCTION_BASE'
+          end
+        end
+      end
+    end
   end
 end

@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
 
 import com.android.build.OutputFile
 
@@ -135,6 +136,10 @@ android {
   packagingOptions {
     jniLibs.pickFirsts.add("**/**/**.so")
   }
+  
+  kotlinOptions {
+    freeCompilerArgs += '-Xskip-metadata-version-check'
+  }
   defaultConfig {
     applicationId "com.paymentsdkexample"
     minSdkVersion rootProject.ext.minSdkVersion
@@ -254,6 +259,7 @@ dependencies {
 
   //noinspection GradleDynamicVersion
   implementation "com.facebook.react:react-native:+"  // From node_modules
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
 
   implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
@@ -278,6 +284,27 @@ dependencies {
   } else {
     implementation jscFlavor
   }
+}
+
+configurations.all {
+  resolutionStrategy {
+    // Use compatible AndroidX versions for PayTabs SDK 6.8.1
+    force 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+    force 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
+    force 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+    force 'androidx.lifecycle:lifecycle-common:2.6.2'
+    force 'androidx.core:core:1.9.0'
+    force 'androidx.core:core-ktx:1.9.0'
+    force 'androidx.recyclerview:recyclerview:1.3.0'
+    force 'androidx.fragment:fragment:1.5.7'
+    force 'androidx.fragment:fragment-ktx:1.5.7'
+    force 'androidx.appcompat:appcompat:1.6.1'
+    force 'androidx.appcompat:appcompat-resources:1.6.1'
+    force 'androidx.constraintlayout:constraintlayout:2.1.4'
+    force 'com.google.errorprone:error_prone_annotations:2.18.0'
+  }
+  exclude group: 'androidx.camera'
+  exclude group: 'androidx.profileinstaller'
 }
 
 if (isNewArchitectureEnabled()) {

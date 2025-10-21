@@ -13,7 +13,7 @@ PODS:
   - glog (0.3.5)
   - hermes-engine (0.70.6)
   - libevent (2.1.12)
-  - PayTabsSDK (6.6.20)
+  - PayTabsSDK (6.6.33)
   - RCT-Folly (2021.07.22.00):
     - boost
     - DoubleConversion
@@ -240,8 +240,8 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-paymentsdk (2.6.8):
-    - PayTabsSDK (= 6.6.20)
+  - react-native-paymentsdk (2.6.9):
+    - PayTabsSDK (= 6.6.33)
     - React
   - React-perflogger (0.70.6)
   - React-RCTActionSheet (0.70.6):
@@ -351,7 +351,7 @@ DEPENDENCIES:
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs:
+  trunk:
     - fmt
     - libevent
     - PayTabsSDK
@@ -429,7 +429,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: a7c83b31436843459a1961bfd74b96033dc77234
+  boost: 9fa78656d705f55b1220151d997e57e2a3f2cde0
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
@@ -437,23 +437,23 @@ SPEC CHECKSUMS:
   glog: 04b94705f318337d7ead9e6d17c019bd9b1f6b1b
   hermes-engine: 2af7b7a59128f250adfd86f15aa1d5a2ecd39995
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  PayTabsSDK: da92d5a9804886f3ab9b82f658870a7706de6298
-  RCT-Folly: 0080d0a6ebf2577475bda044aa59e2ca1f909cda
+  PayTabsSDK: 76281d0e9523011498eb62a0bbae82e1317d6a39
+  RCT-Folly: fd2673f5bfadb2a8173799b6965b892a67ae31d9
   RCTRequired: e1866f61af7049eb3d8e08e8b133abd38bc1ca7a
   RCTTypeSafety: 27c2ac1b00609a432ced1ae701247593f07f901e
   React: bb3e06418d2cc48a84f9666a576c7b38e89cd7db
   React-bridging: 572502ec59c9de30309afdc4932e278214288913
   React-callinvoker: 6b708b79c69f3359d42f1abb4663f620dbd4dadf
   React-Codegen: 74e1cd7cee692a8b983c18df3274b5e749de07c8
-  React-Core: b587d0a624f9611b0e032505f3d6f25e8daa2bee
+  React-Core: 2f8cf9b4c32016ca031bd3c92901be199a968a2f
   React-CoreModules: c6ff48b985e7aa622e82ca51c2c353c7803eb04e
-  React-cxxreact: ade3d9e63c599afdead3c35f8a8bd12b3da6730b
-  React-hermes: ed09ae33512bbb8d31b2411778f3af1a2eb681a1
-  React-jsi: 5a3952e0c6d57460ad9ee2c905025b4c28f71087
-  React-jsiexecutor: b4a65947391c658450151275aa406f2b8263178f
+  React-cxxreact: 69e0e464c51c6ff217274bcfb2bb088723811bab
+  React-hermes: e39bb500861ce0721705f19ada2d592a8804f31d
+  React-jsi: fb5c0ada3fc450d7e6e04fb6777b964d0b128024
+  React-jsiexecutor: 2105e907db2343be205b93c74533784d7f386879
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
-  React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
-  react-native-paymentsdk: f0b28d92ce6941d5efabfcab13692305efb005c1
+  React-logger: 28e721a44e671acf52ac6588f8624eb23245cb27
+  react-native-paymentsdk: ef679c1f4847aa422ed7371be622570a19fd2c3b
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
@@ -465,9 +465,9 @@ SPEC CHECKSUMS:
   React-RCTText: f532e5ca52681ecaecea452b3ad7a5b630f50d75
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
-  ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
+  ReactCommon: 1d6d9a5bf0fed74a5411d3267e52304b2ba4f6f4
   Yoga: 99caf8d5ab45e9d637ee6e0174ec16fbbb01bcfc
 
-PODFILE CHECKSUM: 4d4a3b9adc21dd44c4f2b22392304227c95fdaf1
+PODFILE CHECKSUM: 8bb1c56840cf4216310fe61d2c5288d8d6040638
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2

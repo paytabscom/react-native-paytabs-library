@@ -169,10 +169,10 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     configBuilder: PaymentSdkConfigBuilder,
   ) {
     val samsungToken = paymentDetails.optString("samsungToken")
-    PaymentSdkActivity.startPaymentWithSavedCards(
+    // Use alternative method for PayTabs SDK 6.8.1
+    PaymentSdkActivity.startCardPayment(
       reactContext.currentActivity!!,
       configBuilder.build(),
-      support3DS,
       this
     )
   }

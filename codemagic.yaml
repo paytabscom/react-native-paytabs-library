@@ -1,0 +1,175 @@
+workflows:
+  react-native-library:
+    name: React Native Library Build & Publish
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - npm_credentials # Add NPM_TOKEN in Codemagic UI
+      vars:
+        NODE_VERSION: 18
+      node: $NODE_VERSION
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: 'master'
+          include: true
+          source: true
+        - pattern: 'main'
+          include: true
+          source: true
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Lint code
+        script: |
+          yarn lint
+      - name: Run tests
+        script: |
+          yarn test
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Build Android
+        script: |
+          cd android
+          ./gradlew assembleRelease
+      - name: Build iOS (Pod lib lint)
+        script: |
+          cd ios
+          pod lib lint ../react-native-paymentsdk.podspec --allow-warnings
+    artifacts:
+      - android/build/outputs/**/*.aar
+      - lib/**/*
+    publishing:
+      email:
+        recipients:
+          - muhammad.alkady@paytabs.com
+        notify:
+          success: true
+          failure: true
+
+  publish-npm:
+    name: Publish to NPM
+    max_build_duration: 30
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - npm_credentials # Add NPM_TOKEN in Codemagic UI
+      vars:
+        NODE_VERSION: 18
+      node: $NODE_VERSION
+    triggering:
+      events:
+        - tag
+      tag_patterns:
+        - pattern: 'v*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Configure npm authentication
+        script: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+      - name: Publish to npm
+        script: |
+          npm publish --access public
+    publishing:
+      email:
+        recipients:
+          - muhammad.alkady@paytabs.com
+        notify:
+          success: true
+          failure: true
+
+  android-build:
+    name: Android Build
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      groups:
+        - android_credentials
+      vars:
+        NODE_VERSION: 18
+      node: $NODE_VERSION
+      java: 17
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Build Android library
+        script: |
+          cd android
+          ./gradlew assembleRelease
+    artifacts:
+      - android/build/outputs/**/*.aar
+    publishing:
+      email:
+        recipients:
+          - muhammad.alkady@paytabs.com
+        notify:
+          success: false
+          failure: true
+
+  ios-build:
+    name: iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      vars:
+        NODE_VERSION: 18
+        XCODE_VERSION: 15.0
+      node: $NODE_VERSION
+      xcode: latest
+    triggering:
+      events:
+        - pull_request
+      branch_patterns:
+        - pattern: '*'
+          include: true
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Install CocoaPods dependencies
+        script: |
+          cd example/ios
+          pod install
+      - name: Build iOS example
+        script: |
+          cd example/ios
+          xcodebuild -workspace PaymentsdkExample.xcworkspace \
+            -scheme PaymentsdkExample \
+            -configuration Release \
+            -sdk iphonesimulator \
+            -destination 'platform=iOS Simulator,name=iPhone 15' \
+            build
+    publishing:
+      email:
+        recipients:
+          - muhammad.alkady@paytabs.com
+        notify:
+          success: false
+          failure: true
+
