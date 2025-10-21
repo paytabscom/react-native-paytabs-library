@@ -394,7 +394,7 @@ configuration.transactionType = PaymentSDKConstants.TransactionType.sale
 * Alternative payment methods
 
 ```javascript
-AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry", "aman": "aman", "urpay": "urpay"};
+AlternativePaymentMethod = {"unionPay":"unionpay", "stcPay":"stcpay", "valu": "valu", "meezaQR": "meezaqr", "omannet": "omannet", "knetCredit": "knetcredit", "knetDebit": "knetdebit", "fawry": "fawry", "aman": "aman", "urpay": "urpay", "souhoola": "souhoola", "tabby": "tabby", "tru": "tru", "tamara": "tamara", "forsa": "forsa"};
 ```
 
 ```javascript

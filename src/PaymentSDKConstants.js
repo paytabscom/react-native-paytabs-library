@@ -34,6 +34,9 @@ export default class PaymentSDKConstants {
     applePay: 'applePay',
     souhoola: 'souhoola',
     tabby: 'tabby',
+    tru: 'tru',
+    tamara: 'tamara',
+    forsa: 'forsa',
   };
 
   static PaymentSDKNetworks = {
