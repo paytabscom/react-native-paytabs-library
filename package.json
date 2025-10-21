@@ -81,10 +81,16 @@
     "react-native": "*"
   },
   "jest": {
-    "preset": "react-native",
+    "testEnvironment": "node",
     "modulePathIgnorePatterns": [
       "<rootDir>/example/node_modules",
       "<rootDir>/lib/"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-native|@react-native|@react-navigation)/)"
     ]
   },
   "commitlint": {
