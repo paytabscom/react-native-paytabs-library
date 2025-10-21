@@ -9,18 +9,18 @@ declare module '@paytabs/react-native-paytabs' {
     static startTokenizedCardPayment(
       config,
       token,
-      transactionRef,
+      transactionRef
     ): Promise<any>;
 
     static start3DSecureTokenizedCardPayment(
       config,
       savedCardInfo,
-      token,
+      token
     ): Promise<any>;
 
     static startPaymentWithSavedCards(config, support3DS): Promise<any>;
 
-    static cancelPayment(): Promise<any>
+    static cancelPayment(): Promise<any>;
   }
 
   export class PaymentSDKConstants {
@@ -113,11 +113,11 @@ declare module '@paytabs/react-native-paytabs' {
     cardType?: string;
   }
 
-  export class PaymentSDKCardApproval { 
-      validationUrl?: string;
-      binLength?: number;
-      blockIfNoResponse?: boolean;
-      }
+  export class PaymentSDKCardApproval {
+    validationUrl?: string;
+    binLength?: number;
+    blockIfNoResponse?: boolean;
+  }
 
   export class PaymentSDKCardDiscount {
     /**
@@ -143,34 +143,34 @@ declare module '@paytabs/react-native-paytabs' {
 
   // Add PaymentSDKNetworks here
   export const PaymentSDKNetworks: {
-    AMEX: 'amex',
-    PAGO_BANCOMAT: 'pagoBancomat',
-    BANCONTACT: 'bancontact',
-    CARTES_BANCAIRES: 'cartesBancaires',
-    CHINA_UNION_PAY: 'chinaUnionPay',
-    DANKORT: 'dankort',
-    DISCOVER: 'discover',
-    EFTPOS: 'eftpos',
-    ELECTRON: 'electron',
-    ELO: 'elo',
-    ID_CREDIT: 'idCredit',
-    INTERAC: 'interac',
-    JCB: 'JCB',
-    MADA: 'mada',
-    MAESTRO: 'maestro',
-    MASTERCARD: 'masterCard',
-    MIR: 'mir',
-    PRIVATE_LABEL: 'privateLabel',
-    QUIC_PAY: 'quicPay',
-    SUICA: 'suica',
-    VISA: 'visa',
-    V_PAY: 'vPay',
-    BARCODE: 'barcode',
-    GIROCARD: 'girocard',
-    WAON: 'waon',
-    NANACO: 'nanaco',
-    POST_FINANCE: 'postFinance',
-    T_MONEY: 'tmoney',
-    MEEZA: 'meeza',
+    AMEX: 'amex';
+    PAGO_BANCOMAT: 'pagoBancomat';
+    BANCONTACT: 'bancontact';
+    CARTES_BANCAIRES: 'cartesBancaires';
+    CHINA_UNION_PAY: 'chinaUnionPay';
+    DANKORT: 'dankort';
+    DISCOVER: 'discover';
+    EFTPOS: 'eftpos';
+    ELECTRON: 'electron';
+    ELO: 'elo';
+    ID_CREDIT: 'idCredit';
+    INTERAC: 'interac';
+    JCB: 'JCB';
+    MADA: 'mada';
+    MAESTRO: 'maestro';
+    MASTERCARD: 'masterCard';
+    MIR: 'mir';
+    PRIVATE_LABEL: 'privateLabel';
+    QUIC_PAY: 'quicPay';
+    SUICA: 'suica';
+    VISA: 'visa';
+    V_PAY: 'vPay';
+    BARCODE: 'barcode';
+    GIROCARD: 'girocard';
+    WAON: 'waon';
+    NANACO: 'nanaco';
+    POST_FINANCE: 'postFinance';
+    T_MONEY: 'tmoney';
+    MEEZA: 'meeza';
   };
 }

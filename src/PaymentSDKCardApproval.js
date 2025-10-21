@@ -4,4 +4,4 @@ export default class PaymentSDKCardApproval {
     this.binLength = binLength;
     this.blockIfNoResponse = blockIfNoResponse;
   }
-  }
+}

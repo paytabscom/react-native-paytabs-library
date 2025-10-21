@@ -14,7 +14,11 @@ export default class PaymentSDKConstants {
     digit16: '5',
     alphaNum32: '6',
   };
-  static TransactionType = { sale: 'sale', authorize: 'auth', register: 'Register' };
+  static TransactionType = {
+    sale: 'sale',
+    authorize: 'auth',
+    register: 'Register',
+  };
   static TransactionClass = { ecom: 'ecom', recurring: 'recur' };
   static AlternativePaymentMethod = {
     unionPay: 'unionpay',
@@ -26,10 +30,10 @@ export default class PaymentSDKConstants {
     knetDebit: 'knetdebit',
     fawry: 'fawry',
     aman: 'aman',
-    urpay:  "urpay",
-    applePay: "applePay",
-    souhoola: "souhoola",
-    tabby: "tabby"
+    urpay: 'urpay',
+    applePay: 'applePay',
+    souhoola: 'souhoola',
+    tabby: 'tabby',
   };
 
   static PaymentSDKNetworks = {

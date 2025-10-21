@@ -34,7 +34,7 @@ export default class PaymentSDKConfiguration {
     expiryTime,
     cardDiscounts,
     cardApproval
-) {
+  ) {
     this.profileID = profileID;
     this.serverKey = serverKey;
     this.clientKey = clientKey;
@@ -68,6 +68,6 @@ export default class PaymentSDKConfiguration {
     this.enableZeroContacts = enableZeroContacts;
     this.expiryTime = expiryTime;
     this.cardDiscounts = cardDiscounts;
-    this.cardApproval = cardApproval
+    this.cardApproval = cardApproval;
   }
 }
