@@ -240,7 +240,7 @@ PODS:
   - React-jsinspector (0.70.6)
   - React-logger (0.70.6):
     - glog
-  - react-native-paymentsdk (2.6.9):
+  - react-native-paymentsdk (2.8.0):
     - PayTabsSDK (= 6.6.33)
     - React
   - React-perflogger (0.70.6)
@@ -429,7 +429,7 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  boost: 9fa78656d705f55b1220151d997e57e2a3f2cde0
+  boost: cf4ae79078f2923e5958340491953c526843d174
   DoubleConversion: 5189b271737e1565bdce30deb4a08d647e3f5f54
   FBLazyVector: 48289402952f4f7a4e235de70a9a590aa0b79ef4
   FBReactNativeSpec: dd1186fd05255e3457baa2f4ca65e94c2cd1e3ac
@@ -453,7 +453,7 @@ SPEC CHECKSUMS:
   React-jsiexecutor: 2105e907db2343be205b93c74533784d7f386879
   React-jsinspector: 60769e5a0a6d4b32294a2456077f59d0266f9a8b
   React-logger: 28e721a44e671acf52ac6588f8624eb23245cb27
-  react-native-paymentsdk: ef679c1f4847aa422ed7371be622570a19fd2c3b
+  react-native-paymentsdk: 40e8340881afa2478808ea5b4b465d7d3e72f647
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
   React-RCTAnimation: 5341e288375451297057391227f691d9b2326c3d
