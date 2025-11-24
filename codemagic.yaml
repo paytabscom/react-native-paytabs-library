@@ -173,3 +173,171 @@ workflows:
           success: false
           failure: true
 
+  example-android:
+    name: Example App - Android Build
+    max_build_duration: 60
+    instance_type: linux_x2
+    environment:
+      android_signing:
+        - AndroidSampleKey
+      groups:
+        - firebase
+      vars:
+        PACKAGE_NAME: "com.paymentsdkexample"
+        NODE_VERSION: 18
+      node: $NODE_VERSION
+      java: 17
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Build Android example app
+        script: |
+          cd example/android
+          ./gradlew assembleRelease
+    artifacts:
+      - example/android/app/build/outputs/**/*.apk
+      - example/android/app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - mobile.devop@paytabs.com
+        notify:
+          success: true
+          failure: true
+      firebase:
+        firebase_service_account: $FIREBASE_SERVICE_ACCOUNT_CREDENTIALS
+        android:
+          app_id: $FIREBASE_ANDROID_APP_ID
+          groups:
+            - Testers
+
+  example-ios:
+    name: Example App - iOS Build
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    integrations:
+      app_store_connect: Paytabs
+    environment:
+      groups:
+        - firebase
+      vars:
+        NODE_VERSION: 18
+        XCODE_VERSION: 15.0
+      node: $NODE_VERSION
+      xcode: latest
+      cocoapods: default
+      XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
+      XCODE_SCHEME: PaymentsdkExample
+      EXPORT_METHOD: app-store
+      RELEASE_NOTES: "Automated build from Codemagic"
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Install CocoaPods dependencies
+        script: |
+          cd example/ios
+          pod install --repo-update
+      - name: Build IPA for App Store distribution
+        script: |
+          xcode-project build-ipa \
+          --workspace "$XCODE_WORKSPACE" \
+          --scheme "$XCODE_SCHEME" \
+          --archive-flags="-destination 'generic/platform=iOS'"
+    artifacts:
+      - example/ios/build/**/*.ipa
+      - example/ios/build/**/*.xcarchive
+    publishing:
+      email:
+        recipients:
+          - mobile.devop@paytabs.com
+        notify:
+          success: true
+          failure: true
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+
+  example-combined:
+    name: Example App - Combined Build (iOS & Android)
+    max_build_duration: 120
+    instance_type: mac_mini_m1
+    integrations:
+      app_store_connect: Paytabs
+    environment:
+      android_signing:
+        - AndroidSampleKey
+      ios_signing:
+        - iOSSampleKey
+      groups:
+        - firebase
+      vars:
+        PACKAGE_NAME: "com.paymentsdkexample"
+        NODE_VERSION: 18
+        XCODE_VERSION: 15.0
+        XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
+        XCODE_SCHEME: PaymentsdkExample
+        EXPORT_METHOD: app-store
+        RELEASE_NOTES: "Automated build from Codemagic"
+      node: $NODE_VERSION
+      xcode: latest
+      cocoapods: default
+      java: 17
+    scripts:
+      - name: Install dependencies
+        script: |
+          yarn install
+      - name: Build library
+        script: |
+          yarn prepare
+      - name: Install CocoaPods dependencies
+        script: |
+          cd example/ios
+          pod install --repo-update
+      - name: Build iOS example app
+        script: |
+          xcode-project build-ipa \
+          --workspace "$XCODE_WORKSPACE" \
+          --scheme "$XCODE_SCHEME" \
+          --archive-flags="-destination 'generic/platform=iOS'"
+      - name: Build Android example app
+        script: |
+          cd example/android
+          ./gradlew assembleRelease
+    artifacts:
+      - example/ios/build/**/*.ipa
+      - example/ios/build/**/*.xcarchive
+      - example/android/app/build/outputs/**/*.apk
+      - example/android/app/build/outputs/**/*.aab
+    publishing:
+      email:
+        recipients:
+          - mobile.devop@paytabs.com
+        notify:
+          success: true
+          failure: true
+      firebase:
+        firebase_service_account: $FIREBASE_SERVICE_ACCOUNT_CREDENTIALS
+        android:
+          app_id: $FIREBASE_ANDROID_APP_ID
+          groups:
+            - Testers
+        ios:
+          app_id: $FIREBASE_IOS_APP_ID
+          groups:
+            - Testers
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        submit_to_app_store: false
+
+
