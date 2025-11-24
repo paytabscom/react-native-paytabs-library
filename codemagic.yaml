@@ -232,11 +232,17 @@ workflows:
         XCODE_SCHEME: PaymentsdkExample
         EXPORT_METHOD: app-store
         RELEASE_NOTES: "Automated build from Codemagic"
+        COCOAPODS_DISABLE_STATS: true
     scripts:
       - name: Install dependencies
         script: |
           cd example
           yarn install
+      - name: Clear CocoaPods cache
+        script: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/.cocoapods/repos
+          pod repo add-cdn trunk https://cdn.cocoapods.org/
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
@@ -283,6 +289,7 @@ workflows:
         XCODE_SCHEME: PaymentsdkExample
         EXPORT_METHOD: app-store
         RELEASE_NOTES: "Automated build from Codemagic"
+        COCOAPODS_DISABLE_STATS: true
       node: $NODE_VERSION
       xcode: latest
       cocoapods: default
@@ -292,6 +299,11 @@ workflows:
         script: |
           cd example
           yarn install
+      - name: Clear CocoaPods cache
+        script: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ~/.cocoapods/repos
+          pod repo add-cdn trunk https://cdn.cocoapods.org/
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
