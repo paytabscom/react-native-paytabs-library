@@ -136,7 +136,7 @@ android {
   packagingOptions {
     jniLibs.pickFirsts.add("**/**/**.so")
   }
-  
+
   kotlinOptions {
     freeCompilerArgs += '-Xskip-metadata-version-check'
   }
@@ -230,10 +230,10 @@ android {
         keyAlias System.getenv()["CM_KEY_ALIAS"]
         keyPassword System.getenv()["CM_KEY_PASSWORD"]
       } else {
-        keyAlias keystoreProperties['keyAlias']
-        keyPassword keystoreProperties['keyPassword']
-        storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-        storePassword keystoreProperties['storePassword']
+        storeFile file('debug.keystore')
+        storePassword 'android'
+        keyAlias 'androiddebugkey'
+        keyPassword 'android'
       }
     }
   }
