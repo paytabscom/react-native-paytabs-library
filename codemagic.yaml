@@ -276,8 +276,6 @@ workflows:
     environment:
       android_signing:
         - AndroidSampleKey
-      ios_signing:
-        - iOSSampleKey
       groups:
         - firebase
       vars:
