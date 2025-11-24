@@ -224,16 +224,16 @@ workflows:
     environment:
       groups:
         - firebase
+      xcode: latest
+      cocoapods: default
+      node: $NODE_VERSION
       vars:
         NODE_VERSION: 18
         XCODE_VERSION: 15.0
-      node: $NODE_VERSION
-      xcode: latest
-      cocoapods: default
-      XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
-      XCODE_SCHEME: PaymentsdkExample
-      EXPORT_METHOD: app-store
-      RELEASE_NOTES: "Automated build from Codemagic"
+        XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
+        XCODE_SCHEME: PaymentsdkExample
+        EXPORT_METHOD: app-store
+        RELEASE_NOTES: "Automated build from Codemagic"
     scripts:
       - name: Install dependencies
         script: |
