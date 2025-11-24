@@ -190,7 +190,7 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable-immutable
+          yarn install --immutable
       - name: Build library
         script: |
           yarn prepare
@@ -237,7 +237,7 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable-immutable
+          yarn install --immutable
       - name: Build library
         script: |
           yarn prepare
@@ -293,7 +293,7 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable-immutable
+          yarn install --immutable
       - name: Build library
         script: |
           yarn prepare
