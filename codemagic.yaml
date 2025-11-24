@@ -240,6 +240,7 @@ workflows:
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
+          rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Build IPA for App Store distribution
         script: |
@@ -294,6 +295,7 @@ workflows:
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
+          rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Build iOS example app
         script: |
