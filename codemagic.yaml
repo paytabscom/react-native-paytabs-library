@@ -183,6 +183,7 @@ workflows:
       groups:
         - firebase
       vars:
+        GRADLE_USER_HOME: ~/.gradle
         PACKAGE_NAME: "com.paymentsdkexample"
         NODE_VERSION: 18
       node: $NODE_VERSION
@@ -190,7 +191,8 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable
+          cd example
+          yarn install
       - name: Build library
         script: |
           yarn prepare
@@ -229,7 +231,6 @@ workflows:
       node: $NODE_VERSION
       vars:
         NODE_VERSION: 18
-        XCODE_VERSION: 15.0
         XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
         XCODE_SCHEME: PaymentsdkExample
         EXPORT_METHOD: app-store
@@ -237,10 +238,8 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable
-      - name: Build library
-        script: |
-          yarn prepare
+          cd example
+          yarn install
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
@@ -279,9 +278,9 @@ workflows:
       groups:
         - firebase
       vars:
+        GRADLE_USER_HOME: ~/.gradle
         PACKAGE_NAME: "com.paymentsdkexample"
         NODE_VERSION: 18
-        XCODE_VERSION: 15.0
         XCODE_WORKSPACE: example/ios/PaymentsdkExample.xcworkspace
         XCODE_SCHEME: PaymentsdkExample
         EXPORT_METHOD: app-store
@@ -293,10 +292,8 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-          yarn install --immutable
-      - name: Build library
-        script: |
-          yarn prepare
+          cd example
+          yarn install
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
