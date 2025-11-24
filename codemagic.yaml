@@ -299,11 +299,10 @@ workflows:
         script: |
           cd example
           yarn install
-      - name: Clear CocoaPods cache
+      - name: Fix boost.podspec checksum issue
         script: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/.cocoapods/repos
-          pod repo add-cdn trunk https://cdn.cocoapods.org/
+          cd example
+          bash scripts/fix-boost.sh
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
