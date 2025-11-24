@@ -193,9 +193,6 @@ workflows:
         script: |
           cd example
           yarn install
-      - name: Build library
-        script: |
-          yarn prepare
       - name: Build Android example app
         script: |
           cd example/android
