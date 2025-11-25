@@ -254,10 +254,7 @@ workflows:
           rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Set up provisioning profiles settings on Xcode project
-        script: |
-          xcode-project use-profiles
-          echo "Provisioning profiles:"
-          xcode-project show-profiles
+        script: xcode-project use-profiles
       - name: Increment build number
         script: |
           cd example/ios
@@ -330,10 +327,7 @@ workflows:
           rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Set up provisioning profiles settings on Xcode project
-        script: |
-          xcode-project use-profiles
-          echo "Provisioning profiles:"
-          xcode-project show-profiles
+        script: xcode-project use-profiles
       - name: Increment build number
         script: |
           cd example/ios
