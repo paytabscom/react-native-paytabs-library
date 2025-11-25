@@ -503,7 +503,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.PaymentsdkExample";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PaymentsdkExample;
 				PRODUCT_NAME = PaymentsdkExample;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -532,7 +532,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.PaymentsdkExample";
+				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.PaymentsdkExample;
 				PRODUCT_NAME = PaymentsdkExample;
 				PROVISIONING_PROFILE_SPECIFIER = "React Native Sdk Example";
 				SWIFT_VERSION = 5.0;

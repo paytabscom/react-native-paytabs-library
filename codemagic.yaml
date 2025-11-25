@@ -260,6 +260,12 @@ workflows:
           cd example/ios
           echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
           agvtool new-version -all "$PROJECT_BUILD_NUMBER"
+      - name: Ensure Node binary is available for Xcode
+        script: |
+          cd example/ios
+          # Update .xcode.env to use the correct node path
+          echo "export NODE_BINARY=$(which node)" > .xcode.env
+          cat .xcode.env
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -333,6 +339,12 @@ workflows:
           cd example/ios
           echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
           agvtool new-version -all "$PROJECT_BUILD_NUMBER"
+      - name: Ensure Node binary is available for Xcode
+        script: |
+          cd example/ios
+          # Update .xcode.env to use the correct node path
+          echo "export NODE_BINARY=$(which node)" > .xcode.env
+          cat .xcode.env
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
