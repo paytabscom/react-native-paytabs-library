@@ -266,6 +266,15 @@ workflows:
           # Update .xcode.env to use the correct node path
           echo "export NODE_BINARY=$(which node)" > .xcode.env
           cat .xcode.env
+      - name: Pre-bundle React Native for Release
+        script: |
+          cd example
+          npx react-native bundle \
+            --platform ios \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output ios/main.jsbundle \
+            --assets-dest ios
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -345,6 +354,15 @@ workflows:
           # Update .xcode.env to use the correct node path
           echo "export NODE_BINARY=$(which node)" > .xcode.env
           cat .xcode.env
+      - name: Pre-bundle React Native for Release
+        script: |
+          cd example
+          npx react-native bundle \
+            --platform ios \
+            --dev false \
+            --entry-file index.js \
+            --bundle-output ios/main.jsbundle \
+            --assets-dest ios
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
