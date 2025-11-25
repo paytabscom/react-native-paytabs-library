@@ -266,6 +266,9 @@ workflows:
           # Update .xcode.env to use the correct node path
           echo "export NODE_BINARY=$(which node)" > .xcode.env
           cat .xcode.env
+      - name: Install root dependencies for bundling
+        script: |
+          yarn install
       - name: Pre-bundle React Native for Release
         script: |
           cd example
@@ -354,6 +357,9 @@ workflows:
           # Update .xcode.env to use the correct node path
           echo "export NODE_BINARY=$(which node)" > .xcode.env
           cat .xcode.env
+      - name: Install root dependencies for bundling
+        script: |
+          yarn install
       - name: Pre-bundle React Native for Release
         script: |
           cd example
