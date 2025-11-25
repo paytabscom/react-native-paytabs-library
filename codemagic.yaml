@@ -223,6 +223,12 @@ workflows:
     environment:
       groups:
         - firebase
+        - environment_variables
+      ios_signing:
+        provisioning_profiles:
+          - $PROFILE
+        certificates:
+          - $CERTIFICATE
       xcode: latest
       cocoapods: default
       node: $NODE_VERSION
@@ -238,16 +244,18 @@ workflows:
         script: |
           cd example
           yarn install
-      - name: Clear CocoaPods cache
-        script: |
-          rm -rf ~/Library/Developer/Xcode/DerivedData
-          rm -rf ~/.cocoapods/repos
-          pod repo add-cdn trunk https://cdn.cocoapods.org/
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
           rm -rf Pods Podfile.lock
           pod install --repo-update
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd example/ios
+          echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
+          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -282,6 +290,12 @@ workflows:
         - AndroidSampleKey
       groups:
         - firebase
+        - environment_variables
+      ios_signing:
+        provisioning_profiles:
+          - $PROFILE
+        certificates:
+          - $CERTIFICATE
       vars:
         GRADLE_USER_HOME: ~/.gradle
         PACKAGE_NAME: "com.paymentsdkexample"
@@ -309,6 +323,13 @@ workflows:
           cd example/ios
           rm -rf Pods Podfile.lock
           pod install --repo-update
+      - name: Set up provisioning profiles settings on Xcode project
+        script: xcode-project use-profiles
+      - name: Increment build number
+        script: |
+          cd example/ios
+          echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
+          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
