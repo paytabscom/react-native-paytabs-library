@@ -254,7 +254,10 @@ workflows:
           rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles
+        script: |
+          xcode-project use-profiles
+          echo "Provisioning profiles:"
+          xcode-project show-profiles
       - name: Increment build number
         script: |
           cd example/ios
@@ -327,7 +330,10 @@ workflows:
           rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles --project example/ios/PaymentsdkExample.xcodeproj
+        script: |
+          xcode-project use-profiles
+          echo "Provisioning profiles:"
+          xcode-project show-profiles
       - name: Increment build number
         script: |
           cd example/ios
@@ -338,8 +344,7 @@ workflows:
           xcode-project build-ipa \
           --workspace "$XCODE_WORKSPACE" \
           --scheme "$XCODE_SCHEME" \
-          --archive-flags="-destination 'generic/platform=iOS'" \
-          --export-options-plist "example/ios/export_options.plist"
+          --archive-flags="-destination 'generic/platform=iOS'"
       - name: Build Android example app
         script: |
           cd example/android
