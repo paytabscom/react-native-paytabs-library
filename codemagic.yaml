@@ -244,13 +244,17 @@ workflows:
         script: |
           cd example
           yarn install
+      - name: Fix boost.podspec checksum issue
+        script: |
+          cd example
+          bash scripts/fix-boost.sh
       - name: Install CocoaPods dependencies
         script: |
           cd example/ios
           rm -rf Pods Podfile.lock
           pod install --repo-update
       - name: Set up provisioning profiles settings on Xcode project
-        script: xcode-project use-profiles --project example/ios/PaymentsdkExample.xcodeproj
+        script: xcode-project use-profiles
       - name: Increment build number
         script: |
           cd example/ios
@@ -261,8 +265,7 @@ workflows:
           xcode-project build-ipa \
           --workspace "$XCODE_WORKSPACE" \
           --scheme "$XCODE_SCHEME" \
-          --archive-flags="-destination 'generic/platform=iOS'" \
-          --export-options-plist "example/ios/export_options.plist"
+          --archive-flags="-destination 'generic/platform=iOS'"
     artifacts:
       - example/ios/build/**/*.ipa
       - example/ios/build/**/*.xcarchive
