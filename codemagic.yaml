@@ -7,6 +7,7 @@ workflows:
     environment:
       groups:
         - npm_credentials
+        - git
       vars:
         NODE_VERSION: 18
       node: $NODE_VERSION
@@ -52,6 +53,7 @@ workflows:
         - AndroidSampleKey
       groups:
         - firebase
+        - git
       vars:
         GRADLE_USER_HOME: ~/.gradle
         PACKAGE_NAME: "com.paymentsdkexample"
@@ -90,6 +92,7 @@ workflows:
       groups:
         - firebase
         - environment_variables
+        - git
       ios_signing:
         provisioning_profiles:
           - $PROFILE
@@ -158,6 +161,7 @@ workflows:
       groups:
         - firebase
         - environment_variables
+        - git
       ios_signing:
         provisioning_profiles:
           - $PROFILE
