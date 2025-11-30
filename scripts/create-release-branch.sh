@@ -7,8 +7,14 @@ NEW_VERSION=$NEW_VERSION
 echo "Creating release branch: release_$NEW_VERSION"
 
 git checkout -b "release_$NEW_VERSION"
-git add package.json README.md
-git commit -m "Bump version to $NEW_VERSION and update README"
+
+# Add files if they have changes
+git add -A
+if git diff --cached --quiet; then
+  echo "No changes to commit"
+else
+  git commit -m "Bump version to $NEW_VERSION and update README"
+fi
 
 # Push with proper authentication
 echo "Pushing release branch to GitHub..."

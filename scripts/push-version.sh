@@ -8,8 +8,13 @@ BUILD_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo "Current build branch: $BUILD_BRANCH"
 echo "Pushing bumped version to $BUILD_BRANCH..."
 
-git add package.json README.md
-git commit -m "Bump version to $NEW_VERSION and update README"
+# Add files if they have changes
+git add -A
+if git diff --cached --quiet; then
+  echo "No changes to commit"
+else
+  git commit -m "Bump version to $NEW_VERSION and update README"
+fi
 
 # Push with proper authentication
 REPO_URL=$(git config --get remote.origin.url)
