@@ -21,8 +21,6 @@ workflows:
         script: bash scripts/read-version.sh
       - name: Bump version
         script: bash scripts/bump-version.sh
-      - name: Update CHANGELOG with bug fix
-        script: bash scripts/update-changelog.sh
       - name: Update README with new version
         script: bash scripts/update-readme.sh
       - name: Push bumped version to build branch

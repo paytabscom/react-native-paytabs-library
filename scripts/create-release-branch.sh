@@ -7,8 +7,8 @@ NEW_VERSION=$NEW_VERSION
 echo "Creating release branch: release_$NEW_VERSION"
 
 git checkout -b "release_$NEW_VERSION"
-git add package.json CHANGELOG.md README.md
-git commit -m "Bump version to $NEW_VERSION and update CHANGELOG & README"
+git add package.json README.md
+git commit -m "Bump version to $NEW_VERSION and update README"
 
 # Push with proper authentication
 echo "Pushing release branch to GitHub..."
