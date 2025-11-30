@@ -3,7 +3,7 @@ set -e
 
 echo "Reading current version..."
 
-CURRENT_VERSION=$(grep "^version:" pubspec.yaml | sed 's/version: //')
+CURRENT_VERSION=$(grep -o '"version": "[^"]*"' package.json | head -1 | cut -d'"' -f4)
 echo "Current version: $CURRENT_VERSION"
 echo "CURRENT_VERSION=$CURRENT_VERSION" >> $CM_ENV
 

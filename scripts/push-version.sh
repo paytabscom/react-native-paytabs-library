@@ -8,7 +8,7 @@ BUILD_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 echo "Current build branch: $BUILD_BRANCH"
 echo "Pushing bumped version to $BUILD_BRANCH..."
 
-git add pubspec.yaml CHANGELOG.md README.md
+git add package.json CHANGELOG.md README.md
 git commit -m "Bump version to $NEW_VERSION and update CHANGELOG & README"
 
 # Push with proper authentication

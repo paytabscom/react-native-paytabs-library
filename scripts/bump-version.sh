@@ -12,8 +12,8 @@ NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
 echo "Bumping version from $CURRENT_VERSION to $NEW_VERSION"
 echo "NEW_VERSION=$NEW_VERSION" >> $CM_ENV
 
-# Update pubspec.yaml (escape special chars and use portable sed)
-sed -i.bak "s/version: $CURRENT_VERSION/version: $NEW_VERSION/" pubspec.yaml
-rm -f pubspec.yaml.bak
+# Update package.json
+sed -i.bak "s/\"version\": \"$CURRENT_VERSION\"/\"version\": \"$NEW_VERSION\"/" package.json
+rm -f package.json.bak
 
 echo "✓ Version bumped to $NEW_VERSION"
