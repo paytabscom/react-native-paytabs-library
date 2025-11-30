@@ -12,17 +12,29 @@ workflows:
       node: $NODE_VERSION
     scripts:
       - name: Install dependencies
-        script: |
-          yarn install
+        script: bash scripts/install-dependencies.sh
       - name: Build library
-        script: |
-          yarn prepare
+        script: bash scripts/build-library.sh
+      - name: Setup git credentials
+        script: bash scripts/setup-git.sh
+      - name: Read current version
+        script: bash scripts/read-version.sh
+      - name: Bump version
+        script: bash scripts/bump-version.sh
+      - name: Update CHANGELOG with bug fix
+        script: bash scripts/update-changelog.sh
+      - name: Update README with new version
+        script: bash scripts/update-readme.sh
+      - name: Push bumped version to build branch
+        script: bash scripts/push-version.sh
+      - name: Create release branch
+        script: bash scripts/create-release-branch.sh
+      - name: Create and push git tag
+        script: bash scripts/create-tag.sh
       - name: Configure npm authentication
-        script: |
-          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        script: bash scripts/configure-npm.sh
       - name: Publish to npm
-        script: |
-          npm publish --access public
+        script: bash scripts/publish-npm.sh
     publishing:
       email:
         recipients:
@@ -50,13 +62,9 @@ workflows:
       java: 17
     scripts:
       - name: Install dependencies
-        script: |
-          cd example
-          yarn install
+        script: bash scripts/install-example-deps.sh
       - name: Build Android example app
-        script: |
-          cd example/android
-          ./gradlew assembleRelease
+        script: bash scripts/build-android-release.sh
     artifacts:
       - example/android/app/build/outputs/**/*.apk
       - example/android/app/build/outputs/**/*.aab
@@ -101,43 +109,23 @@ workflows:
         COCOAPODS_DISABLE_STATS: true
     scripts:
       - name: Install dependencies
-        script: |
-          cd example
-          yarn install
+        script: bash scripts/install-example-deps.sh
       - name: Fix boost.podspec checksum issue
         script: |
           cd example
           bash scripts/fix-boost.sh
       - name: Install CocoaPods dependencies
-        script: |
-          cd example/ios
-          rm -rf Pods Podfile.lock
-          pod install --repo-update
+        script: bash scripts/install-cocoapods.sh
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
       - name: Increment build number
-        script: |
-          cd example/ios
-          echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
-          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
+        script: bash scripts/increment-build-number.sh
       - name: Ensure Node binary is available for Xcode
-        script: |
-          cd example/ios
-          # Update .xcode.env to use the correct node path
-          echo "export NODE_BINARY=$(which node)" > .xcode.env
-          cat .xcode.env
+        script: bash scripts/setup-node-binary.sh
       - name: Install root dependencies for bundling
-        script: |
-          yarn install
+        script: bash scripts/install-root-deps.sh
       - name: Pre-bundle React Native for Release
-        script: |
-          cd example
-          npx react-native bundle \
-            --platform ios \
-            --dev false \
-            --entry-file index.js \
-            --bundle-output ios/main.jsbundle \
-            --assets-dest ios
+        script: bash scripts/bundle-react-native-ios.sh
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -192,43 +180,23 @@ workflows:
       java: 17
     scripts:
       - name: Install dependencies
-        script: |
-          cd example
-          yarn install
+        script: bash scripts/install-example-deps.sh
       - name: Fix boost.podspec checksum issue
         script: |
           cd example
           bash scripts/fix-boost.sh
       - name: Install CocoaPods dependencies
-        script: |
-          cd example/ios
-          rm -rf Pods Podfile.lock
-          pod install --repo-update
+        script: bash scripts/install-cocoapods.sh
       - name: Set up provisioning profiles settings on Xcode project
         script: xcode-project use-profiles
       - name: Increment build number
-        script: |
-          cd example/ios
-          echo "Current PROJECT_BUILD_NUMBER is $PROJECT_BUILD_NUMBER"
-          agvtool new-version -all "$PROJECT_BUILD_NUMBER"
+        script: bash scripts/increment-build-number.sh
       - name: Ensure Node binary is available for Xcode
-        script: |
-          cd example/ios
-          # Update .xcode.env to use the correct node path
-          echo "export NODE_BINARY=$(which node)" > .xcode.env
-          cat .xcode.env
+        script: bash scripts/setup-node-binary.sh
       - name: Install root dependencies for bundling
-        script: |
-          yarn install
+        script: bash scripts/install-root-deps.sh
       - name: Pre-bundle React Native for Release
-        script: |
-          cd example
-          npx react-native bundle \
-            --platform ios \
-            --dev false \
-            --entry-file index.js \
-            --bundle-output ios/main.jsbundle \
-            --assets-dest ios
+        script: bash scripts/bundle-react-native-ios.sh
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
@@ -236,9 +204,7 @@ workflows:
           --scheme "$XCODE_SCHEME" \
           --archive-flags="-destination 'generic/platform=iOS'"
       - name: Build Android example app
-        script: |
-          cd example/android
-          ./gradlew assembleRelease
+        script: bash scripts/build-android-release.sh
     artifacts:
       - example/ios/build/**/*.ipa
       - example/ios/build/**/*.xcarchive
