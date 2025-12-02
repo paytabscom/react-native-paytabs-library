@@ -134,7 +134,7 @@ workflows:
           --scheme "$XCODE_SCHEME" \
           --archive-flags="-destination 'generic/platform=iOS'"
     artifacts:
-      - example/ios/build/**/*.ipa
+      - build/ios/ipa/*.ipa
       - example/ios/build/**/*.xcarchive
     publishing:
       email:
@@ -208,7 +208,7 @@ workflows:
       - name: Build Android example app
         script: bash scripts/build-android-release.sh
     artifacts:
-      - example/ios/build/**/*.ipa
+      - build/ios/ipa/*.ipa
       - example/ios/build/**/*.xcarchive
       - example/android/app/build/outputs/**/*.apk
       - example/android/app/build/outputs/**/*.aab
