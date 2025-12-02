@@ -129,25 +129,10 @@ workflows:
         script: bash scripts/bundle-react-native-ios.sh
       - name: Build IPA for App Store distribution
         script: |
-          # Create export options plist to disable bitcode
-          cat > /tmp/export-options.plist <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>uploadBitcode</key>
-            <false/>
-            <key>compileBitcode</key>
-            <false/>
-          </dict>
-          </plist>
-          EOF
-
           xcode-project build-ipa \
           --workspace "$XCODE_WORKSPACE" \
           --scheme "$XCODE_SCHEME" \
-          --archive-flags="-destination 'generic/platform=iOS' ENABLE_BITCODE=NO" \
-          --export-options-plist=/tmp/export-options.plist
+          --archive-flags="-destination 'generic/platform=iOS' ENABLE_BITCODE=NO"
     artifacts:
       - build/ios/ipa/*.ipa
       - example/ios/build/**/*.xcarchive
@@ -216,25 +201,10 @@ workflows:
         script: bash scripts/bundle-react-native-ios.sh
       - name: Build iOS example app (IPA)
         script: |
-          # Create export options plist to disable bitcode
-          cat > /tmp/export-options.plist <<EOF
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-            <key>uploadBitcode</key>
-            <false/>
-            <key>compileBitcode</key>
-            <false/>
-          </dict>
-          </plist>
-          EOF
-
           xcode-project build-ipa \
           --workspace "$XCODE_WORKSPACE" \
           --scheme "$XCODE_SCHEME" \
-          --archive-flags="-destination 'generic/platform=iOS' ENABLE_BITCODE=NO" \
-          --export-options-plist=/tmp/export-options.plist
+          --archive-flags="-destination 'generic/platform=iOS' ENABLE_BITCODE=NO"
       - name: Build Android example app
         script: bash scripts/build-android-release.sh
     artifacts:
