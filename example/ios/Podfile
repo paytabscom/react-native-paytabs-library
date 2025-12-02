@@ -33,18 +33,15 @@ target 'PaymentsdkExample' do
   end
 
   post_install do |installer|
-   # Fix deployment target BEFORE react_native_post_install
-   installer.pods_project.targets.each do |target|
-     target.build_configurations.each do |config|
-       # Fix deployment target warnings
-       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+    # Fix deployment target BEFORE react_native_post_install
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        # Fix deployment target warnings
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
 
-       # DISABLE BITCODE for all pods (including Hermes)
-       config.build_settings['ENABLE_BITCODE'] = 'NO'
-     end
-   end
-  end
-
+        config.build_settings['ENABLE_BITCODE'] = 'NO'
+      end
+    end
 
     react_native_post_install(
       installer,
