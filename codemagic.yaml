@@ -127,6 +127,10 @@ workflows:
         script: bash scripts/install-root-deps.sh
       - name: Pre-bundle React Native for Release
         script: bash scripts/bundle-react-native-ios.sh
+      - name: Disable Bitcode in Pods
+        script: |
+          cd example/ios
+          sed -i '' 's/ENABLE_BITCODE = YES;/ENABLE_BITCODE = NO;/g' Pods/Pods.xcodeproj/project.pbxproj
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
