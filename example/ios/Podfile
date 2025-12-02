@@ -33,14 +33,19 @@ target 'PaymentsdkExample' do
   end
 
   post_install do |installer|
-    # Fix deployment target BEFORE react_native_post_install
-    installer.pods_project.targets.each do |target|
-      target.build_configurations.each do |config|
-        # Fix deployment target warnings
-        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
-      end
-    end
-    
+   # Fix deployment target BEFORE react_native_post_install
+   installer.pods_project.targets.each do |target|
+     target.build_configurations.each do |config|
+       # Fix deployment target warnings
+       config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+
+       # DISABLE BITCODE for all pods (including Hermes)
+       config.build_settings['ENABLE_BITCODE'] = 'NO'
+     end
+   end
+  end
+
+
     react_native_post_install(
       installer,
       # Set `mac_catalyst_enabled` to `true` in order to apply patches
@@ -48,7 +53,7 @@ target 'PaymentsdkExample' do
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
-    
+
     # Fix boost compatibility with C++17 by defining BOOST_NO_CXX98_FUNCTION_BASE
     installer.pods_project.targets.each do |target|
       target.build_configurations.each do |config|
