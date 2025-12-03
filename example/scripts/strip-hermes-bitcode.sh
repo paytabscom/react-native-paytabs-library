@@ -3,33 +3,45 @@
 # Strip bitcode from Hermes framework
 # This is necessary for iOS 26.1+ which no longer accepts bitcode in App Store submissions
 
+set -e
+
 echo "Stripping bitcode from Hermes framework..."
 
-PODS_ROOT="${SRCROOT}/Pods"
-HERMES_FRAMEWORK="${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"
-
-if [ ! -d "$HERMES_FRAMEWORK" ]; then
-    echo "Hermes framework not found at: $HERMES_FRAMEWORK"
-    echo "Trying alternative path..."
-    HERMES_FRAMEWORK="${PODS_ROOT}/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"
-fi
-
-if [ ! -d "$HERMES_FRAMEWORK" ]; then
-    echo "Warning: Could not find Hermes framework path"
+# Find the Pods directory - look in common locations
+if [ -n "$SRCROOT" ]; then
+    PODS_ROOT="$SRCROOT/Pods"
+elif [ -d "example/ios/Pods" ]; then
+    PODS_ROOT="example/ios/Pods"
+elif [ -d "Pods" ]; then
+    PODS_ROOT="Pods"
+else
+    echo "Warning: Could not find Pods directory"
     exit 0
 fi
 
+HERMES_FRAMEWORK="$PODS_ROOT/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"
+
+if [ ! -d "$HERMES_FRAMEWORK" ]; then
+    echo "Warning: Hermes framework not found at: $HERMES_FRAMEWORK"
+    exit 0
+fi
+
+echo "Found Hermes framework at: $HERMES_FRAMEWORK"
+
 # Find all Hermes binaries in the xcframework and strip bitcode
-find "$HERMES_FRAMEWORK" -name "hermes" -type f | while read -r binary; do
+found_binary=0
+find "$HERMES_FRAMEWORK" -name "hermes" -type f 2>/dev/null | while read -r binary; do
     if [ -f "$binary" ]; then
         echo "Found Hermes binary: $binary"
-        if otool -l "$binary" | grep -q "LC_SEGMENT_64 (__LLVM)"; then
-            echo "Stripping bitcode from: $binary"
-            xcrun bitcode_strip -r "$binary" -o "$binary"
-            if [ $? -eq 0 ]; then
+        found_binary=1
+
+        # Check if binary contains bitcode
+        if otool -l "$binary" 2>/dev/null | grep -q "__LLVM"; then
+            echo "Bitcode detected. Stripping from: $binary"
+            if xcrun bitcode_strip -r "$binary" -o "$binary" 2>/dev/null; then
                 echo "Successfully stripped bitcode from: $binary"
             else
-                echo "Warning: Failed to strip bitcode from: $binary"
+                echo "Warning: bitcode_strip may have failed, but continuing..."
             fi
         else
             echo "No bitcode found in: $binary"
