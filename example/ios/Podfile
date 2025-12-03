@@ -70,5 +70,17 @@ target 'PaymentsdkExample' do
         end
       end
     end
+
+    # Strip bitcode from Hermes framework (prebuilt binary may contain bitcode)
+    hermes_framework_path = "#{installer.pods_project.pods_root}/hermes-engine/destroot/Library/Frameworks/universal/hermes.xcframework"
+    if File.exist?(hermes_framework_path)
+      Dir.glob("#{hermes_framework_path}/**/*.framework").each do |framework|
+        binary_name = File.basename(framework, ".framework")
+        binary_path = File.join(framework, binary_name)
+        if File.exist?(binary_path)
+          `xcrun bitcode_strip -r #{binary_path} -o #{binary_path}`
+        end
+      end
+    end
   end
 end
