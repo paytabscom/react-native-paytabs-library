@@ -128,7 +128,7 @@ workflows:
       - name: Pre-bundle React Native for Release
         script: bash scripts/bundle-react-native-ios.sh
       - name: Strip bitcode from Hermes framework
-        script: bash scripts/strip-hermes-bitcode.sh
+        script: bash example/scripts/strip-hermes-bitcode.sh
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -202,7 +202,7 @@ workflows:
       - name: Pre-bundle React Native for Release
         script: bash scripts/bundle-react-native-ios.sh
       - name: Strip bitcode from Hermes framework
-        script: bash scripts/strip-hermes-bitcode.sh
+        script: bash example/scripts/strip-hermes-bitcode.sh
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
