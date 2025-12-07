@@ -5,13 +5,15 @@ require_relative '../node_modules/react-native/scripts/cocoapods/utils.rb'
 platform :ios, '15.1'
 prepare_react_native_project!
 
+linkage = ENV['USE_FRAMEWORKS']
+if linkage != nil
+  Pod::UI.puts "Configuring Pod with #{linkage}ally linked Frameworks".green
+  use_frameworks! :linkage => linkage.to_sym
+end
+
 target 'PaymentsdkExample' do
-  use_frameworks! :linkage => :static
-
-  config = use_native_modules!
-
   use_react_native!(
-    :path => config[:reactNativePath],
+    :path => "../node_modules/react-native",
     # Hermes is now enabled by default.
     :hermes_enabled => true
   )
@@ -24,7 +26,7 @@ target 'PaymentsdkExample' do
   post_install do |installer|
     react_native_post_install(
       installer,
-      config[:reactNativePath],
+      "../node_modules/react-native",
       :mac_catalyst_enabled => false
     )
   end
