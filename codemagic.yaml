@@ -123,10 +123,6 @@ workflows:
         script: bash scripts/increment-build-number.sh
       - name: Ensure Node binary is available for Xcode
         script: bash scripts/setup-node-binary.sh
-      - name: Install root dependencies for bundling
-        script: bash scripts/install-root-deps.sh
-      - name: Pre-bundle React Native for Release
-        script: bash scripts/bundle-react-native-ios.sh
       - name: Build IPA for App Store distribution
         script: |
           xcode-project build-ipa \
@@ -195,10 +191,6 @@ workflows:
         script: bash scripts/increment-build-number.sh
       - name: Ensure Node binary is available for Xcode
         script: bash scripts/setup-node-binary.sh
-      - name: Install root dependencies for bundling
-        script: bash scripts/install-root-deps.sh
-      - name: Pre-bundle React Native for Release
-        script: bash scripts/bundle-react-native-ios.sh
       - name: Build iOS example app (IPA)
         script: |
           xcode-project build-ipa \
