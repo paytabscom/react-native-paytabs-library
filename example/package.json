@@ -14,9 +14,10 @@
     "react-native": "0.79.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9",
-    "@babel/runtime": "^7.28.4",
-    "babel-plugin-module-resolver": "^4.1.0",
-    "metro-react-native-babel-preset": "0.72.3"
+    "@babel/core": "^7.25.0",
+    "@babel/runtime": "^7.25.0",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "@react-native/babel-preset": "0.79.2",
+    "@react-native/metro-config": "0.79.2"
   }
 }
