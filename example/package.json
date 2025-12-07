@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@paytabs/react-native-paytabs": "file:..",
-    "react": "18.1.0",
-    "react-native": "0.70.6"
+    "react": "18.2.0",
+    "react-native": "0.72.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
