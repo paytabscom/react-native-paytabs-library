@@ -64,6 +64,40 @@ const currencies = [
   { code: 'SEK', name: 'Swedish Krona' },
 ];
 
+// Common country codes list
+const countryCodes = [
+  { code: 'AE', name: 'United Arab Emirates' },
+  { code: 'SA', name: 'Saudi Arabia' },
+  { code: 'EG', name: 'Egypt' },
+  { code: 'US', name: 'United States' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'KW', name: 'Kuwait' },
+  { code: 'BH', name: 'Bahrain' },
+  { code: 'OM', name: 'Oman' },
+  { code: 'QA', name: 'Qatar' },
+  { code: 'JO', name: 'Jordan' },
+  { code: 'LB', name: 'Lebanon' },
+  { code: 'PK', name: 'Pakistan' },
+  { code: 'IN', name: 'India' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'CN', name: 'China' },
+  { code: 'AU', name: 'Australia' },
+  { code: 'CA', name: 'Canada' },
+  { code: 'CH', name: 'Switzerland' },
+  { code: 'SE', name: 'Sweden' },
+  { code: 'FR', name: 'France' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'NL', name: 'Netherlands' },
+  { code: 'BE', name: 'Belgium' },
+  { code: 'AT', name: 'Austria' },
+  { code: 'SG', name: 'Singapore' },
+  { code: 'MY', name: 'Malaysia' },
+  { code: 'TH', name: 'Thailand' },
+  { code: 'PH', name: 'Philippines' },
+];
+
 export default class App extends Component {
   constructor(props) {
     super(props);
@@ -71,41 +105,50 @@ export default class App extends Component {
       message: '',
       isLoading: false,
       // Credentials
-      profileID: 'ProfileId',
-      serverKey: 'ServerKey',
-      clientKey: 'clientKey',
+      profileID: '100181',
+      serverKey: 'SRJNGJBG2D-JDRGZTMJBB-LHLJJBZJLB',
+      clientKey: 'CBKMN9-Q2GP6D-RT97N6-72HNHM',
+      merchantApplePayName: 'Your Store Name',
+      merchantApplePayIdentifier: 'merchant.com.paytabs.applepay',
       // Payment Configuration
       showPaymentConfiguration: false,
-      cartID: '****',
+      cartID: '1234',
       currency: 'EGP',
       cartDescription: 'Flowers',
       merchantCountryCode: 'EG',
-      merchantName: 'Flowers Store22',
-      amount: '23',
-      screenTitle: 'Pay using Card',
+      merchantName: 'Your Store Name',
+      amount: '1.0',
+      screenTitle: 'Pay with Card',
       expiryTime: '65',
+      // Apple Pay Options
+      simplifyApplePayValidation: true,
+      forceShippingInfo: false,
+      isDigitalProduct: false,
+      enableZeroContacts: false,
       // Billing Details
       showBillingDetails: false,
-      billingName: 'Jones Smith',
-      billingEmail: 'email@domain.com',
-      billingPhone: '97311111111',
-      billingAddressLine: 'Flat 1,Building 123, Road 2345',
+      billingName: 'John Smith',
+      billingEmail: 'email@test.com',
+      billingPhone: '+97311111111',
+      billingAddressLine: 'Street1',
       billingCity: 'Dubai',
       billingState: 'Dubai',
-      billingCountryCode: 'AE',
-      billingZip: '1234',
+      billingCountryCode: 'ae',
+      billingZip: '12345',
       // Shipping Details
       showShippingDetails: false,
-      shippingName: 'Jones Smith',
-      shippingEmail: 'email@domain.com',
-      shippingPhone: '97311111111',
-      shippingAddressLine: 'Flat 1,Building 123, Road 2345',
+      shippingName: 'John Smith',
+      shippingEmail: 'email@test.com',
+      shippingPhone: '+9731111111',
+      shippingAddressLine: 'Street1',
       shippingCity: 'Dubai',
       shippingState: 'Dubai',
-      shippingCountryCode: 'AE',
-      shippingZip: '1234',
+      shippingCountryCode: 'ae',
+      shippingZip: '12345',
       // Currency Dropdown
       showCurrencyDropdown: false,
+      // Merchant Country Code Dropdown
+      showMerchantCountryCodeDropdown: false,
     };
   }
 
@@ -117,7 +160,7 @@ export default class App extends Component {
 
   validateRequiredFields() {
     const errors = [];
-    
+
     if (!this.state.profileID || this.state.profileID.trim() === '') {
       errors.push('Profile ID is required');
     }
@@ -133,7 +176,30 @@ export default class App extends Component {
     if (!this.state.currency || this.state.currency.trim() === '') {
       errors.push('Currency is required');
     }
-    
+
+    return errors;
+  }
+
+  validateApplePay() {
+    const errors = this.validateRequiredFields();
+
+    // Validate Apple Pay specific fields
+    const merchantID = this.state.merchantApplePayIdentifier
+      .trim()
+      .toLowerCase();
+    if (!merchantID || merchantID === '') {
+      errors.push(
+        'Apple Pay Merchant ID is required. Please enter it in the Credentials section.'
+      );
+    }
+
+    const merchantName = this.state.merchantApplePayName.trim();
+    if (!merchantName || merchantName === '') {
+      errors.push(
+        'Apple Pay Merchant Name is required. Please enter it in the Credentials section.'
+      );
+    }
+
     return errors;
   }
 
@@ -155,6 +221,24 @@ export default class App extends Component {
       showShippingInfo: configuration.showShippingInfo,
       paymentNetworks: configuration.paymentNetworks,
     };
+
+    // Add Apple Pay specific fields if they exist
+    if (configuration.merchantIdentifier !== undefined) {
+      configJson.merchantIdentifier = configuration.merchantIdentifier;
+    }
+    if (configuration.simplifyApplePayValidation !== undefined) {
+      configJson.simplifyApplePayValidation =
+        configuration.simplifyApplePayValidation;
+    }
+    if (configuration.forceShippingInfo !== undefined) {
+      configJson.forceShippingInfo = configuration.forceShippingInfo;
+    }
+    if (configuration.isDigitalProduct !== undefined) {
+      configJson.isDigitalProduct = configuration.isDigitalProduct;
+    }
+    if (configuration.enableZeroContacts !== undefined) {
+      configJson.enableZeroContacts = configuration.enableZeroContacts;
+    }
 
     // Add billing details if present
     if (configuration.billingDetails) {
@@ -193,70 +277,78 @@ export default class App extends Component {
       // Validate required fields
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
       this.setState({ isLoading: true, message: 'Processing payment...' });
-      
+
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
-      
-      console.log(`${paymentMethod} Configuration:`, JSON.stringify(configJson, null, 2));
-      
-      paymentFunction(JSON.stringify(configJson)).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('Payment Details:', paymentDetails);
-            this.setState({ message: successMessage });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+
+      console.log(
+        `${paymentMethod} Configuration:`,
+        JSON.stringify(configJson, null, 2)
+      );
+
+      paymentFunction(JSON.stringify(configJson))
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('Payment Details:', paymentDetails);
+              this.setState({ message: successMessage });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error(`${paymentMethod} Error:`, error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: `Payment error: ${errorMessage}` });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error(`${paymentMethod} Error:`, error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: `Payment error: ${errorMessage}` });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error(`${paymentMethod} Exception:`, error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: `Payment exception: ${errorMessage}` });
-      });
+          console.error(`${paymentMethod} Exception:`, error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: `Payment exception: ${errorMessage}` });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: `Configuration error: ${errorMessage}` });
     }
   }
 
   buildConfiguration() {
     let configuration = new PaymentSDKConfiguration();
-    
-    // Credentials
-    configuration.profileID = this.state.profileID;
-    configuration.serverKey = this.state.serverKey;
-    configuration.clientKey = this.state.clientKey;
-    
+
+    // Credentials - trim whitespace
+    configuration.profileID = this.state.profileID.trim();
+    configuration.serverKey = this.state.serverKey.trim();
+    configuration.clientKey = this.state.clientKey.trim();
+
     // Payment Configuration
     configuration.cartID = this.state.cartID;
     configuration.currency = this.state.currency;
     configuration.cartDescription = this.state.cartDescription;
     configuration.merchantCountryCode = this.state.merchantCountryCode;
-    configuration.merchantName = this.state.merchantName;
+    configuration.merchantName = this.state.merchantName.trim();
     configuration.amount = parseFloat(this.state.amount) || 0;
     configuration.screenTitle = this.state.screenTitle;
     configuration.expiryTime = parseInt(this.state.expiryTime) || 0;
-    
+
     // Billing Details - Only add if enabled
     if (this.state.showBillingDetails) {
       let billingDetails = new PaymentSDKBillingDetails(
@@ -274,7 +366,7 @@ export default class App extends Component {
     } else {
       configuration.showBillingInfo = false;
     }
-    
+
     // Shipping Details
     if (this.state.showShippingDetails) {
       let shippingDetails = new PaymentSDKShippingDetails(
@@ -292,13 +384,23 @@ export default class App extends Component {
     } else {
       configuration.showShippingInfo = false;
     }
-    
+
     configuration.paymentNetworks = selectedNetworks;
-    
+
     return configuration;
   }
 
   onPressPay() {
+    // Validate card payment
+    const validationErrors = this.validateRequiredFields();
+    if (validationErrors.length > 0) {
+      this.setState({
+        message: 'Validation errors: ' + validationErrors.join(', '),
+        isLoading: false,
+      });
+      return;
+    }
+
     this.handlePayment(
       'Card Payment',
       (config) => RNPaymentSDKLibrary.startCardPayment(config),
@@ -310,50 +412,58 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing tokenized payment...' });
-      
+      this.setState({
+        isLoading: true,
+        message: 'Processing tokenized payment...',
+      });
+
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
-      
+
       RNPaymentSDKLibrary.startTokenizedCardPayment(
         JSON.stringify(configJson),
         'Token',
         'TransactionReference'
-      ).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('Tokenized Payment Details:', paymentDetails);
-            this.setState({ message: 'Tokenized payment successful!' });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+      )
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('Tokenized Payment Details:', paymentDetails);
+              this.setState({ message: 'Tokenized payment successful!' });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error('Tokenized Payment Error:', error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: 'Payment error: ' + errorMessage });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error('Tokenized Payment Error:', error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment error: ' + errorMessage });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error('Tokenized Payment Exception:', error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: 'Payment exception: ' + errorMessage });
-      });
+          console.error('Tokenized Payment Exception:', error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: 'Payment exception: ' + errorMessage });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: 'Configuration error: ' + errorMessage });
     }
   }
@@ -362,51 +472,56 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
       this.setState({ isLoading: true, message: 'Processing 3DS payment...' });
-      
+
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
       let cardInfo = new PaymentSDKSavedCardInfo('4111 11## #### 1111', 'visa');
-      
+
       RNPaymentSDKLibrary.start3DSecureTokenizedCardPayment(
         JSON.stringify(configJson),
         JSON.stringify(cardInfo),
         'Token'
-      ).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('3DS Payment Details:', paymentDetails);
-            this.setState({ message: '3DS payment successful!' });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+      )
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('3DS Payment Details:', paymentDetails);
+              this.setState({ message: '3DS payment successful!' });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error('3DS Payment Error:', error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: 'Payment error: ' + errorMessage });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error('3DS Payment Error:', error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment error: ' + errorMessage });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error('3DS Payment Exception:', error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: 'Payment exception: ' + errorMessage });
-      });
+          console.error('3DS Payment Exception:', error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: 'Payment exception: ' + errorMessage });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: 'Configuration error: ' + errorMessage });
     }
   }
@@ -415,99 +530,139 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing saved card payment...' });
-      
+      this.setState({
+        isLoading: true,
+        message: 'Processing saved card payment...',
+      });
+
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
-      
+
       RNPaymentSDKLibrary.startPaymentWithSavedCards(
         JSON.stringify(configJson),
         false
-      ).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('Saved Card Payment Details:', paymentDetails);
-            this.setState({ message: 'Saved card payment successful!' });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+      )
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('Saved Card Payment Details:', paymentDetails);
+              this.setState({ message: 'Saved card payment successful!' });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error('Saved Card Payment Error:', error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: 'Payment error: ' + errorMessage });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error('Saved Card Payment Error:', error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment error: ' + errorMessage });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error('Saved Card Payment Exception:', error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: 'Payment exception: ' + errorMessage });
-      });
+          console.error('Saved Card Payment Exception:', error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: 'Payment exception: ' + errorMessage });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: 'Configuration error: ' + errorMessage });
     }
   }
 
   onPressApplePay() {
     try {
-      const validationErrors = this.validateRequiredFields();
+      // Validate Apple Pay configuration
+      const validationErrors = this.validateApplePay();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
       this.setState({ isLoading: true, message: 'Processing Apple Pay...' });
-      
+
       const configuration = this.buildConfiguration();
+
+      // Apply Apple Pay specific configuration
+      // Normalize merchant ID to lowercase (Apple Pay merchant IDs are case-sensitive and should be lowercase)
+      const merchantID = this.state.merchantApplePayIdentifier
+        .trim()
+        .toLowerCase();
+      const merchantName = this.state.merchantApplePayName.trim();
+
+      configuration.merchantName = merchantName;
+      configuration.merchantIdentifier = merchantID;
+      configuration.simplifyApplePayValidation =
+        this.state.simplifyApplePayValidation;
+      configuration.forceShippingInfo = this.state.forceShippingInfo;
+      configuration.isDigitalProduct = this.state.isDigitalProduct;
+      configuration.enableZeroContacts = this.state.enableZeroContacts;
+
       const configJson = this.configurationToJson(configuration);
-      
-      RNPaymentSDKLibrary.startApplePayPayment(
-        JSON.stringify(configJson)
-      ).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('Apple Pay Details:', paymentDetails);
-            this.setState({ message: 'Apple Pay successful!' });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+      configJson.merchantName = merchantName;
+      configJson.merchantIdentifier = merchantID;
+      configJson.simplifyApplePayValidation =
+        this.state.simplifyApplePayValidation;
+      configJson.forceShippingInfo = this.state.forceShippingInfo;
+      configJson.isDigitalProduct = this.state.isDigitalProduct;
+      configJson.enableZeroContacts = this.state.enableZeroContacts;
+
+      console.log(
+        'Apple Pay Configuration:',
+        JSON.stringify(configJson, null, 2)
+      );
+
+      RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configJson))
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('Apple Pay Details:', paymentDetails);
+              this.setState({ message: 'Apple Pay successful!' });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error('Apple Pay Error:', error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: 'Payment error: ' + errorMessage });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error('Apple Pay Error:', error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment error: ' + errorMessage });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error('Apple Pay Exception:', error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: 'Payment exception: ' + errorMessage });
-      });
+          console.error('Apple Pay Exception:', error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: 'Payment exception: ' + errorMessage });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: 'Configuration error: ' + errorMessage });
     }
   }
@@ -516,55 +671,71 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({ 
+        this.setState({
           message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false 
+          isLoading: false,
         });
         return;
       }
 
       this.setState({ isLoading: true, message: 'Processing STC Pay...' });
-      
+
       const configuration = this.buildConfiguration();
-      configuration.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay];
+      configuration.alternativePaymentMethods = [
+        PaymentSDKConstants.AlternativePaymentMethod.stcPay,
+      ];
       const configJson = this.configurationToJson(configuration);
-      configJson.alternativePaymentMethods = [PaymentSDKConstants.AlternativePaymentMethod.stcPay];
-      
+      configJson.alternativePaymentMethods = [
+        PaymentSDKConstants.AlternativePaymentMethod.stcPay,
+      ];
+
       RNPaymentSDKLibrary.startAlternativePaymentMethod(
         JSON.stringify(configJson)
-      ).then(
-        (result) => {
-          this.setState({ isLoading: false });
-          if (result.PaymentDetails != null) {
-            let paymentDetails = result.PaymentDetails;
-            console.log('STC Pay Details:', paymentDetails);
-            this.setState({ message: 'STC Pay successful!' });
-          } else if (result.Event === 'CancelPayment') {
-            console.log('Cancel Payment Event');
-            this.setState({ message: 'Payment cancelled' });
+      )
+        .then(
+          (result) => {
+            this.setState({ isLoading: false });
+            if (result.PaymentDetails != null) {
+              let paymentDetails = result.PaymentDetails;
+              console.log('STC Pay Details:', paymentDetails);
+              this.setState({ message: 'STC Pay successful!' });
+            } else if (result.Event === 'CancelPayment') {
+              console.log('Cancel Payment Event');
+              this.setState({ message: 'Payment cancelled' });
+            }
+          },
+          (error) => {
+            this.setState({ isLoading: false });
+            console.error('STC Pay Error:', error);
+            const errorMessage =
+              error?.message || error?.toString() || 'Unknown error';
+            this.setState({ message: 'Payment error: ' + errorMessage });
           }
-        },
-        (error) => {
+        )
+        .catch((error) => {
           this.setState({ isLoading: false });
-          console.error('STC Pay Error:', error);
-          const errorMessage = error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment error: ' + errorMessage });
-        }
-      ).catch((error) => {
-        this.setState({ isLoading: false });
-        console.error('STC Pay Exception:', error);
-        const errorMessage = error?.message || error?.toString() || 'Unknown error';
-        this.setState({ message: 'Payment exception: ' + errorMessage });
-      });
+          console.error('STC Pay Exception:', error);
+          const errorMessage =
+            error?.message || error?.toString() || 'Unknown error';
+          this.setState({ message: 'Payment exception: ' + errorMessage });
+        });
     } catch (error) {
       this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
-      const errorMessage = error?.message || error?.toString() || 'Unknown error';
+      const errorMessage =
+        error?.message || error?.toString() || 'Unknown error';
       this.setState({ message: 'Configuration error: ' + errorMessage });
     }
   }
 
-  renderInputField(label, value, onChangeText, placeholder, keyboardType = 'default') {
+  renderInputField(
+    label,
+    value,
+    onChangeText,
+    placeholder,
+    keyboardType = 'default',
+    secureTextEntry = false
+  ) {
     return (
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>{label}</Text>
@@ -575,14 +746,16 @@ export default class App extends Component {
           placeholder={placeholder}
           keyboardType={keyboardType}
           placeholderTextColor="#999"
+          secureTextEntry={secureTextEntry}
         />
       </View>
     );
   }
 
   renderCurrencyDropdown() {
-    const selectedCurrency = currencies.find(c => c.code === this.state.currency) || currencies[0];
-    
+    const selectedCurrency =
+      currencies.find((c) => c.code === this.state.currency) || currencies[0];
+
     return (
       <View style={styles.inputContainer}>
         <Text style={styles.inputLabel}>Currency</Text>
@@ -595,7 +768,7 @@ export default class App extends Component {
           </Text>
           <Text style={styles.dropdownArrow}>▼</Text>
         </TouchableOpacity>
-        
+
         <Modal
           visible={this.state.showCurrencyDropdown}
           transparent={true}
@@ -620,7 +793,8 @@ export default class App extends Component {
                   <TouchableOpacity
                     style={[
                       styles.currencyItem,
-                      this.state.currency === item.code && styles.currencyItemSelected,
+                      this.state.currency === item.code &&
+                        styles.currencyItemSelected,
                     ]}
                     onPress={() => {
                       this.setState({
@@ -632,7 +806,8 @@ export default class App extends Component {
                     <Text
                       style={[
                         styles.currencyCode,
-                        this.state.currency === item.code && styles.currencyCodeSelected,
+                        this.state.currency === item.code &&
+                          styles.currencyCodeSelected,
                       ]}
                     >
                       {item.code}
@@ -640,12 +815,102 @@ export default class App extends Component {
                     <Text
                       style={[
                         styles.currencyName,
-                        this.state.currency === item.code && styles.currencyNameSelected,
+                        this.state.currency === item.code &&
+                          styles.currencyNameSelected,
                       ]}
                     >
                       {item.name}
                     </Text>
                     {this.state.currency === item.code && (
+                      <Text style={styles.checkmark}>✓</Text>
+                    )}
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </View>
+        </Modal>
+      </View>
+    );
+  }
+
+  renderMerchantCountryCodeDropdown() {
+    const selectedCountry =
+      countryCodes.find((c) => c.code === this.state.merchantCountryCode) ||
+      countryCodes[0];
+
+    return (
+      <View style={styles.inputContainer}>
+        <Text style={styles.inputLabel}>Merchant Country Code</Text>
+        <TouchableOpacity
+          style={styles.dropdown}
+          onPress={() =>
+            this.setState({ showMerchantCountryCodeDropdown: true })
+          }
+        >
+          <Text style={styles.dropdownText}>
+            {selectedCountry.code} - {selectedCountry.name}
+          </Text>
+          <Text style={styles.dropdownArrow}>▼</Text>
+        </TouchableOpacity>
+
+        <Modal
+          visible={this.state.showMerchantCountryCodeDropdown}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() =>
+            this.setState({ showMerchantCountryCodeDropdown: false })
+          }
+        >
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Select Country Code</Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.setState({ showMerchantCountryCodeDropdown: false })
+                  }
+                  style={styles.modalCloseButton}
+                >
+                  <Text style={styles.modalCloseText}>✕</Text>
+                </TouchableOpacity>
+              </View>
+              <FlatList
+                data={countryCodes}
+                keyExtractor={(item) => item.code}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={[
+                      styles.currencyItem,
+                      this.state.merchantCountryCode === item.code &&
+                        styles.currencyItemSelected,
+                    ]}
+                    onPress={() => {
+                      this.setState({
+                        merchantCountryCode: item.code,
+                        showMerchantCountryCodeDropdown: false,
+                      });
+                    }}
+                  >
+                    <Text
+                      style={[
+                        styles.currencyCode,
+                        this.state.merchantCountryCode === item.code &&
+                          styles.currencyCodeSelected,
+                      ]}
+                    >
+                      {item.code}
+                    </Text>
+                    <Text
+                      style={[
+                        styles.currencyName,
+                        this.state.merchantCountryCode === item.code &&
+                          styles.currencyNameSelected,
+                      ]}
+                    >
+                      {item.name}
+                    </Text>
+                    {this.state.merchantCountryCode === item.code && (
                       <Text style={styles.checkmark}>✓</Text>
                     )}
                   </TouchableOpacity>
@@ -689,9 +954,9 @@ export default class App extends Component {
           {this.state.message ? (
             <View style={styles.messageContainer}>
               {this.state.isLoading && (
-                <ActivityIndicator 
-                  size="small" 
-                  color="#2196F3" 
+                <ActivityIndicator
+                  size="small"
+                  color="#2196F3"
                   style={styles.loadingIndicator}
                 />
               )}
@@ -711,12 +976,33 @@ export default class App extends Component {
               {this.renderInputField(
                 'Server Key',
                 this.state.serverKey,
-                (text) => this.setState({ serverKey: text })
+                (text) => this.setState({ serverKey: text }),
+                '',
+                'default',
+                true
               )}
               {this.renderInputField(
                 'Client Key',
                 this.state.clientKey,
-                (text) => this.setState({ clientKey: text })
+                (text) => this.setState({ clientKey: text }),
+                '',
+                'default',
+                true
+              )}
+              {Platform.OS === 'ios' && (
+                <>
+                  {this.renderInputField(
+                    'Apple Pay Merchant Name',
+                    this.state.merchantApplePayName,
+                    (text) => this.setState({ merchantApplePayName: text })
+                  )}
+                  {this.renderInputField(
+                    'Apple Pay Merchant ID',
+                    this.state.merchantApplePayIdentifier,
+                    (text) =>
+                      this.setState({ merchantApplePayIdentifier: text })
+                  )}
+                </>
               )}
             </View>
           </View>
@@ -727,10 +1013,8 @@ export default class App extends Component {
             this.state.showPaymentConfiguration,
             (value) => this.setState({ showPaymentConfiguration: value }),
             <>
-              {this.renderInputField(
-                'Cart ID',
-                this.state.cartID,
-                (text) => this.setState({ cartID: text })
+              {this.renderInputField('Cart ID', this.state.cartID, (text) =>
+                this.setState({ cartID: text })
               )}
               {this.renderCurrencyDropdown()}
               {this.renderInputField(
@@ -738,11 +1022,7 @@ export default class App extends Component {
                 this.state.cartDescription,
                 (text) => this.setState({ cartDescription: text })
               )}
-              {this.renderInputField(
-                'Merchant Country Code',
-                this.state.merchantCountryCode,
-                (text) => this.setState({ merchantCountryCode: text })
-              )}
+              {this.renderMerchantCountryCodeDropdown()}
               {this.renderInputField(
                 'Merchant Name',
                 this.state.merchantName,
@@ -767,6 +1047,70 @@ export default class App extends Component {
                 '0',
                 'numeric'
               )}
+              {Platform.OS === 'ios' && (
+                <>
+                  <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>
+                      Simplify Apple Pay Validation
+                    </Text>
+                    <Switch
+                      value={this.state.simplifyApplePayValidation}
+                      onValueChange={(value) =>
+                        this.setState({ simplifyApplePayValidation: value })
+                      }
+                      trackColor={{ false: '#90caf9', true: '#2196F3' }}
+                      thumbColor={
+                        this.state.simplifyApplePayValidation
+                          ? '#ffffff'
+                          : '#f4f3f4'
+                      }
+                    />
+                  </View>
+                  <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>Force Shipping Info</Text>
+                    <Switch
+                      value={this.state.forceShippingInfo}
+                      onValueChange={(value) =>
+                        this.setState({ forceShippingInfo: value })
+                      }
+                      trackColor={{ false: '#90caf9', true: '#2196F3' }}
+                      thumbColor={
+                        this.state.forceShippingInfo ? '#ffffff' : '#f4f3f4'
+                      }
+                    />
+                  </View>
+                  <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>
+                      Digital Product (Apple Pay)
+                    </Text>
+                    <Switch
+                      value={this.state.isDigitalProduct}
+                      onValueChange={(value) =>
+                        this.setState({ isDigitalProduct: value })
+                      }
+                      trackColor={{ false: '#90caf9', true: '#2196F3' }}
+                      thumbColor={
+                        this.state.isDigitalProduct ? '#ffffff' : '#f4f3f4'
+                      }
+                    />
+                  </View>
+                  <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>
+                      Enable Zero Contacts (Apple Pay)
+                    </Text>
+                    <Switch
+                      value={this.state.enableZeroContacts}
+                      onValueChange={(value) =>
+                        this.setState({ enableZeroContacts: value })
+                      }
+                      trackColor={{ false: '#90caf9', true: '#2196F3' }}
+                      thumbColor={
+                        this.state.enableZeroContacts ? '#ffffff' : '#f4f3f4'
+                      }
+                    />
+                  </View>
+                </>
+              )}
             </>
           )}
 
@@ -776,10 +1120,8 @@ export default class App extends Component {
             this.state.showBillingDetails,
             (value) => this.setState({ showBillingDetails: value }),
             <>
-              {this.renderInputField(
-                'Name',
-                this.state.billingName,
-                (text) => this.setState({ billingName: text })
+              {this.renderInputField('Name', this.state.billingName, (text) =>
+                this.setState({ billingName: text })
               )}
               {this.renderInputField(
                 'Email',
@@ -800,15 +1142,11 @@ export default class App extends Component {
                 this.state.billingAddressLine,
                 (text) => this.setState({ billingAddressLine: text })
               )}
-              {this.renderInputField(
-                'City',
-                this.state.billingCity,
-                (text) => this.setState({ billingCity: text })
+              {this.renderInputField('City', this.state.billingCity, (text) =>
+                this.setState({ billingCity: text })
               )}
-              {this.renderInputField(
-                'State',
-                this.state.billingState,
-                (text) => this.setState({ billingState: text })
+              {this.renderInputField('State', this.state.billingState, (text) =>
+                this.setState({ billingState: text })
               )}
               {this.renderInputField(
                 'Country Code',
@@ -829,10 +1167,8 @@ export default class App extends Component {
             this.state.showShippingDetails,
             (value) => this.setState({ showShippingDetails: value }),
             <>
-              {this.renderInputField(
-                'Name',
-                this.state.shippingName,
-                (text) => this.setState({ shippingName: text })
+              {this.renderInputField('Name', this.state.shippingName, (text) =>
+                this.setState({ shippingName: text })
               )}
               {this.renderInputField(
                 'Email',
@@ -853,10 +1189,8 @@ export default class App extends Component {
                 this.state.shippingAddressLine,
                 (text) => this.setState({ shippingAddressLine: text })
               )}
-              {this.renderInputField(
-                'City',
-                this.state.shippingCity,
-                (text) => this.setState({ shippingCity: text })
+              {this.renderInputField('City', this.state.shippingCity, (text) =>
+                this.setState({ shippingCity: text })
               )}
               {this.renderInputField(
                 'State',
@@ -879,7 +1213,10 @@ export default class App extends Component {
           {/* Payment Buttons */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-              style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={() => this.onPressPay()}
               disabled={this.state.isLoading}
             >
@@ -891,7 +1228,10 @@ export default class App extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={() => this.onPressTokenizedPayment()}
               disabled={this.state.isLoading}
             >
@@ -899,7 +1239,10 @@ export default class App extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={() => this.onPress3DsPayment()}
               disabled={this.state.isLoading}
             >
@@ -907,7 +1250,10 @@ export default class App extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={() => this.onPressSavedCardPayment()}
               disabled={this.state.isLoading}
             >
@@ -916,7 +1262,10 @@ export default class App extends Component {
 
             {Platform.OS === 'ios' && (
               <TouchableOpacity
-                style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+                style={[
+                  styles.paymentButton,
+                  this.state.isLoading && styles.buttonDisabled,
+                ]}
                 onPress={() => this.onPressApplePay()}
                 disabled={this.state.isLoading}
               >
@@ -925,7 +1274,10 @@ export default class App extends Component {
             )}
 
             <TouchableOpacity
-              style={[styles.paymentButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={() => this.onPressSTCPay()}
               disabled={this.state.isLoading}
             >
@@ -933,7 +1285,11 @@ export default class App extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[styles.paymentButton, styles.cancelButton, this.state.isLoading && styles.buttonDisabled]}
+              style={[
+                styles.paymentButton,
+                styles.cancelButton,
+                this.state.isLoading && styles.buttonDisabled,
+              ]}
               onPress={async () => {
                 console.log('Cancel payment');
                 setTimeout(() => {
@@ -1206,5 +1562,19 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     letterSpacing: 0.5,
+  },
+  switchContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+    paddingVertical: 8,
+  },
+  switchLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: '#424242',
+    flex: 1,
+    marginRight: 12,
   },
 });
