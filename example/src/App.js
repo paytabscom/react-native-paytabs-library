@@ -13,7 +13,6 @@ import {
   Platform,
   StyleSheet,
   Text,
-  Button,
   View,
   ScrollView,
   TextInput,
@@ -29,11 +28,9 @@ import {
   PaymentSDKBillingDetails,
   PaymentSDKShippingDetails,
   PaymentSDKSavedCardInfo,
-  PaymentSDKCardDiscount,
   PaymentSDKNetworks,
-  PaymentSDKCardApproval,
 } from '@paytabs/react-native-paytabs';
-import { PaymentSDKConstants, PaymentSDKTheme } from '../../lib/module';
+import { PaymentSDKConstants } from '../../lib/module';
 
 const selectedNetworks = [
   PaymentSDKNetworks.VISA,
@@ -347,7 +344,7 @@ export default class App extends Component {
     configuration.merchantName = this.state.merchantName.trim();
     configuration.amount = parseFloat(this.state.amount) || 0;
     configuration.screenTitle = this.state.screenTitle;
-    configuration.expiryTime = parseInt(this.state.expiryTime) || 0;
+    configuration.expiryTime = parseInt(this.state.expiryTime, 10) || 0;
 
     // Billing Details - Only add if enabled
     if (this.state.showBillingDetails) {
