@@ -16,8 +16,9 @@
   "devDependencies": {
     "@babel/core": "^7.25.0",
     "@babel/runtime": "^7.25.0",
-    "babel-plugin-module-resolver": "^5.0.0",
     "@react-native/babel-preset": "0.79.2",
-    "@react-native/metro-config": "0.79.2"
+    "@react-native/metro-config": "0.79.2",
+    "babel-plugin-module-resolver": "^5.0.0",
+    "metro-minify-terser": "0.82.5"
   }
 }

@@ -203,12 +203,12 @@ class RNPaymentManager: NSObject {
             configuration.tokeniseType = type
         }
         if let tokenFormat = dictionary["tokenFormat"] as? String,
-           let type = TokenFormat.getType(type: tokenFormat) {
+           let type = TokenFormat(rawValue: tokenFormat) {
             configuration.tokenFormat = type
         }
 
         if let transactionType = dictionary["transactionType"] as? String {
-            configuration.transactionType = TransactionType.init(rawValue: transactionType) ?? .sale
+            configuration.transactionType = TransactionType(rawValue: transactionType) ?? .sale
         }
 
         if let themeDictionary = dictionary["theme"] as? [String: Any],
@@ -246,11 +246,83 @@ class RNPaymentManager: NSObject {
     private func generatePaymentNetworks(paymentsArray: [String]) -> [PKPaymentNetwork] {
         var networks = [PKPaymentNetwork]()
         for paymentNetwork in paymentsArray {
-            if let network = PKPaymentNetwork.fromString(paymentNetwork) {
+            let network = mapPaymentNetwork(paymentNetwork: paymentNetwork)
+            if let network = network {
                 networks.append(network)
             }
         }
         return networks
+    }
+
+    private func mapPaymentNetwork(paymentNetwork: String) -> PKPaymentNetwork? {
+        switch paymentNetwork.lowercased() {
+        case "amex":
+            return .amex
+        case "cartesbancaires":
+            return .cartesBancaires
+        case "chinaunionpay":
+            return .chinaUnionPay
+        case "discover":
+            return .discover
+        case "eftnpos":
+            if #available(iOS 12.0, *) {
+                return .eftpos
+            }
+            return nil
+        case "electron":
+            if #available(iOS 12.0, *) {
+                return .electron
+            }
+            return nil
+        case "elo":
+            if #available(iOS 12.1.1, *) {
+                return .elo
+            }
+            return nil
+        case "idcredit":
+            return .idCredit
+        case "interac":
+            return .interac
+        case "jcb":
+            return .JCB
+        case "mada":
+            if #available(iOS 10.3, *) {
+                return .mada
+            }
+            return nil
+        case "maestro":
+            if #available(iOS 12.0, *) {
+                return .maestro
+            }
+            return nil
+        case "mastercard":
+            return .masterCard
+        case "privateLabel":
+            return .privateLabel
+        case "quicpay":
+            return .quicPay
+        case "suica":
+            return .suica
+        case "visa":
+            return .visa
+        case "vPay":
+            if #available(iOS 12.0, *) {
+                return .vPay
+            }
+            return nil
+        case "barcode":
+            if #available(iOS 14.0, *) {
+                return .barcode
+            }
+            return nil
+        case "girocard":
+            if #available(iOS 14.0, *) {
+                return .girocard
+            }
+            return nil
+        default:
+            return nil
+        }
     }
 
     private func generateSavedCardInfo(dictionary: [String: Any]) -> PaymentSDKSavedCardInfo? {
@@ -393,7 +465,7 @@ class RNPaymentManager: NSObject {
     private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
         var apms = [AlternativePaymentMethod]()
         for apmValue in apmsArray {
-            if let apm = AlternativePaymentMethod.init(rawValue: apmValue) {
+            if let apm = AlternativePaymentMethod(rawValue: apmValue) {
                 apms.append(apm)
             }
         }
@@ -415,7 +487,7 @@ class RNPaymentManager: NSObject {
         default:
             break
         }
-        return TokeniseType.getType(type: type)
+        return TokeniseType(rawValue: type)
     }
 }
 

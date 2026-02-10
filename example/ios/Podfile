@@ -18,6 +18,8 @@ target 'PaymentsdkExample' do
     :hermes_enabled => true
   )
 
+  pod 'react-native-paymentsdk', :path => '../node_modules/@paytabs/react-native-paytabs'
+
   target 'PaymentsdkExampleTests' do
     inherit! :complete
     # Pods for testing
