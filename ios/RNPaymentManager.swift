@@ -150,12 +150,10 @@ class RNPaymentManager: NSObject {
         self.resolve = resolve
         self.reject = reject
 
-        PaymentManager.cancelPayment { [weak self ] didCancel in
+        PaymentManager.cancelPayment { [weak self] (didCancel: Bool?) in
             guard let self = self else { return }
-
             resolve(["Event": "CancelPayment"])
             self.resolve = nil
-
         }
 
     }
@@ -203,12 +201,12 @@ class RNPaymentManager: NSObject {
             configuration.tokeniseType = type
         }
         if let tokenFormat = dictionary["tokenFormat"] as? String,
-           let type = TokenFormat(rawValue: tokenFormat) {
+           let type = mapTokenFormat(tokenFormat) {
             configuration.tokenFormat = type
         }
 
         if let transactionType = dictionary["transactionType"] as? String {
-            configuration.transactionType = TransactionType(rawValue: transactionType) ?? .sale
+            configuration.transactionType = mapTransactionType(transactionType)
         }
 
         if let themeDictionary = dictionary["theme"] as? [String: Any],
@@ -465,29 +463,67 @@ class RNPaymentManager: NSObject {
     private func generateAlternativePaymentMethods(apmsArray: [String]) -> [AlternativePaymentMethod] {
         var apms = [AlternativePaymentMethod]()
         for apmValue in apmsArray {
-            if let apm = AlternativePaymentMethod(rawValue: apmValue) {
+            if let apm = mapAlternativePaymentMethod(apmValue) {
                 apms.append(apm)
             }
         }
         return apms
     }
 
-    // to be fixed in next versions
-    private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
-        var type = 0
-        switch tokeniseType {
-        case "userOptionalDefaultOn":
-            type = 4
-        case "userOptional":
-            type = 3
-        case "userMandatory":
-            type = 2
-        case "merchantMandatory":
-            type = 1
-        default:
-            break
+    /// Map string to TokenFormat without using rawValue (SDK 6.6.42 compatibility).
+    private func mapTokenFormat(_ value: String) -> TokenFormat? {
+        switch value.lowercased() {
+        case "1", "none": return TokenFormat.none
+        case "2", "hex32": return .hex32
+        case "3", "alphanum20": return .alphaNum20
+        case "4", "digit22": return .digit22
+        case "5", "digit16": return .digit16
+        case "6", "alphanum32": return .alphaNum32
+        default: return nil
         }
-        return TokeniseType(rawValue: type)
+    }
+
+    /// Map string to TransactionType without using rawValue (SDK 6.6.42 compatibility).
+    private func mapTransactionType(_ value: String) -> TransactionType {
+        switch value.lowercased() {
+        case "auth", "authorize": return .authorize
+        case "register": return .register
+        case "sale": return .sale
+        default: return .sale
+        }
+    }
+
+    /// Map string to AlternativePaymentMethod without using rawValue (SDK 6.6.42 compatibility).
+    private func mapAlternativePaymentMethod(_ value: String) -> AlternativePaymentMethod? {
+        switch value.lowercased() {
+        case "unionpay", "union_pay": return .unionPay
+        case "stcpay", "stc_pay": return .stcPay
+        case "valu": return .valu
+        case "meezaqr", "meeza_qr": return .meezaQR
+        case "omannet", "oman_net": return .omannet
+        case "knetcredit", "knet_credit": return .knetCredit
+        case "knetdebit", "knet_debit": return .knetDebit
+        case "fawry": return .fawry
+        case "urpay": return .URPay
+        case "aman": return .aman
+        case "applepay", "apple_pay": return .applePay
+        case "souhoola": return .souhoola
+        case "tabby": return .Tabby
+        case "tamara": return .tamara
+        case "tru": return .tru
+        case "forsa": return .forsa
+        default: return nil
+        }
+    }
+
+    /// Map string to TokeniseType by case name (SDK 6.6.42 compatibility).
+    private func mapTokeiseType(tokeniseType: String) -> TokeniseType? {
+        switch tokeniseType {
+        case "userOptionalDefaultOn", "userOptional", "userOptinoal": return .userOptinoal
+        case "userMandatory": return .userMandatory
+        case "merchantMandatory": return .merchantMandatory
+        default: return nil
+        }
     }
 }
 

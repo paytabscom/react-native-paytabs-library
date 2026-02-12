@@ -29,8 +29,8 @@ import {
   PaymentSDKShippingDetails,
   PaymentSDKSavedCardInfo,
   PaymentSDKNetworks,
+  PaymentSDKConstants,
 } from '@paytabs/react-native-paytabs';
-import { PaymentSDKConstants } from '../../lib/module';
 
 const selectedNetworks = [
   PaymentSDKNetworks.VISA,
