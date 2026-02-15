@@ -8,7 +8,7 @@ PODS:
   - hermes-engine (0.79.2):
     - hermes-engine/Pre-built (= 0.79.2)
   - hermes-engine/Pre-built (0.79.2)
-  - PayTabsSDK (6.6.42)
+  - PayTabsSDK (6.6.45)
   - RCT-Folly (2024.11.18.00):
     - boost
     - DoubleConversion
@@ -1333,8 +1333,8 @@ PODS:
     - React-jsiexecutor
     - React-RCTFBReactNativeSpec
     - ReactCommon/turbomodule/core
-  - react-native-paymentsdk (2.8.3):
-    - PayTabsSDK (= 6.6.42)
+  - react-native-paymentsdk (2.8.2):
+    - PayTabsSDK (= 6.6.45)
     - React
   - React-NativeModulesApple (0.79.2):
     - glog
@@ -1894,7 +1894,7 @@ SPEC CHECKSUMS:
   fmt: a40bb5bd0294ea969aaaba240a927bd33d878cdd
   glog: 5683914934d5b6e4240e497e0f4a3b42d1854183
   hermes-engine: 314be5250afa5692b57b4dd1705959e1973a8ebe
-  PayTabsSDK: 587ee8521b5ae178ea7a787a2a93073813e7a864
+  PayTabsSDK: df5e1c93350e47156a636b928f2c9640d3bc6fed
   RCT-Folly: e78785aa9ba2ed998ea4151e314036f6c49e6d82
   RCTDeprecation: 83ffb90c23ee5cea353bd32008a7bca100908f8c
   RCTRequired: eb7c0aba998009f47a540bec9e9d69a54f68136e
@@ -1926,7 +1926,7 @@ SPEC CHECKSUMS:
   React-logger: 8edfcedc100544791cd82692ca5a574240a16219
   React-Mapbuffer: c3f4b608e4a59dd2f6a416ef4d47a14400194468
   React-microtasksnativemodule: 054f34e9b82f02bd40f09cebd4083828b5b2beb6
-  react-native-paymentsdk: 8ee49d78fb196c5b785c0ca3c88b2a5be2fb9510
+  react-native-paymentsdk: d7293e8d01545f4a554ff9067adeaf600ad780e7
   React-NativeModulesApple: 2c4377e139522c3d73f5df582e4f051a838ff25e
   React-oscompat: ef5df1c734f19b8003e149317d041b8ce1f7d29c
   React-perflogger: 9a151e0b4c933c9205fd648c246506a83f31395d
