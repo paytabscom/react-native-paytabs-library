@@ -11,6 +11,8 @@ jsconfig.json
 
 # Xcode
 #
+# Local Xcode env (Node path etc.) - must not be committed (machine-specific)
+**/.xcode.env.local
 build/
 *.pbxuser
 !default.pbxuser
