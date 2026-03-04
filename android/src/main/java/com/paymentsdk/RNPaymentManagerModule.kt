@@ -2,6 +2,7 @@ package com.paymentsdk
 
 import android.util.Log
 import com.facebook.react.bridge.*
+import com.facebook.react.bridge.UiThreadUtil
 import com.google.gson.Gson
 import com.payment.paymentsdk.PaymentSdkActivity
 import com.payment.paymentsdk.PaymentSdkConfigBuilder
@@ -38,7 +39,9 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
           configBuilder.setMerchantIcon(iconUri)
         }
       }
-      startPayment(paymentDetails, configBuilder)
+      runOnUiThreadAndStartPayment {
+        startPayment(paymentDetails, configBuilder)
+      }
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
@@ -62,7 +65,9 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
           configBuilder.setMerchantIcon(iconUri)
         }
       }
-      startTokenizedPayment(paymentDetails, token, transactionRef, configBuilder)
+      runOnUiThreadAndStartPayment {
+        startTokenizedPayment(paymentDetails, token, transactionRef, configBuilder)
+      }
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
@@ -88,7 +93,9 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
           configBuilder.setMerchantIcon(iconUri)
         }
       }
-      start3DsPayment(paymentDetails, paymentSDKSavedCardInfo, token, configBuilder)
+      runOnUiThreadAndStartPayment {
+        start3DsPayment(paymentDetails, paymentSDKSavedCardInfo, token, configBuilder)
+      }
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
@@ -111,24 +118,52 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
           configBuilder.setMerchantIcon(iconUri)
         }
       }
-      startSavedCardPayment(paymentDetails, support3DS, configBuilder)
+      runOnUiThreadAndStartPayment {
+        startSavedCardPayment(paymentDetails, support3DS, configBuilder)
+      }
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
   }
 
+  /**
+   * Runs the given block on the UI thread. Ensures currentActivity is non-null before starting
+   * payment to avoid crashes when "Pay with Card" is tapped.
+   */
+  private fun runOnUiThreadAndStartPayment(block: () -> Unit) {
+    UiThreadUtil.runOnUiThread(Runnable {
+      val activity = reactContext.currentActivity
+      if (activity == null) {
+        promise?.reject("Error", "Activity is not available. Please try again when the app is in the foreground.", null)
+        return@Runnable
+      }
+      try {
+        block()
+      } catch (e: Throwable) {
+        Log.e(PaymentSDKMODULE, "Payment start failed", e)
+        promise?.reject("Error", e.message ?: "Unknown error", e)
+      }
+    })
+  }
+
   private fun startPayment(paymentDetails: JSONObject, configBuilder: PaymentSdkConfigBuilder) {
-    val samsungToken = paymentDetails.optString("samsungToken")
-    if (samsungToken.isNotEmpty()) PaymentSdkActivity.startSamsungPayment(
-      reactContext.currentActivity!!,
-      configBuilder.build(),
-      samsungToken,
-      this
-    ) else PaymentSdkActivity.startCardPayment(
-      reactContext.currentActivity!!,
-      configBuilder.build(),
-      this
-    )
+    val activity = reactContext.currentActivity
+      ?: run {
+        promise?.reject("Error", "Activity is not available.", null)
+        return
+      }
+    try {
+      val config = configBuilder.build()
+      val samsungToken = paymentDetails.optString("samsungToken")
+      if (samsungToken.isNotEmpty()) {
+        PaymentSdkActivity.startSamsungPayment(activity, config, samsungToken, this)
+      } else {
+        PaymentSdkActivity.startCardPayment(activity, config, this)
+      }
+    } catch (e: Throwable) {
+      Log.e(PaymentSDKMODULE, "startCardPayment failed", e)
+      promise?.reject("Error", e.message ?: "Unknown error", e)
+    }
   }
 
   private fun startTokenizedPayment(
@@ -137,9 +172,12 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     transactionRef: String,
     configBuilder: PaymentSdkConfigBuilder,
   ) {
-    val samsungToken = paymentDetails.optString("samsungToken")
+    val activity = reactContext.currentActivity ?: run {
+      promise?.reject("Error", "Activity is not available.", null)
+      return
+    }
     PaymentSdkActivity.startTokenizedCardPayment(
-      reactContext.currentActivity!!,
+      activity,
       configBuilder.build(),
       token,
       transactionRef,
@@ -153,9 +191,12 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     token: String,
     configBuilder: PaymentSdkConfigBuilder,
   ) {
-    val samsungToken = paymentDetails.optString("samsungToken")
+    val activity = reactContext.currentActivity ?: run {
+      promise?.reject("Error", "Activity is not available.", null)
+      return
+    }
     PaymentSdkActivity.start3DSecureTokenizedCardPayment(
-      reactContext.currentActivity!!,
+      activity,
       configBuilder.build(),
       savedCardInfo,
       token,
@@ -168,10 +209,12 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     support3DS: Boolean,
     configBuilder: PaymentSdkConfigBuilder,
   ) {
-    val samsungToken = paymentDetails.optString("samsungToken")
-    // Use alternative method for PayTabs SDK 6.8.1
+    val activity = reactContext.currentActivity ?: run {
+      promise?.reject("Error", "Activity is not available.", null)
+      return
+    }
     PaymentSdkActivity.startCardPayment(
-      reactContext.currentActivity!!,
+      activity,
       configBuilder.build(),
       this
     )
@@ -183,11 +226,22 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     try {
       val paymentDetails = JSONObject(arguments)
       val configData = createConfiguration(paymentDetails)
-      PaymentSdkActivity.startAlternativePaymentMethods(
-        reactContext.currentActivity!!,
-        configData.build(),
-        this
-      )
+      UiThreadUtil.runOnUiThread(Runnable {
+        val activity = reactContext.currentActivity
+        if (activity == null) {
+          promise.reject("Error", "Activity is not available. Please try again when the app is in the foreground.", null)
+          return@Runnable
+        }
+        try {
+          PaymentSdkActivity.startAlternativePaymentMethods(
+            activity,
+            configData.build(),
+            this@RNPaymentManagerModule
+          )
+        } catch (e: Exception) {
+          promise.reject("Error", e.message ?: "Unknown error", e)
+        }
+      })
     } catch (e: Exception) {
       promise.reject("Error", e.message, Throwable(e.message))
     }
@@ -260,7 +314,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     } else {
       null
     }
-    return PaymentSdkConfigBuilder(
+    var builder = PaymentSdkConfigBuilder(
       profileId,
       serverKey,
       clientKey,
@@ -269,7 +323,13 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     ).setCartDescription(cartDesc).setLanguageCode(locale).setBillingData(billingData)
       .setMerchantCountryCode(paymentDetails.optString("merchantCountryCode"))
       .setShippingData(shippingData).setCartId(orderId).setTokenise(tokeniseType, tokenFormat)
-      .setTokenisationData(token, transRef)
+    if (token.isNotBlank() || transRef.isNotBlank()) {
+      builder = builder.setTokenisationData(
+        token.ifBlank { null },
+        transRef.ifBlank { null }
+      )
+    }
+    return builder
       .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
       .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
       .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
