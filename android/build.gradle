@@ -140,7 +140,7 @@ dependencies {
   implementation "com.facebook.react:react-native:+"
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
   implementation 'com.google.code.gson:gson:2.10.1'
-  implementation('com.paytabs:payment-sdk:6.8.5') {
+  implementation('com.paytabs:payment-sdk:6.8.8') {
     exclude group: 'androidx.core', module: 'core'
     exclude group: 'androidx.core', module: 'core-ktx'
   }
@@ -149,7 +149,7 @@ dependencies {
 
 configurations.all {
   resolutionStrategy {
-    // Use compatible AndroidX versions for PayTabs SDK 6.8.5
+    // Use compatible AndroidX versions for PayTabs SDK 6.8.8
     force 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
     force 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     force 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
