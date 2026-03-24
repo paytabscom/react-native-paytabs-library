@@ -1,6 +1,6 @@
 # react-native-paytabs
 
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.8.9-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.9.0-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you
 integrate with PayTabs seamlessly.
@@ -9,16 +9,19 @@ Library Support:
 
 * [x] iOS
 * [x] Android
+* [x] Android 16 (SDK 36) with Edge-to-Edge support
 
 Library Version:
 
 * [x] React Version: 18.1.0
 * [x] React-Native Version: 0.70.6
+* [x] PayTabs Android SDK: 6.8.8
+* [x] Target SDK: 36 (Android 16)
 
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.8.9 --save
+$ npm install @paytabs/react-native-paytabs@2.9.0 --save
 ```
 
 ### Expo
@@ -40,6 +43,20 @@ expo install @paytabs/react-native-paytabs
       }
   }
   ```
+
+  **Android 16 Edge-to-Edge Support:**
+
+  This library now supports Android 16 (SDK 36) with mandatory edge-to-edge enforcement. The library has been updated to use:
+  * PayTabs SDK 6.8.8 with Android 16 compatible dependencies
+  * androidx.activity 1.13.0 for edge-to-edge compatibility
+  * compileSdk 36 and targetSdk 36
+
+  If you experience any edge-to-edge related issues, ensure your app's `build.gradle` uses at least:
+  ```gradle
+  compileSdkVersion 36
+  targetSdkVersion 36
+  ```
+
 * iOS
 
   * Add `libswiftWebKit.tbd` to your **Link Binary With Libraries**
