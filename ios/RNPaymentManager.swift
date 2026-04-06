@@ -15,12 +15,18 @@ class RNPaymentManager: NSObject {
     var resolve: RCTPromiseResolveBlock?
     var reject: RCTPromiseRejectBlock?
 
+    // Track if callback has been invoked to prevent duplicate calls
+    private var hasInvokedCallback: Bool = false
+    private var lastTransactionReference: String?
+
     @objc(startCardPayment:withResolver:withRejecter:)
     func startCardPayment(paymentDetails: NSString,
                           resolve: @escaping RCTPromiseResolveBlock,
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -42,6 +48,8 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -62,6 +70,8 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -85,6 +95,8 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         let savedCardData = Data((savedCardInfo as String).utf8)
@@ -112,6 +124,8 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -131,6 +145,8 @@ class RNPaymentManager: NSObject {
                           reject: @escaping RCTPromiseRejectBlock) -> Void {
         self.resolve = resolve
         self.reject = reject
+        self.hasInvokedCallback = false
+        self.lastTransactionReference = nil
 
         let data = Data((paymentDetails as String).utf8)
         do {
@@ -529,6 +545,20 @@ class RNPaymentManager: NSObject {
 
 extension RNPaymentManager: PaymentManagerDelegate {
     func paymentManager(didFinishTransaction transactionDetails: PaymentSDKTransactionDetails?, error: Error?) {
+        // Prevent duplicate callbacks for the same transaction
+        if hasInvokedCallback {
+            let currentRef = transactionDetails?.transactionReference
+            // If both references are the same (including both being nil), it's a duplicate
+            if currentRef == lastTransactionReference {
+                print("[PayTabs] Duplicate callback detected. Ignoring.")
+                return
+            }
+        }
+
+        // Mark that we've invoked the callback
+        hasInvokedCallback = true
+        lastTransactionReference = transactionDetails?.transactionReference
+
         if let error = error, let reject = reject {
             reject("Error", error.localizedDescription, error)
             self.reject = nil
@@ -551,6 +581,14 @@ extension RNPaymentManager: PaymentManagerDelegate {
     }
 
     func paymentManager(didCancelPayment error: Error?) {
+        // Prevent duplicate cancel callbacks
+        if hasInvokedCallback {
+            print("[PayTabs] Duplicate cancel callback detected. Ignoring.")
+            return
+        }
+
+        hasInvokedCallback = true
+
         if let resolve = resolve {
             resolve(["Event": "CancelPayment"])
             self.resolve = nil
