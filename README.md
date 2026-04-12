@@ -153,9 +153,9 @@ Rules:
 
 - Omit the property (or use an empty string) to keep the SDK default host and regional routing for your **`merchantCountryCode`**.
 - Use only a URL PayTabs has approved for your integration. The native SDK expects a valid base URL for its HTTP client (a trailing slash is optional).
-- **iOS:** the public PayTabs iOS SDK selects the payment host from **`merchantCountryCode`** only. This React Native field is not applied on iOS until PayTabs exposes an equivalent on the native configuration type.
+- **iOS:** the PayTabs iOS SDK normally selects the payment host from **`merchantCountryCode`** only. This bridge additionally forwards **`paymentApiBaseUrl`** at runtime **only if** the linked `PayTabsSDK` implements `setPaymentApiBaseUrl:` on `PaymentSDKConfiguration` (forward compatibility). Otherwise the key is ignored with no error.
 
-The Android bridge forwards **`paymentApiBaseUrl`** to the native builder when the installed **`com.paytabs:payment-sdk`** includes **`setPaymentApiBaseUrl`**. If your SDK build does not yet ship that API, the value is ignored and a warning is written to the Android log.
+The Android bridge forwards **`paymentApiBaseUrl`** to the native builder when the installed **`com.paytabs:payment-sdk`** includes **`setPaymentApiBaseUrl`**. If your SDK build does not yet ship that API, the value is ignored and a warning is written to the Android log. The JSON value **must be a string** (not a number or object).
 
 You can dismiss the payment screen if there is no transaction in progress.
 

@@ -186,6 +186,19 @@ class RNPaymentManager: NSObject {
         }
     }
 
+    /// Forwards `paymentApiBaseUrl` only when the native `PaymentSDKConfiguration` implements `setPaymentApiBaseUrl:` (future SDKs). Unknown JSON types are ignored.
+    private func applyOptionalPaymentApiBaseUrl(from dictionary: [String: Any], to configuration: PaymentSDKConfiguration) {
+        guard let raw = dictionary["paymentApiBaseUrl"] as? String else {
+            return
+        }
+        let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        guard let cfg = configuration as? NSObject else { return }
+        let sel = NSSelectorFromString("setPaymentApiBaseUrl:")
+        guard cfg.responds(to: sel) else { return }
+        cfg.perform(sel, with: trimmed)
+    }
+
     private func generateConfiguration(dictionary: [String: Any]) -> PaymentSDKConfiguration {
         let configuration = PaymentSDKConfiguration()
         configuration.profileID = dictionary["profileID"] as? String ?? ""
@@ -198,6 +211,7 @@ class RNPaymentManager: NSObject {
         configuration.merchantName = dictionary["merchantName"] as? String ?? ""
         configuration.screenTitle = dictionary["screenTitle"] as? String
         configuration.merchantCountryCode = dictionary["merchantCountryCode"] as? String ?? ""
+        applyOptionalPaymentApiBaseUrl(from: dictionary, to: configuration)
         configuration.merchantIdentifier = dictionary["merchantIdentifier"] as? String
         configuration.simplifyApplePayValidation = dictionary["simplifyApplePayValidation"] as? Bool ?? false
         configuration.languageCode = dictionary["languageCode"] as? String

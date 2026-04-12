@@ -259,6 +259,23 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
   }
 
   /**
+   * Reads [paymentApiBaseUrl] only when the JSON value is a string (avoids accidental numbers/objects).
+   */
+  private fun optionalPaymentApiBaseUrlString(paymentDetails: JSONObject): String? {
+    if (paymentDetails.isNull("paymentApiBaseUrl")) return null
+    return when (val v = paymentDetails.opt("paymentApiBaseUrl")) {
+      is String -> v.trim().takeIf { it.isNotEmpty() }
+      else -> {
+        Log.w(
+          PaymentSDKMODULE,
+          "paymentApiBaseUrl must be a JSON string; ignoring type ${v?.javaClass?.simpleName}",
+        )
+        null
+      }
+    }
+  }
+
+  /**
    * Applies [paymentApiBaseUrl] when the installed PayTabs Android SDK exposes
    * [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]. Older published artifacts omit this API;
    * reflection keeps this module compiling while still supporting newer SDKs.
@@ -267,15 +284,14 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     builder: PaymentSdkConfigBuilder,
     paymentDetails: JSONObject,
   ): PaymentSdkConfigBuilder {
-    val url = paymentDetails.optString("paymentApiBaseUrl", "").trim()
-    if (url.isEmpty()) return builder
+    val url = optionalPaymentApiBaseUrlString(paymentDetails) ?: return builder
     return try {
       val method = builder.javaClass.getMethod("setPaymentApiBaseUrl", String::class.java)
       method.invoke(builder, url) as PaymentSdkConfigBuilder
-    } catch (e: ReflectiveOperationException) {
+    } catch (e: Exception) {
       Log.w(
         PaymentSDKMODULE,
-        "paymentApiBaseUrl is set but this payment-sdk version has no setPaymentApiBaseUrl: ${e.message}",
+        "paymentApiBaseUrl not applied (${e.javaClass.simpleName}): ${e.message}",
       )
       builder
     }

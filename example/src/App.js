@@ -236,6 +236,15 @@ export default class App extends Component {
     if (configuration.enableZeroContacts !== undefined) {
       configJson.enableZeroContacts = configuration.enableZeroContacts;
     }
+    if (
+      configuration.paymentApiBaseUrl != null &&
+      configuration.paymentApiBaseUrl !== undefined &&
+      String(configuration.paymentApiBaseUrl).trim() !== ''
+    ) {
+      configJson.paymentApiBaseUrl = String(
+        configuration.paymentApiBaseUrl
+      ).trim();
+    }
 
     // Add billing details if present
     if (configuration.billingDetails) {
