@@ -139,6 +139,24 @@ configuration.expiryTime = 120;
 
 ```
 
+### Payment API base URL (Android)
+
+Use the same **`merchantCountryCode`** on both platforms so the default PayTabs payment hosts stay aligned with your account region.
+
+When PayTabs gives you a **dedicated payment API origin**, you can pass it on **Android** via the configuration object (included in the JSON you send to `startCardPayment` and other Android entry points):
+
+```javascript
+configuration.paymentApiBaseUrl = "https://your-origin.example/";
+```
+
+Rules:
+
+- Omit the property (or use an empty string) to keep the SDK default host and regional routing for your **`merchantCountryCode`**.
+- Use only a URL PayTabs has approved for your integration. The native SDK expects a valid base URL for its HTTP client (a trailing slash is optional).
+- **iOS:** the public PayTabs iOS SDK selects the payment host from **`merchantCountryCode`** only. This React Native field is not applied on iOS until PayTabs exposes an equivalent on the native configuration type.
+
+The Android bridge forwards **`paymentApiBaseUrl`** to the native builder when the installed **`com.paytabs:payment-sdk`** includes **`setPaymentApiBaseUrl`**. If your SDK build does not yet ship that API, the value is ignored and a warning is written to the Android log.
+
 You can dismiss the payment screen if there is no transaction in progress.
 
 ```javascript

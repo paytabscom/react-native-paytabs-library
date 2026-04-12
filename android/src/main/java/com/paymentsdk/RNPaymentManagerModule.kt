@@ -258,6 +258,29 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     }
   }
 
+  /**
+   * Applies [paymentApiBaseUrl] when the installed PayTabs Android SDK exposes
+   * [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]. Older published artifacts omit this API;
+   * reflection keeps this module compiling while still supporting newer SDKs.
+   */
+  private fun applyPaymentApiBaseUrlIfPresent(
+    builder: PaymentSdkConfigBuilder,
+    paymentDetails: JSONObject,
+  ): PaymentSdkConfigBuilder {
+    val url = paymentDetails.optString("paymentApiBaseUrl", "").trim()
+    if (url.isEmpty()) return builder
+    return try {
+      val method = builder.javaClass.getMethod("setPaymentApiBaseUrl", String::class.java)
+      method.invoke(builder, url) as PaymentSdkConfigBuilder
+    } catch (e: ReflectiveOperationException) {
+      Log.w(
+        PaymentSDKMODULE,
+        "paymentApiBaseUrl is set but this payment-sdk version has no setPaymentApiBaseUrl: ${e.message}",
+      )
+      builder
+    }
+  }
+
   private fun createConfiguration(paymentDetails: JSONObject): PaymentSdkConfigBuilder {
     val profileId = paymentDetails.optString("profileID")
     val serverKey = paymentDetails.optString("serverKey")
@@ -329,6 +352,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
         transRef.ifBlank { null }
       )
     }
+    builder = applyPaymentApiBaseUrlIfPresent(builder, paymentDetails)
     return builder
       .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
       .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))

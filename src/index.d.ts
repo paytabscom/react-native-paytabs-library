@@ -64,6 +64,8 @@ declare module '@paytabs/react-native-paytabs' {
     alternativePaymentMethods?: Array<string>;
     cardDiscounts?: Array<PaymentSDKCardDiscount>;
     cardApproval?: PaymentSDKCardApproval;
+    /** Android only: optional payment API origin when PayTabs provides a dedicated host. Omit for default regional routing. */
+    paymentApiBaseUrl?: string;
   }
 
   export class PaymentSDKBillingDetails {
