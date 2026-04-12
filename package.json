@@ -1,6 +1,6 @@
 {
   "name": "@paytabs/react-native-paytabs",
-  "version": "2.8.10",
+  "version": "2.8.11",
   "description": "Paytabs React-Native Library",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
