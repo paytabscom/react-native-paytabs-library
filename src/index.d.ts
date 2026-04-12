@@ -66,7 +66,7 @@ declare module '@paytabs/react-native-paytabs' {
     cardApproval?: PaymentSDKCardApproval;
     /**
      * Optional payment API origin when PayTabs provides a dedicated host (omit for default regional routing).
-     * Android: applied via native builder when `setPaymentApiBaseUrl` exists on the linked SDK.
+     * Android: `PaymentSdkConfigBuilder.setPaymentApiBaseUrl` (payment-sdk 6.8.10+).
      * iOS: applied only if the linked PayTabsSDK exposes `setPaymentApiBaseUrl:` on `PaymentSDKConfiguration`.
      */
     paymentApiBaseUrl?: string;

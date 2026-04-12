@@ -57,7 +57,7 @@ dependencies {
 
 configurations.all {
   resolutionStrategy {
-    // Use compatible AndroidX versions for PayTabs SDK 6.8.8 with Android 16 support
+    // Use compatible AndroidX versions for PayTabs SDK 6.8.10 with Android 16 support
     force 'androidx.activity:activity:1.13.0'
     force 'androidx.activity:activity-ktx:1.13.0'
     force 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'

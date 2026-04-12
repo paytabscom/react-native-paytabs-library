@@ -276,25 +276,15 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
   }
 
   /**
-   * Applies [paymentApiBaseUrl] when the installed PayTabs Android SDK exposes
-   * [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]. Older published artifacts omit this API;
-   * reflection keeps this module compiling while still supporting newer SDKs.
+   * Applies optional [paymentApiBaseUrl] via [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]
+   * (supported in PayTabs Android payment-sdk 6.8.10+).
    */
   private fun applyPaymentApiBaseUrlIfPresent(
     builder: PaymentSdkConfigBuilder,
     paymentDetails: JSONObject,
   ): PaymentSdkConfigBuilder {
     val url = optionalPaymentApiBaseUrlString(paymentDetails) ?: return builder
-    return try {
-      val method = builder.javaClass.getMethod("setPaymentApiBaseUrl", String::class.java)
-      method.invoke(builder, url) as PaymentSdkConfigBuilder
-    } catch (e: Exception) {
-      Log.w(
-        PaymentSDKMODULE,
-        "paymentApiBaseUrl not applied (${e.javaClass.simpleName}): ${e.message}",
-      )
-      builder
-    }
+    return builder.setPaymentApiBaseUrl(url)
   }
 
   private fun createConfiguration(paymentDetails: JSONObject): PaymentSdkConfigBuilder {

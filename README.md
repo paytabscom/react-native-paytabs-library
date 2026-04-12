@@ -15,7 +15,8 @@ Library Version:
 
 * [x] React Version: 18.1.0
 * [x] React-Native Version: 0.70.6
-* [x] PayTabs Android SDK: 6.8.8
+* [x] PayTabs Android SDK: 6.8.10
+* [x] PayTabs iOS SDK (CocoaPods): 6.6.50
 * [x] Target SDK: 36 (Android 16)
 
 # Installation
@@ -47,7 +48,7 @@ expo install @paytabs/react-native-paytabs
   **Android 16 Edge-to-Edge Support:**
 
   This library now supports Android 16 (SDK 36) with mandatory edge-to-edge enforcement. The library has been updated to use:
-  * PayTabs SDK 6.8.8 with Android 16 compatible dependencies
+  * PayTabs SDK 6.8.10 with Android 16 compatible dependencies
   * androidx.activity 1.13.0 for edge-to-edge compatibility
   * compileSdk 36 and targetSdk 36
 
@@ -155,7 +156,7 @@ Rules:
 - Use only a URL PayTabs has approved for your integration. The native SDK expects a valid base URL for its HTTP client (a trailing slash is optional).
 - **iOS:** the PayTabs iOS SDK normally selects the payment host from **`merchantCountryCode`** only. This bridge additionally forwards **`paymentApiBaseUrl`** at runtime **only if** the linked `PayTabsSDK` implements `setPaymentApiBaseUrl:` on `PaymentSDKConfiguration` (forward compatibility). Otherwise the key is ignored with no error.
 
-The Android bridge forwards **`paymentApiBaseUrl`** to the native builder when the installed **`com.paytabs:payment-sdk`** includes **`setPaymentApiBaseUrl`**. If your SDK build does not yet ship that API, the value is ignored and a warning is written to the Android log. The JSON value **must be a string** (not a number or object).
+The Android bridge forwards **`paymentApiBaseUrl`** to **`PaymentSdkConfigBuilder.setPaymentApiBaseUrl`** (PayTabs Android **payment-sdk 6.8.10+**). The JSON value **must be a string** (not a number or object).
 
 You can dismiss the payment screen if there is no transaction in progress.
 
