@@ -1,6 +1,6 @@
 # react-native-paytabs
 
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.8.11-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.8.12-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you
 integrate with PayTabs seamlessly.
@@ -15,13 +15,14 @@ Library Version:
 
 * [x] React Version: 18.1.0
 * [x] React-Native Version: 0.70.6
-* [x] PayTabs Android SDK: 6.8.8
+* [x] PayTabs Android SDK: 6.8.15
+* [x] PayTabs iOS SDK (CocoaPods): 6.6.59
 * [x] Target SDK: 36 (Android 16)
 
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.8.11 --save
+$ npm install @paytabs/react-native-paytabs@2.8.12 --save
 ```
 
 ### Expo
@@ -47,7 +48,7 @@ expo install @paytabs/react-native-paytabs
   **Android 16 Edge-to-Edge Support:**
 
   This library now supports Android 16 (SDK 36) with mandatory edge-to-edge enforcement. The library has been updated to use:
-  * PayTabs SDK 6.8.8 with Android 16 compatible dependencies
+  * PayTabs SDK 6.8.15 with Android 16 compatible dependencies
   * androidx.activity 1.13.0 for edge-to-edge compatibility
   * compileSdk 36 and targetSdk 36
 
@@ -138,6 +139,19 @@ Options to set expiry timeout for the card payment screen
 configuration.expiryTime = 120;
 
 ```
+
+### Payment API base URL
+
+When PayTabs gives you a dedicated payment API origin, pass it on both platforms:
+
+```javascript
+configuration.paymentApiBaseUrl = "https://your-origin.example/";
+```
+
+- Omit the property (or use an empty string) to keep the SDK default host for your `merchantCountryCode`.
+- Use only a URL PayTabs has approved for your integration.
+- Android: forwarded to `PaymentSdkConfigBuilder.setPaymentApiBaseUrl` (payment-sdk 6.8.10+, currently 6.8.15).
+- iOS: assigned to `PaymentSDKConfiguration.paymentApiBaseUrl` (PayTabsSDK 6.6.50+, currently 6.6.59).
 
 You can dismiss the payment screen if there is no transaction in progress.
 

@@ -258,6 +258,35 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
     }
   }
 
+  /**
+   * Reads [paymentApiBaseUrl] only when the JSON value is a string (avoids accidental numbers/objects).
+   */
+  private fun optionalPaymentApiBaseUrlString(paymentDetails: JSONObject): String? {
+    if (paymentDetails.isNull("paymentApiBaseUrl")) return null
+    return when (val v = paymentDetails.opt("paymentApiBaseUrl")) {
+      is String -> v.trim().takeIf { it.isNotEmpty() }
+      else -> {
+        Log.w(
+          PaymentSDKMODULE,
+          "paymentApiBaseUrl must be a JSON string; ignoring type ${v?.javaClass?.simpleName}",
+        )
+        null
+      }
+    }
+  }
+
+  /**
+   * Applies optional [paymentApiBaseUrl] via [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]
+   * (supported in PayTabs Android payment-sdk 6.8.10+, currently 6.8.15).
+   */
+  private fun applyPaymentApiBaseUrlIfPresent(
+    builder: PaymentSdkConfigBuilder,
+    paymentDetails: JSONObject,
+  ): PaymentSdkConfigBuilder {
+    val url = optionalPaymentApiBaseUrlString(paymentDetails) ?: return builder
+    return builder.setPaymentApiBaseUrl(url)
+  }
+
   private fun createConfiguration(paymentDetails: JSONObject): PaymentSdkConfigBuilder {
     val profileId = paymentDetails.optString("profileID")
     val serverKey = paymentDetails.optString("serverKey")
@@ -329,7 +358,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
         transRef.ifBlank { null }
       )
     }
-    return builder
+    builder = builder
       .hideCardScanner(paymentDetails.optBoolean("hideCardScanner"))
       .showBillingInfo(paymentDetails.optBoolean("showBillingInfo"))
       .showShippingInfo(paymentDetails.optBoolean("showShippingInfo"))
@@ -340,6 +369,8 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       .setCardDiscount(getPaymentSdkCardDiscounts(paymentDetails))
       .setCardApproval(cardApprovalData)
       .setMetadata(getMetadata())
+    builder = applyPaymentApiBaseUrlIfPresent(builder, paymentDetails)
+    return builder
   }
 
   private fun getCardApproval(cardApproval: JSONObject): PaymentSdkCardApproval {
