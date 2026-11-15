@@ -51,6 +51,12 @@ declare module '@paytabs/react-native-paytabs' {
     screenTitle?: string;
     merchantName?: string;
     serverIP?: string;
+    /**
+     * Optional Payment API base URL (use only an origin approved by PayTabs for your integration).
+     * Android: PaymentSdkConfigBuilder.setPaymentApiBaseUrl (payment-sdk 6.8.10+, currently 6.8.15).
+     * iOS: PaymentSDKConfiguration.paymentApiBaseUrl (PayTabsSDK 6.6.50+, currently 6.6.59).
+     */
+    paymentApiBaseUrl?: string;
     tokeniseType?: string;
     tokenFormat?: string;
     hideCardScanner?: string;

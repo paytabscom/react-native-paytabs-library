@@ -21,7 +21,12 @@ import {
   Modal,
   FlatList,
   ActivityIndicator,
+  AppState,
 } from 'react-native';
+
+// Native payment UI owns the flow; clear the sample spinner if the bridge promise hangs.
+const LOADING_HANDOFF_MS = 2000;
+const LOADING_SAFETY_TIMEOUT_MS = 20000;
 import {
   RNPaymentSDKLibrary,
   PaymentSDKConfiguration,
@@ -96,6 +101,10 @@ const countryCodes = [
 ];
 
 export default class App extends Component {
+  loadingTimeoutId = null;
+  loadingHandoffId = null;
+  appStateSubscription = null;
+
   constructor(props) {
     super(props);
     this.state = {
@@ -107,6 +116,8 @@ export default class App extends Component {
       clientKey: 'CBKMN9-Q2GP6D-RT97N6-72HNHM',
       merchantApplePayName: 'Your Store Name',
       merchantApplePayIdentifier: 'merchant.com.paytabs.applepay',
+      // Optional Payment API host (leave empty for SDK default)
+      paymentApiBaseUrl: '',
       // Payment Configuration
       showPaymentConfiguration: false,
       cartID: '1234',
@@ -236,6 +247,15 @@ export default class App extends Component {
     if (configuration.enableZeroContacts !== undefined) {
       configJson.enableZeroContacts = configuration.enableZeroContacts;
     }
+    if (
+      configuration.paymentApiBaseUrl !== undefined &&
+      configuration.paymentApiBaseUrl !== null &&
+      String(configuration.paymentApiBaseUrl).trim() !== ''
+    ) {
+      configJson.paymentApiBaseUrl = String(
+        configuration.paymentApiBaseUrl
+      ).trim();
+    }
 
     // Add billing details if present
     if (configuration.billingDetails) {
@@ -268,20 +288,90 @@ export default class App extends Component {
     return configJson;
   }
 
+  componentDidMount() {
+    this.appStateSubscription = AppState.addEventListener(
+      'change',
+      this.handleAppStateChange
+    );
+  }
+
+  componentWillUnmount() {
+    this.clearLoadingTimeout();
+    if (this.appStateSubscription) {
+      this.appStateSubscription.remove();
+      this.appStateSubscription = null;
+    }
+  }
+
+  clearLoadingTimeout = () => {
+    if (this.loadingTimeoutId) {
+      clearTimeout(this.loadingTimeoutId);
+      this.loadingTimeoutId = null;
+    }
+    if (this.loadingHandoffId) {
+      clearTimeout(this.loadingHandoffId);
+      this.loadingHandoffId = null;
+    }
+  };
+
+  startLoading = (message) => {
+    this.clearLoadingTimeout();
+    this.setState({ isLoading: true, message });
+    // After native sheet should be up, restore the sample button stack.
+    this.loadingHandoffId = setTimeout(() => {
+      if (this.state.isLoading) {
+        this.setState({ isLoading: false });
+      }
+      this.loadingHandoffId = null;
+    }, LOADING_HANDOFF_MS);
+    // Hard safety if something else leaves loading stuck.
+    this.loadingTimeoutId = setTimeout(() => {
+      if (this.state.isLoading) {
+        this.setState({
+          isLoading: false,
+          message:
+            'Payment UI closed or timed out. Tap Cancel Payment if needed, then try again.',
+        });
+      }
+      this.loadingTimeoutId = null;
+    }, LOADING_SAFETY_TIMEOUT_MS);
+  };
+
+  stopLoading = (message) => {
+    this.clearLoadingTimeout();
+    if (message !== undefined) {
+      this.setState({ isLoading: false, message });
+    } else {
+      this.setState({ isLoading: false });
+    }
+  };
+
+  handleAppStateChange = (nextAppState) => {
+    // After returning from Safari/3DS/etc., clear a stuck sample loader.
+    if (nextAppState === 'active' && this.state.isLoading) {
+      setTimeout(() => {
+        if (this.state.isLoading) {
+          this.stopLoading(
+            this.state.message && !this.state.message.startsWith('Processing')
+              ? this.state.message
+              : 'Payment UI closed'
+          );
+        }
+      }, 800);
+    }
+  };
+
   // Generic payment handler
   handlePayment(paymentMethod, paymentFunction, successMessage) {
     try {
       // Validate required fields
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing payment...' });
+      this.startLoading('Processing payment...');
 
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
@@ -292,39 +382,31 @@ export default class App extends Component {
       );
 
       paymentFunction(JSON.stringify(configJson))
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('Payment Details:', paymentDetails);
-              this.setState({ message: successMessage });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error(`${paymentMethod} Error:`, error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: `Payment error: ${errorMessage}` });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('Payment Details:', result.PaymentDetails);
+            this.setState({ message: successMessage });
+          } else if (result?.Event === 'CancelPayment') {
+            console.log('Cancel Payment Event');
+            this.setState({ message: 'Payment cancelled' });
+          } else {
+            this.setState({ message: 'Payment finished' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error(`${paymentMethod} Exception:`, error);
+          console.error(`${paymentMethod} Error:`, error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: `Payment exception: ${errorMessage}` });
+          this.setState({ message: `Payment error: ${errorMessage}` });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: `Configuration error: ${errorMessage}` });
+      this.stopLoading(`Configuration error: ${errorMessage}`);
     }
   }
 
@@ -345,6 +427,9 @@ export default class App extends Component {
     configuration.amount = parseFloat(this.state.amount) || 0;
     configuration.screenTitle = this.state.screenTitle;
     configuration.expiryTime = parseInt(this.state.expiryTime, 10) || 0;
+    if (this.state.paymentApiBaseUrl && this.state.paymentApiBaseUrl.trim()) {
+      configuration.paymentApiBaseUrl = this.state.paymentApiBaseUrl.trim();
+    }
 
     // Billing Details - Only add if enabled
     if (this.state.showBillingDetails) {
@@ -391,10 +476,7 @@ export default class App extends Component {
     // Validate card payment
     const validationErrors = this.validateRequiredFields();
     if (validationErrors.length > 0) {
-      this.setState({
-        message: 'Validation errors: ' + validationErrors.join(', '),
-        isLoading: false,
-      });
+      this.stopLoading('Validation errors: ' + validationErrors.join(', '));
       return;
     }
 
@@ -409,17 +491,11 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({
-        isLoading: true,
-        message: 'Processing tokenized payment...',
-      });
+      this.startLoading('Processing tokenized payment...');
 
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
@@ -429,39 +505,28 @@ export default class App extends Component {
         'Token',
         'TransactionReference'
       )
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('Tokenized Payment Details:', paymentDetails);
-              this.setState({ message: 'Tokenized payment successful!' });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error('Tokenized Payment Error:', error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: 'Payment error: ' + errorMessage });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('Tokenized Payment Details:', result.PaymentDetails);
+            this.setState({ message: 'Tokenized payment successful!' });
+          } else if (result?.Event === 'CancelPayment') {
+            this.setState({ message: 'Payment cancelled' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error('Tokenized Payment Exception:', error);
+          console.error('Tokenized Payment Error:', error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment exception: ' + errorMessage });
+          this.setState({ message: 'Payment error: ' + errorMessage });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: 'Configuration error: ' + errorMessage });
+      this.stopLoading('Configuration error: ' + errorMessage);
     }
   }
 
@@ -469,14 +534,11 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing 3DS payment...' });
+      this.startLoading('Processing 3DS payment...');
 
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
@@ -487,39 +549,28 @@ export default class App extends Component {
         JSON.stringify(cardInfo),
         'Token'
       )
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('3DS Payment Details:', paymentDetails);
-              this.setState({ message: '3DS payment successful!' });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error('3DS Payment Error:', error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: 'Payment error: ' + errorMessage });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('3DS Payment Details:', result.PaymentDetails);
+            this.setState({ message: '3DS payment successful!' });
+          } else if (result?.Event === 'CancelPayment') {
+            this.setState({ message: 'Payment cancelled' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error('3DS Payment Exception:', error);
+          console.error('3DS Payment Error:', error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment exception: ' + errorMessage });
+          this.setState({ message: 'Payment error: ' + errorMessage });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: 'Configuration error: ' + errorMessage });
+      this.stopLoading('Configuration error: ' + errorMessage);
     }
   }
 
@@ -527,17 +578,11 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({
-        isLoading: true,
-        message: 'Processing saved card payment...',
-      });
+      this.startLoading('Processing saved card payment...');
 
       const configuration = this.buildConfiguration();
       const configJson = this.configurationToJson(configuration);
@@ -546,39 +591,28 @@ export default class App extends Component {
         JSON.stringify(configJson),
         false
       )
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('Saved Card Payment Details:', paymentDetails);
-              this.setState({ message: 'Saved card payment successful!' });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error('Saved Card Payment Error:', error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: 'Payment error: ' + errorMessage });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('Saved Card Payment Details:', result.PaymentDetails);
+            this.setState({ message: 'Saved card payment successful!' });
+          } else if (result?.Event === 'CancelPayment') {
+            this.setState({ message: 'Payment cancelled' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error('Saved Card Payment Exception:', error);
+          console.error('Saved Card Payment Error:', error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment exception: ' + errorMessage });
+          this.setState({ message: 'Payment error: ' + errorMessage });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: 'Configuration error: ' + errorMessage });
+      this.stopLoading('Configuration error: ' + errorMessage);
     }
   }
 
@@ -587,14 +621,11 @@ export default class App extends Component {
       // Validate Apple Pay configuration
       const validationErrors = this.validateApplePay();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing Apple Pay...' });
+      this.startLoading('Processing Apple Pay...');
 
       const configuration = this.buildConfiguration();
 
@@ -621,46 +652,45 @@ export default class App extends Component {
       configJson.forceShippingInfo = this.state.forceShippingInfo;
       configJson.isDigitalProduct = this.state.isDigitalProduct;
       configJson.enableZeroContacts = this.state.enableZeroContacts;
+      if (this.state.paymentApiBaseUrl && this.state.paymentApiBaseUrl.trim()) {
+        configJson.paymentApiBaseUrl = this.state.paymentApiBaseUrl.trim();
+      }
 
       console.log(
         'Apple Pay Configuration:',
         JSON.stringify(configJson, null, 2)
       );
+      console.log(
+        'paymentApiBaseUrl in payload:',
+        configJson.paymentApiBaseUrl || '(not set — SDK default host)'
+      );
 
       RNPaymentSDKLibrary.startApplePayPayment(JSON.stringify(configJson))
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('Apple Pay Details:', paymentDetails);
-              this.setState({ message: 'Apple Pay successful!' });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error('Apple Pay Error:', error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: 'Payment error: ' + errorMessage });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('Apple Pay Details:', result.PaymentDetails);
+            this.setState({ message: 'Apple Pay successful!' });
+          } else if (result?.Event === 'CancelPayment') {
+            console.log('Cancel Payment Event');
+            this.setState({ message: 'Payment cancelled' });
+          } else {
+            this.setState({ message: 'Apple Pay finished' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error('Apple Pay Exception:', error);
+          console.error('Apple Pay Error:', error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment exception: ' + errorMessage });
+          this.setState({ message: 'Payment error: ' + errorMessage });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: 'Configuration error: ' + errorMessage });
+      this.stopLoading('Configuration error: ' + errorMessage);
     }
   }
 
@@ -668,14 +698,11 @@ export default class App extends Component {
     try {
       const validationErrors = this.validateRequiredFields();
       if (validationErrors.length > 0) {
-        this.setState({
-          message: 'Validation errors: ' + validationErrors.join(', '),
-          isLoading: false,
-        });
+        this.stopLoading('Validation errors: ' + validationErrors.join(', '));
         return;
       }
 
-      this.setState({ isLoading: true, message: 'Processing STC Pay...' });
+      this.startLoading('Processing STC Pay...');
 
       const configuration = this.buildConfiguration();
       configuration.alternativePaymentMethods = [
@@ -689,39 +716,28 @@ export default class App extends Component {
       RNPaymentSDKLibrary.startAlternativePaymentMethod(
         JSON.stringify(configJson)
       )
-        .then(
-          (result) => {
-            this.setState({ isLoading: false });
-            if (result.PaymentDetails != null) {
-              let paymentDetails = result.PaymentDetails;
-              console.log('STC Pay Details:', paymentDetails);
-              this.setState({ message: 'STC Pay successful!' });
-            } else if (result.Event === 'CancelPayment') {
-              console.log('Cancel Payment Event');
-              this.setState({ message: 'Payment cancelled' });
-            }
-          },
-          (error) => {
-            this.setState({ isLoading: false });
-            console.error('STC Pay Error:', error);
-            const errorMessage =
-              error?.message || error?.toString() || 'Unknown error';
-            this.setState({ message: 'Payment error: ' + errorMessage });
+        .then((result) => {
+          if (result?.PaymentDetails != null) {
+            console.log('STC Pay Details:', result.PaymentDetails);
+            this.setState({ message: 'STC Pay successful!' });
+          } else if (result?.Event === 'CancelPayment') {
+            this.setState({ message: 'Payment cancelled' });
           }
-        )
+        })
         .catch((error) => {
-          this.setState({ isLoading: false });
-          console.error('STC Pay Exception:', error);
+          console.error('STC Pay Error:', error);
           const errorMessage =
             error?.message || error?.toString() || 'Unknown error';
-          this.setState({ message: 'Payment exception: ' + errorMessage });
+          this.setState({ message: 'Payment error: ' + errorMessage });
+        })
+        .finally(() => {
+          this.stopLoading();
         });
     } catch (error) {
-      this.setState({ isLoading: false });
       console.error('Configuration Error:', error);
       const errorMessage =
         error?.message || error?.toString() || 'Unknown error';
-      this.setState({ message: 'Configuration error: ' + errorMessage });
+      this.stopLoading('Configuration error: ' + errorMessage);
     }
   }
 
@@ -1000,6 +1016,12 @@ export default class App extends Component {
                       this.setState({ merchantApplePayIdentifier: text })
                   )}
                 </>
+              )}
+              {this.renderInputField(
+                'Payment API Base URL (optional)',
+                this.state.paymentApiBaseUrl,
+                (text) => this.setState({ paymentApiBaseUrl: text }),
+                'https://your-origin.example/'
               )}
             </View>
           </View>
@@ -1282,20 +1304,23 @@ export default class App extends Component {
             </TouchableOpacity>
 
             <TouchableOpacity
-              style={[
-                styles.paymentButton,
-                styles.cancelButton,
-                this.state.isLoading && styles.buttonDisabled,
-              ]}
+              style={[styles.paymentButton, styles.cancelButton]}
               onPress={async () => {
                 console.log('Cancel payment');
-                setTimeout(() => {
-                  RNPaymentSDKLibrary.cancelPayment();
-                }, 3000);
+                this.stopLoading('Cancelling payment...');
+                try {
+                  await RNPaymentSDKLibrary.cancelPayment();
+                  this.stopLoading('Payment cancelled');
+                } catch (error) {
+                  const errorMessage =
+                    error?.message || error?.toString() || 'Unknown error';
+                  this.stopLoading('Cancel error: ' + errorMessage);
+                }
               }}
-              disabled={this.state.isLoading}
             >
-              <Text style={styles.buttonText}>Cancel Payment</Text>
+              <Text style={styles.buttonText}>
+                {this.state.isLoading ? 'Stop Loader / Cancel' : 'Cancel Payment'}
+              </Text>
             </TouchableOpacity>
           </View>
         </ScrollView>
