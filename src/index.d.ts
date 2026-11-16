@@ -53,10 +53,16 @@ declare module '@paytabs/react-native-paytabs' {
     serverIP?: string;
     /**
      * Optional Payment API base URL (use only an origin approved by PayTabs for your integration).
-     * Android: PaymentSdkConfigBuilder.setPaymentApiBaseUrl (payment-sdk 6.8.10+, currently 6.8.15).
-     * iOS: PaymentSDKConfiguration.paymentApiBaseUrl (PayTabsSDK 6.6.50+, currently 6.6.59).
+     * Android: PaymentSdkConfigBuilder.setPaymentApiBaseUrl (payment-sdk 6.8.10+, currently 6.8.16).
+     * iOS: PaymentSDKConfiguration.paymentApiBaseUrl (PayTabsSDK 6.6.50+, currently 6.6.60).
      */
     paymentApiBaseUrl?: string;
+    /**
+     * Optional Account Funding Transaction (AFT) details.
+     * Android: PaymentSdkConfigBuilder.setAccountFunding (payment-sdk 6.8.16+).
+     * iOS: PaymentSDKConfiguration.accountFunding (PayTabsSDK 6.6.60+).
+     */
+    accountFunding?: PaymentSDKAccountFunding;
     tokeniseType?: string;
     tokenFormat?: string;
     hideCardScanner?: string;
@@ -70,6 +76,56 @@ declare module '@paytabs/react-native-paytabs' {
     alternativePaymentMethods?: Array<string>;
     cardDiscounts?: Array<PaymentSDKCardDiscount>;
     cardApproval?: PaymentSDKCardApproval;
+  }
+
+  export class PaymentSDKAccountFunding {
+    purpose?: string;
+    senderType?: string;
+    senderIsRecipient?: boolean;
+    sender?: PaymentSDKAftSender;
+    recipient?: PaymentSDKAftRecipient;
+    customer?: PaymentSDKAftCustomer;
+  }
+
+  export class PaymentSDKAftSender {
+    accountNumber?: string;
+    accountType?: string;
+    referenceNumber?: string;
+    sourceOfFunds?: string;
+    address?: string;
+    state?: string;
+    zip?: string;
+    city?: string;
+    country?: string;
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    phone?: string;
+    personalIdType?: string;
+    taxType?: string;
+    identificationNumber?: string;
+    dateOfBirth?: PaymentSDKAftDateOfBirth;
+  }
+
+  export class PaymentSDKAftRecipient {
+    accountIdentifier?: string;
+    accountType?: string;
+    fundingMethod?: string;
+  }
+
+  export class PaymentSDKAftCustomer {
+    firstName?: string;
+    middleName?: string;
+    lastName?: string;
+    identificationType?: string;
+    identificationValue?: string;
+    identificationCountry?: string;
+  }
+
+  export class PaymentSDKAftDateOfBirth {
+    year?: number;
+    month?: number;
+    day?: number;
   }
 
   export class PaymentSDKBillingDetails {

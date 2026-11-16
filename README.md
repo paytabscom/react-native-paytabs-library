@@ -1,6 +1,6 @@
 # react-native-paytabs
 
-![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.8.13-green)
+![Version](https://img.shields.io/badge/React%20Native%20Paytabs-v2.8.12-green)
 
 React native paytabs library is a wrapper for the native PayTabs Android and iOS SDKs, It helps you
 integrate with PayTabs seamlessly.
@@ -15,14 +15,14 @@ Library Version:
 
 * [x] React Version: 18.1.0
 * [x] React-Native Version: 0.70.6
-* [x] PayTabs Android SDK: 6.8.15
-* [x] PayTabs iOS SDK (CocoaPods): 6.6.59
+* [x] PayTabs Android SDK: 6.8.16
+* [x] PayTabs iOS SDK (CocoaPods): 6.6.60
 * [x] Target SDK: 36 (Android 16)
 
 # Installation
 
 ```sh
-$ npm install @paytabs/react-native-paytabs@2.8.13 --save
+$ npm install @paytabs/react-native-paytabs@2.8.12 --save
 ```
 
 ### Expo
@@ -48,7 +48,7 @@ expo install @paytabs/react-native-paytabs
   **Android 16 Edge-to-Edge Support:**
 
   This library now supports Android 16 (SDK 36) with mandatory edge-to-edge enforcement. The library has been updated to use:
-  * PayTabs SDK 6.8.15 with Android 16 compatible dependencies
+  * PayTabs SDK 6.8.16 with Android 16 compatible dependencies
   * androidx.activity 1.13.0 for edge-to-edge compatibility
   * compileSdk 36 and targetSdk 36
 
@@ -150,8 +150,56 @@ configuration.paymentApiBaseUrl = "https://your-origin.example/";
 
 - Omit the property (or use an empty string) to keep the SDK default host for your `merchantCountryCode`.
 - Use only a URL PayTabs has approved for your integration.
-- Android: forwarded to `PaymentSdkConfigBuilder.setPaymentApiBaseUrl` (payment-sdk 6.8.10+, currently 6.8.15).
-- iOS: assigned to `PaymentSDKConfiguration.paymentApiBaseUrl` (PayTabsSDK 6.6.50+, currently 6.6.59).
+- Android: forwarded to `PaymentSdkConfigBuilder.setPaymentApiBaseUrl` (payment-sdk 6.8.10+, currently 6.8.16).
+- iOS: assigned to `PaymentSDKConfiguration.paymentApiBaseUrl` (PayTabsSDK 6.6.50+, currently 6.6.60).
+
+### Account Funding Transaction (AFT)
+
+Supported on Android payment-sdk **6.8.16+** and iOS PayTabsSDK **6.6.60+**. Pass `configuration.accountFunding` when your merchant profile is enabled for AFT:
+
+```javascript
+import {
+  PaymentSDKAccountFunding,
+  PaymentSDKAftSender,
+  PaymentSDKAftRecipient,
+  PaymentSDKAftCustomer,
+  PaymentSDKAftDateOfBirth,
+} from '@paytabs/react-native-paytabs';
+
+configuration.accountFunding = new PaymentSDKAccountFunding(
+  'purpose',
+  'senderType',
+  false,
+  new PaymentSDKAftSender(
+    'accountNumber',
+    'accountType',
+    'referenceNumber',
+    'sourceOfFunds',
+    'address',
+    'state',
+    'zip',
+    'city',
+    'country',
+    'firstName',
+    'middleName',
+    'lastName',
+    'phone',
+    'personalIdType',
+    'taxType',
+    'identificationNumber',
+    new PaymentSDKAftDateOfBirth(1990, 1, 15)
+  ),
+  new PaymentSDKAftRecipient('accountIdentifier', 'accountType', 'fundingMethod'),
+  new PaymentSDKAftCustomer(
+    'firstName',
+    'middleName',
+    'lastName',
+    'identificationType',
+    'identificationValue',
+    'identificationCountry'
+  )
+);
+```
 
 You can dismiss the payment screen if there is no transaction in progress.
 

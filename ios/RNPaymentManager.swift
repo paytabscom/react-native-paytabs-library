@@ -186,13 +186,19 @@ class RNPaymentManager: NSObject {
         }
     }
 
-    /// Sets `paymentApiBaseUrl` on the native Swift `PaymentSDKConfiguration` (PayTabsSDK 6.6.50+, currently 6.6.59).
+    /// Sets `paymentApiBaseUrl` on the native Swift `PaymentSDKConfiguration` (PayTabsSDK 6.6.50+, currently 6.6.60).
     /// Must assign the Swift property directly — ObjC `setPaymentApiBaseUrl:` is not exposed on this type.
     private func applyOptionalPaymentApiBaseUrl(from dictionary: [String: Any], to configuration: PaymentSDKConfiguration) {
         guard let raw = dictionary["paymentApiBaseUrl"] as? String else { return }
         let trimmed = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         configuration.paymentApiBaseUrl = trimmed
+    }
+
+    /// Sets optional AFT `accountFunding` (PayTabsSDK 6.6.60+).
+    private func applyOptionalAccountFunding(from dictionary: [String: Any], to configuration: PaymentSDKConfiguration) {
+        guard let accountFundingDictionary = dictionary["accountFunding"] as? [String: Any] else { return }
+        configuration.accountFunding = generateAccountFunding(dictionary: accountFundingDictionary)
     }
 
     private func generateConfiguration(dictionary: [String: Any]) -> PaymentSDKConfiguration {
@@ -208,6 +214,7 @@ class RNPaymentManager: NSObject {
         configuration.screenTitle = dictionary["screenTitle"] as? String
         configuration.merchantCountryCode = dictionary["merchantCountryCode"] as? String ?? ""
         applyOptionalPaymentApiBaseUrl(from: dictionary, to: configuration)
+        applyOptionalAccountFunding(from: dictionary, to: configuration)
         configuration.merchantIdentifier = dictionary["merchantIdentifier"] as? String
         configuration.simplifyApplePayValidation = dictionary["simplifyApplePayValidation"] as? Bool ?? false
         configuration.languageCode = dictionary["languageCode"] as? String
@@ -389,6 +396,74 @@ class RNPaymentManager: NSObject {
                return PaymentSDKCardApproval(validationUrl: validationUrl, binLength: binLength, blockIfNoResponse: blockIfNoResponse)
                 }
               return nil
+    }
+
+    private func generateAccountFunding(dictionary: [String: Any]) -> PaymentSDKAccountFunding {
+        let accountFunding = PaymentSDKAccountFunding()
+        accountFunding.purpose = dictionary["purpose"] as? String
+        accountFunding.senderType = dictionary["senderType"] as? String
+        accountFunding.senderIsRecipient = dictionary["senderIsRecipient"] as? Bool
+        if let senderDictionary = dictionary["sender"] as? [String: Any] {
+            accountFunding.sender = generateAftSender(dictionary: senderDictionary)
+        }
+        if let recipientDictionary = dictionary["recipient"] as? [String: Any] {
+            accountFunding.recipient = generateAftRecipient(dictionary: recipientDictionary)
+        }
+        if let customerDictionary = dictionary["customer"] as? [String: Any] {
+            accountFunding.customer = generateAftCustomer(dictionary: customerDictionary)
+        }
+        return accountFunding
+    }
+
+    private func generateAftSender(dictionary: [String: Any]) -> PaymentSDKAftSender {
+        let sender = PaymentSDKAftSender()
+        sender.accountNumber = dictionary["accountNumber"] as? String
+        sender.accountType = dictionary["accountType"] as? String
+        sender.referenceNumber = dictionary["referenceNumber"] as? String
+        sender.sourceOfFunds = dictionary["sourceOfFunds"] as? String
+        sender.address = dictionary["address"] as? String
+        sender.state = dictionary["state"] as? String
+        sender.zip = dictionary["zip"] as? String
+        sender.city = dictionary["city"] as? String
+        sender.country = dictionary["country"] as? String
+        sender.firstName = dictionary["firstName"] as? String
+        sender.middleName = dictionary["middleName"] as? String
+        sender.lastName = dictionary["lastName"] as? String
+        sender.phone = dictionary["phone"] as? String
+        sender.personalIdType = dictionary["personalIdType"] as? String
+        sender.taxType = dictionary["taxType"] as? String
+        sender.identificationNumber = dictionary["identificationNumber"] as? String
+        if let dateOfBirthDictionary = dictionary["dateOfBirth"] as? [String: Any] {
+            sender.dateOfBirth = generateAftDateOfBirth(dictionary: dateOfBirthDictionary)
+        }
+        return sender
+    }
+
+    private func generateAftRecipient(dictionary: [String: Any]) -> PaymentSDKAftRecipient {
+        let recipient = PaymentSDKAftRecipient()
+        recipient.accountIdentifier = dictionary["accountIdentifier"] as? String
+        recipient.accountType = dictionary["accountType"] as? String
+        recipient.fundingMethod = dictionary["fundingMethod"] as? String
+        return recipient
+    }
+
+    private func generateAftCustomer(dictionary: [String: Any]) -> PaymentSDKAftCustomer {
+        let customer = PaymentSDKAftCustomer()
+        customer.firstName = dictionary["firstName"] as? String
+        customer.middleName = dictionary["middleName"] as? String
+        customer.lastName = dictionary["lastName"] as? String
+        customer.identificationType = dictionary["identificationType"] as? String
+        customer.identificationValue = dictionary["identificationValue"] as? String
+        customer.identificationCountry = dictionary["identificationCountry"] as? String
+        return customer
+    }
+
+    private func generateAftDateOfBirth(dictionary: [String: Any]) -> PaymentSDKAftDateOfBirth {
+        let dateOfBirth = PaymentSDKAftDateOfBirth()
+        dateOfBirth.year = dictionary["year"] as? Int
+        dateOfBirth.month = dictionary["month"] as? Int
+        dateOfBirth.day = dictionary["day"] as? Int
+        return dateOfBirth
     }
 
        private func generateDiscountDetails(dictionary: [[String: Any]]) -> [PaymentSDKCardDiscount]? {

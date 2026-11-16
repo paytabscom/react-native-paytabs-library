@@ -34,7 +34,8 @@ export default class PaymentSDKConfiguration {
     expiryTime,
     cardDiscounts,
     cardApproval,
-    paymentApiBaseUrl
+    paymentApiBaseUrl,
+    accountFunding
   ) {
     this.profileID = profileID;
     this.serverKey = serverKey;
@@ -71,5 +72,6 @@ export default class PaymentSDKConfiguration {
     this.cardDiscounts = cardDiscounts;
     this.cardApproval = cardApproval;
     this.paymentApiBaseUrl = paymentApiBaseUrl;
+    this.accountFunding = accountFunding;
   }
 }

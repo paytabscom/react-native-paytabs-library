@@ -12,3 +12,8 @@ export { default as PaymentSDKSavedCardInfo } from './PaymentSDKSavedCardInfo';
 export { default as PaymentSDKCardDiscount } from './PaymentSDKCardDiscount';
 export { default as PaymentSDKNetworks } from './PaymentSDKNetworks';
 export { default as PaymentSDKCardApproval } from './PaymentSDKCardApproval';
+export { default as PaymentSDKAccountFunding } from './PaymentSDKAccountFunding';
+export { default as PaymentSDKAftSender } from './PaymentSDKAftSender';
+export { default as PaymentSDKAftRecipient } from './PaymentSDKAftRecipient';
+export { default as PaymentSDKAftCustomer } from './PaymentSDKAftCustomer';
+export { default as PaymentSDKAftDateOfBirth } from './PaymentSDKAftDateOfBirth';
