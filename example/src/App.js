@@ -35,6 +35,11 @@ import {
   PaymentSDKSavedCardInfo,
   PaymentSDKNetworks,
   PaymentSDKConstants,
+  PaymentSDKAccountFunding,
+  PaymentSDKAftSender,
+  PaymentSDKAftRecipient,
+  PaymentSDKAftCustomer,
+  PaymentSDKAftDateOfBirth,
 } from '@paytabs/react-native-paytabs';
 
 const selectedNetworks = [
@@ -153,6 +158,39 @@ export default class App extends Component {
       shippingState: 'Dubai',
       shippingCountryCode: 'ae',
       shippingZip: '12345',
+      // AFT (Account Funding Transaction) — requires merchant profile AFT enablement
+      showAccountFunding: false,
+      aftPurpose: 'Account funding',
+      aftSenderType: 'INDIVIDUAL',
+      aftSenderIsRecipient: false,
+      aftSenderAccountNumber: '4111111111111111',
+      aftSenderAccountType: 'CARD',
+      aftSenderReferenceNumber: 'REF-001',
+      aftSenderSourceOfFunds: 'CREDIT',
+      aftSenderAddress: 'Street1',
+      aftSenderState: 'Dubai',
+      aftSenderZip: '12345',
+      aftSenderCity: 'Dubai',
+      aftSenderCountry: 'AE',
+      aftSenderFirstName: 'John',
+      aftSenderMiddleName: '',
+      aftSenderLastName: 'Smith',
+      aftSenderPhone: '+97311111111',
+      aftSenderPersonalIdType: 'NATIONAL_ID',
+      aftSenderTaxType: '',
+      aftSenderIdentificationNumber: 'ID123456',
+      aftSenderDobYear: '1990',
+      aftSenderDobMonth: '1',
+      aftSenderDobDay: '15',
+      aftRecipientAccountIdentifier: 'wallet-001',
+      aftRecipientAccountType: 'WALLET',
+      aftRecipientFundingMethod: 'CARD',
+      aftCustomerFirstName: 'John',
+      aftCustomerMiddleName: '',
+      aftCustomerLastName: 'Smith',
+      aftCustomerIdentificationType: 'NATIONAL_ID',
+      aftCustomerIdentificationValue: 'ID123456',
+      aftCustomerIdentificationCountry: 'AE',
       // Currency Dropdown
       showCurrencyDropdown: false,
       // Merchant Country Code Dropdown
@@ -283,6 +321,59 @@ export default class App extends Component {
         countryCode: configuration.shippingDetails.countryCode,
         zip: configuration.shippingDetails.zip,
       };
+    }
+
+    if (configuration.accountFunding) {
+      const funding = configuration.accountFunding;
+      configJson.accountFunding = {
+        purpose: funding.purpose,
+        senderType: funding.senderType,
+        senderIsRecipient: funding.senderIsRecipient,
+      };
+      if (funding.sender) {
+        configJson.accountFunding.sender = {
+          accountNumber: funding.sender.accountNumber,
+          accountType: funding.sender.accountType,
+          referenceNumber: funding.sender.referenceNumber,
+          sourceOfFunds: funding.sender.sourceOfFunds,
+          address: funding.sender.address,
+          state: funding.sender.state,
+          zip: funding.sender.zip,
+          city: funding.sender.city,
+          country: funding.sender.country,
+          firstName: funding.sender.firstName,
+          middleName: funding.sender.middleName,
+          lastName: funding.sender.lastName,
+          phone: funding.sender.phone,
+          personalIdType: funding.sender.personalIdType,
+          taxType: funding.sender.taxType,
+          identificationNumber: funding.sender.identificationNumber,
+        };
+        if (funding.sender.dateOfBirth) {
+          configJson.accountFunding.sender.dateOfBirth = {
+            year: funding.sender.dateOfBirth.year,
+            month: funding.sender.dateOfBirth.month,
+            day: funding.sender.dateOfBirth.day,
+          };
+        }
+      }
+      if (funding.recipient) {
+        configJson.accountFunding.recipient = {
+          accountIdentifier: funding.recipient.accountIdentifier,
+          accountType: funding.recipient.accountType,
+          fundingMethod: funding.recipient.fundingMethod,
+        };
+      }
+      if (funding.customer) {
+        configJson.accountFunding.customer = {
+          firstName: funding.customer.firstName,
+          middleName: funding.customer.middleName,
+          lastName: funding.customer.lastName,
+          identificationType: funding.customer.identificationType,
+          identificationValue: funding.customer.identificationValue,
+          identificationCountry: funding.customer.identificationCountry,
+        };
+      }
     }
 
     return configJson;
@@ -465,6 +556,50 @@ export default class App extends Component {
       configuration.showShippingInfo = true;
     } else {
       configuration.showShippingInfo = false;
+    }
+
+    if (this.state.showAccountFunding) {
+      configuration.accountFunding = new PaymentSDKAccountFunding(
+        this.state.aftPurpose.trim(),
+        this.state.aftSenderType.trim(),
+        this.state.aftSenderIsRecipient,
+        new PaymentSDKAftSender(
+          this.state.aftSenderAccountNumber.trim(),
+          this.state.aftSenderAccountType.trim(),
+          this.state.aftSenderReferenceNumber.trim(),
+          this.state.aftSenderSourceOfFunds.trim(),
+          this.state.aftSenderAddress.trim(),
+          this.state.aftSenderState.trim(),
+          this.state.aftSenderZip.trim(),
+          this.state.aftSenderCity.trim(),
+          this.state.aftSenderCountry.trim(),
+          this.state.aftSenderFirstName.trim(),
+          this.state.aftSenderMiddleName.trim() || undefined,
+          this.state.aftSenderLastName.trim(),
+          this.state.aftSenderPhone.trim(),
+          this.state.aftSenderPersonalIdType.trim(),
+          this.state.aftSenderTaxType.trim() || undefined,
+          this.state.aftSenderIdentificationNumber.trim(),
+          new PaymentSDKAftDateOfBirth(
+            parseInt(this.state.aftSenderDobYear, 10) || undefined,
+            parseInt(this.state.aftSenderDobMonth, 10) || undefined,
+            parseInt(this.state.aftSenderDobDay, 10) || undefined
+          )
+        ),
+        new PaymentSDKAftRecipient(
+          this.state.aftRecipientAccountIdentifier.trim(),
+          this.state.aftRecipientAccountType.trim(),
+          this.state.aftRecipientFundingMethod.trim()
+        ),
+        new PaymentSDKAftCustomer(
+          this.state.aftCustomerFirstName.trim(),
+          this.state.aftCustomerMiddleName.trim() || undefined,
+          this.state.aftCustomerLastName.trim(),
+          this.state.aftCustomerIdentificationType.trim(),
+          this.state.aftCustomerIdentificationValue.trim(),
+          this.state.aftCustomerIdentificationCountry.trim()
+        )
+      );
     }
 
     configuration.paymentNetworks = selectedNetworks;
@@ -1229,6 +1364,194 @@ export default class App extends Component {
             </>
           )}
 
+          {/* AFT / Account Funding */}
+          {this.renderSection(
+            'Account Funding (AFT)',
+            this.state.showAccountFunding,
+            (value) => this.setState({ showAccountFunding: value }),
+            <>
+              {this.renderInputField(
+                'Purpose',
+                this.state.aftPurpose,
+                (text) => this.setState({ aftPurpose: text })
+              )}
+              {this.renderInputField(
+                'Sender Type',
+                this.state.aftSenderType,
+                (text) => this.setState({ aftSenderType: text })
+              )}
+              <View style={styles.switchContainer}>
+                <Text style={styles.switchLabel}>Sender Is Recipient</Text>
+                <Switch
+                  value={this.state.aftSenderIsRecipient}
+                  onValueChange={(value) =>
+                    this.setState({ aftSenderIsRecipient: value })
+                  }
+                  trackColor={{ false: '#90caf9', true: '#2196F3' }}
+                  thumbColor={
+                    this.state.aftSenderIsRecipient ? '#ffffff' : '#f4f3f4'
+                  }
+                />
+              </View>
+              <Text style={styles.subSectionTitle}>Sender</Text>
+              {this.renderInputField(
+                'Account Number',
+                this.state.aftSenderAccountNumber,
+                (text) => this.setState({ aftSenderAccountNumber: text })
+              )}
+              {this.renderInputField(
+                'Account Type',
+                this.state.aftSenderAccountType,
+                (text) => this.setState({ aftSenderAccountType: text })
+              )}
+              {this.renderInputField(
+                'Reference Number',
+                this.state.aftSenderReferenceNumber,
+                (text) => this.setState({ aftSenderReferenceNumber: text })
+              )}
+              {this.renderInputField(
+                'Source Of Funds',
+                this.state.aftSenderSourceOfFunds,
+                (text) => this.setState({ aftSenderSourceOfFunds: text })
+              )}
+              {this.renderInputField(
+                'Address',
+                this.state.aftSenderAddress,
+                (text) => this.setState({ aftSenderAddress: text })
+              )}
+              {this.renderInputField(
+                'City',
+                this.state.aftSenderCity,
+                (text) => this.setState({ aftSenderCity: text })
+              )}
+              {this.renderInputField(
+                'State',
+                this.state.aftSenderState,
+                (text) => this.setState({ aftSenderState: text })
+              )}
+              {this.renderInputField(
+                'ZIP',
+                this.state.aftSenderZip,
+                (text) => this.setState({ aftSenderZip: text })
+              )}
+              {this.renderInputField(
+                'Country',
+                this.state.aftSenderCountry,
+                (text) => this.setState({ aftSenderCountry: text })
+              )}
+              {this.renderInputField(
+                'First Name',
+                this.state.aftSenderFirstName,
+                (text) => this.setState({ aftSenderFirstName: text })
+              )}
+              {this.renderInputField(
+                'Middle Name',
+                this.state.aftSenderMiddleName,
+                (text) => this.setState({ aftSenderMiddleName: text })
+              )}
+              {this.renderInputField(
+                'Last Name',
+                this.state.aftSenderLastName,
+                (text) => this.setState({ aftSenderLastName: text })
+              )}
+              {this.renderInputField(
+                'Phone',
+                this.state.aftSenderPhone,
+                (text) => this.setState({ aftSenderPhone: text }),
+                '+1234567890',
+                'phone-pad'
+              )}
+              {this.renderInputField(
+                'Personal ID Type',
+                this.state.aftSenderPersonalIdType,
+                (text) => this.setState({ aftSenderPersonalIdType: text })
+              )}
+              {this.renderInputField(
+                'Tax Type',
+                this.state.aftSenderTaxType,
+                (text) => this.setState({ aftSenderTaxType: text })
+              )}
+              {this.renderInputField(
+                'Identification Number',
+                this.state.aftSenderIdentificationNumber,
+                (text) =>
+                  this.setState({ aftSenderIdentificationNumber: text })
+              )}
+              {this.renderInputField(
+                'DOB Year',
+                this.state.aftSenderDobYear,
+                (text) => this.setState({ aftSenderDobYear: text }),
+                '1990',
+                'numeric'
+              )}
+              {this.renderInputField(
+                'DOB Month',
+                this.state.aftSenderDobMonth,
+                (text) => this.setState({ aftSenderDobMonth: text }),
+                '1',
+                'numeric'
+              )}
+              {this.renderInputField(
+                'DOB Day',
+                this.state.aftSenderDobDay,
+                (text) => this.setState({ aftSenderDobDay: text }),
+                '15',
+                'numeric'
+              )}
+              <Text style={styles.subSectionTitle}>Recipient</Text>
+              {this.renderInputField(
+                'Account Identifier',
+                this.state.aftRecipientAccountIdentifier,
+                (text) =>
+                  this.setState({ aftRecipientAccountIdentifier: text })
+              )}
+              {this.renderInputField(
+                'Account Type',
+                this.state.aftRecipientAccountType,
+                (text) => this.setState({ aftRecipientAccountType: text })
+              )}
+              {this.renderInputField(
+                'Funding Method',
+                this.state.aftRecipientFundingMethod,
+                (text) => this.setState({ aftRecipientFundingMethod: text })
+              )}
+              <Text style={styles.subSectionTitle}>Customer</Text>
+              {this.renderInputField(
+                'First Name',
+                this.state.aftCustomerFirstName,
+                (text) => this.setState({ aftCustomerFirstName: text })
+              )}
+              {this.renderInputField(
+                'Middle Name',
+                this.state.aftCustomerMiddleName,
+                (text) => this.setState({ aftCustomerMiddleName: text })
+              )}
+              {this.renderInputField(
+                'Last Name',
+                this.state.aftCustomerLastName,
+                (text) => this.setState({ aftCustomerLastName: text })
+              )}
+              {this.renderInputField(
+                'Identification Type',
+                this.state.aftCustomerIdentificationType,
+                (text) =>
+                  this.setState({ aftCustomerIdentificationType: text })
+              )}
+              {this.renderInputField(
+                'Identification Value',
+                this.state.aftCustomerIdentificationValue,
+                (text) =>
+                  this.setState({ aftCustomerIdentificationValue: text })
+              )}
+              {this.renderInputField(
+                'Identification Country',
+                this.state.aftCustomerIdentificationCountry,
+                (text) =>
+                  this.setState({ aftCustomerIdentificationCountry: text })
+              )}
+            </>
+          )}
+
           {/* Payment Buttons */}
           <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -1413,6 +1736,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#1565c0',
     letterSpacing: 0.3,
+  },
+  subSectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1976d2',
+    marginTop: 8,
+    marginBottom: 12,
   },
   sectionContent: {
     marginTop: 12,

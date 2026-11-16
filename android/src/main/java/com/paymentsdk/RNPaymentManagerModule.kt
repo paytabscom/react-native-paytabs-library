@@ -277,7 +277,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
 
   /**
    * Applies optional [paymentApiBaseUrl] via [PaymentSdkConfigBuilder.setPaymentApiBaseUrl]
-   * (supported in PayTabs Android payment-sdk 6.8.10+, currently 6.8.15).
+   * (supported in PayTabs Android payment-sdk 6.8.10+, currently 6.8.16).
    */
   private fun applyPaymentApiBaseUrlIfPresent(
     builder: PaymentSdkConfigBuilder,
@@ -285,6 +285,93 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
   ): PaymentSdkConfigBuilder {
     val url = optionalPaymentApiBaseUrlString(paymentDetails) ?: return builder
     return builder.setPaymentApiBaseUrl(url)
+  }
+
+  private fun optionalJsonString(obj: JSONObject, key: String): String? {
+    if (obj.isNull(key)) return null
+    return obj.optString(key).trim().takeIf { it.isNotEmpty() }
+  }
+
+  private fun optionalJsonInt(obj: JSONObject, key: String): Int? {
+    if (!obj.has(key) || obj.isNull(key)) return null
+    return obj.optInt(key)
+  }
+
+  private fun optionalJsonBoolean(obj: JSONObject, key: String): Boolean? {
+    if (!obj.has(key) || obj.isNull(key)) return null
+    return obj.optBoolean(key)
+  }
+
+  /**
+   * Applies optional AFT [accountFunding] via [PaymentSdkConfigBuilder.setAccountFunding]
+   * (supported in PayTabs Android payment-sdk 6.8.16+).
+   */
+  private fun applyAccountFundingIfPresent(
+    builder: PaymentSdkConfigBuilder,
+    paymentDetails: JSONObject,
+  ): PaymentSdkConfigBuilder {
+    val accountFundingJson = paymentDetails.optJSONObject("accountFunding") ?: return builder
+    return builder.setAccountFunding(createAccountFunding(accountFundingJson))
+  }
+
+  private fun createAccountFunding(accountFunding: JSONObject): PaymentSdkAccountFunding {
+    return PaymentSdkAccountFunding(
+      optionalJsonString(accountFunding, "purpose"),
+      optionalJsonString(accountFunding, "senderType"),
+      optionalJsonBoolean(accountFunding, "senderIsRecipient"),
+      accountFunding.optJSONObject("sender")?.let { createAftSender(it) },
+      accountFunding.optJSONObject("recipient")?.let { createAftRecipient(it) },
+      accountFunding.optJSONObject("customer")?.let { createAftCustomer(it) },
+    )
+  }
+
+  private fun createAftSender(sender: JSONObject): PaymentSdkAftSender {
+    return PaymentSdkAftSender(
+      optionalJsonString(sender, "accountNumber"),
+      optionalJsonString(sender, "accountType"),
+      optionalJsonString(sender, "referenceNumber"),
+      optionalJsonString(sender, "sourceOfFunds"),
+      optionalJsonString(sender, "address"),
+      optionalJsonString(sender, "state"),
+      optionalJsonString(sender, "zip"),
+      optionalJsonString(sender, "city"),
+      optionalJsonString(sender, "country"),
+      optionalJsonString(sender, "firstName"),
+      optionalJsonString(sender, "middleName"),
+      optionalJsonString(sender, "lastName"),
+      optionalJsonString(sender, "phone"),
+      optionalJsonString(sender, "personalIdType"),
+      optionalJsonString(sender, "taxType"),
+      optionalJsonString(sender, "identificationNumber"),
+      sender.optJSONObject("dateOfBirth")?.let { createAftDateOfBirth(it) },
+    )
+  }
+
+  private fun createAftRecipient(recipient: JSONObject): PaymentSdkAftRecipient {
+    return PaymentSdkAftRecipient(
+      optionalJsonString(recipient, "accountIdentifier"),
+      optionalJsonString(recipient, "accountType"),
+      optionalJsonString(recipient, "fundingMethod"),
+    )
+  }
+
+  private fun createAftCustomer(customer: JSONObject): PaymentSdkAftCustomer {
+    return PaymentSdkAftCustomer(
+      optionalJsonString(customer, "firstName"),
+      optionalJsonString(customer, "middleName"),
+      optionalJsonString(customer, "lastName"),
+      optionalJsonString(customer, "identificationType"),
+      optionalJsonString(customer, "identificationValue"),
+      optionalJsonString(customer, "identificationCountry"),
+    )
+  }
+
+  private fun createAftDateOfBirth(dateOfBirth: JSONObject): PaymentSdkAftDateOfBirth {
+    return PaymentSdkAftDateOfBirth(
+      optionalJsonInt(dateOfBirth, "year"),
+      optionalJsonInt(dateOfBirth, "month"),
+      optionalJsonInt(dateOfBirth, "day"),
+    )
   }
 
   private fun createConfiguration(paymentDetails: JSONObject): PaymentSdkConfigBuilder {
@@ -370,6 +457,7 @@ class RNPaymentManagerModule(private val reactContext: ReactApplicationContext) 
       .setCardApproval(cardApprovalData)
       .setMetadata(getMetadata())
     builder = applyPaymentApiBaseUrlIfPresent(builder, paymentDetails)
+    builder = applyAccountFundingIfPresent(builder, paymentDetails)
     return builder
   }
 
